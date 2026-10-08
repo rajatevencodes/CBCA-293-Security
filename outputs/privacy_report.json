@@ -1,0 +1,64 @@
+{
+  "k_anonymity_before": {
+    "quasi_identifiers": [
+      "age_band",
+      "gender",
+      "state"
+    ],
+    "k": 5,
+    "groups": 461,
+    "smallest_group": 1,
+    "groups_below_k": 395,
+    "customers_in_groups_below_k": 659,
+    "total_customers": 999,
+    "result": "FAIL"
+  },
+  "k_anonymity_after": {
+    "quasi_identifiers": [
+      "age_band",
+      "gender",
+      "region"
+    ],
+    "k": 5,
+    "groups": 40,
+    "smallest_group": 5,
+    "groups_below_k": 0,
+    "customers_in_groups_below_k": 0,
+    "total_customers": 999,
+    "result": "PASS"
+  },
+  "example_before": {
+    "cc_num": "2703186189652095",
+    "name": "Jennifer Banks",
+    "dob": "1988-03-09",
+    "street": "561 Perry Cove",
+    "city": "Moravian Falls",
+    "state": "NC",
+    "zip": "28654"
+  },
+  "example_after": {
+    "card_masked": "**** **** **** 2095",
+    "customer_id": "C_3298fc2482",
+    "age_band": "25-39",
+    "region": "South",
+    "name / street / city / zip": "removed"
+  },
+  "columns_removed": [
+    "cc_num",
+    "first",
+    "last",
+    "dob",
+    "street",
+    "city",
+    "state",
+    "zip",
+    "lat",
+    "long",
+    "city_pop",
+    "job",
+    "merch_lat",
+    "merch_long",
+    "trans_num",
+    "unix_time"
+  ]
+}

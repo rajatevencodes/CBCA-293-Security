@@ -1,0 +1,85 @@
+{
+  "threshold": 3,
+  "night_hours": [
+    0,
+    1,
+    2,
+    3,
+    22,
+    23
+  ],
+  "risky_categories": [
+    "grocery_pos",
+    "misc_net",
+    "shopping_net"
+  ],
+  "overall_train_fraud_rate": 0.005789,
+  "test": {
+    "rule_high_amount": {
+      "flagged": 5315,
+      "tp": 666,
+      "fp": 4649,
+      "fn": 1479,
+      "tn": 548925,
+      "precision": 0.1253,
+      "recall": 0.3105,
+      "f1": 0.1786,
+      "accuracy": 0.989
+    },
+    "rule_night": {
+      "flagged": 130139,
+      "tp": 1807,
+      "fp": 128332,
+      "fn": 338,
+      "tn": 425242,
+      "precision": 0.0139,
+      "recall": 0.8424,
+      "f1": 0.0273,
+      "accuracy": 0.7685
+    },
+    "rule_risky_category": {
+      "flagged": 121699,
+      "tp": 1258,
+      "fp": 120441,
+      "fn": 887,
+      "tn": 433133,
+      "precision": 0.0103,
+      "recall": 0.5865,
+      "f1": 0.0203,
+      "accuracy": 0.7817
+    },
+    "rule_above_usual": {
+      "flagged": 20073,
+      "tp": 1518,
+      "fp": 18555,
+      "fn": 627,
+      "tn": 535019,
+      "precision": 0.0756,
+      "recall": 0.7077,
+      "f1": 0.1366,
+      "accuracy": 0.9655
+    },
+    "combined": {
+      "flagged": 3592,
+      "tp": 1224,
+      "fp": 2368,
+      "fn": 921,
+      "tn": 551206,
+      "precision": 0.3408,
+      "recall": 0.5706,
+      "f1": 0.4267,
+      "accuracy": 0.9941
+    },
+    "flag_nothing_baseline": {
+      "flagged": 0,
+      "tp": 0,
+      "fp": 0,
+      "fn": 2145,
+      "tn": 553574,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "accuracy": 0.9961
+    }
+  }
+}

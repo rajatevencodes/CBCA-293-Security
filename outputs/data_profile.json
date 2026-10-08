@@ -1,0 +1,30 @@
+{
+  "total_rows": 1852394,
+  "missing_values": 0,
+  "duplicate_rows": 0,
+  "duplicate_transaction_ids": 0,
+  "fraud_rows": 9651,
+  "fraud_rate_pct": 0.52,
+  "customers_cards": 999,
+  "states": 51,
+  "categories": 14,
+  "merchants": 693,
+  "customer_age_min": 13,
+  "customer_age_max": 96,
+  "splits": {
+    "test": {
+      "rows": 555719,
+      "fraud_rows": 2145,
+      "fraud_rate_pct": 0.39,
+      "first_transaction": "2020-06-21 12:14:25",
+      "last_transaction": "2020-12-31 23:59:34"
+    },
+    "train": {
+      "rows": 1296675,
+      "fraud_rows": 7506,
+      "fraud_rate_pct": 0.58,
+      "first_transaction": "2019-01-01 00:00:18",
+      "last_transaction": "2020-06-21 12:13:37"
+    }
+  }
+}
