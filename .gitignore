@@ -1,0 +1,4 @@
+# Downloaded source data and generated pipeline output are too large for GitHub.
+data/raw/*.csv
+data/processed/*.csv
+
