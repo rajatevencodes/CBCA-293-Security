@@ -1,10 +1,10 @@
-# Chapter 2. Project Design and Methodology
+# Chapter 2. Project design and methodology
 
-## 2.1 System Overview
+## 2.1 System overview
 
-The system is a batch pipeline written in Python, followed by a Tableau dashboard. It takes 1.85 million credit card transactions, hides the private customer details, flags suspicious transactions with 4 simple rules, and sends the protected result to Tableau.
+The system is a Python batch pipeline connected to a Tableau dashboard. It protects the private fields in 1.85 million card transactions, applies 4 fraud rules and gives Tableau only the protected result.
 
-The pipeline has six steps. Each step is a separate Python module in `src/`, and `src/run_pipeline.py` runs them in order.
+The pipeline has six steps, each in a separate module under `src/`. `src/run_pipeline.py` runs them in order.
 
 | Step | Module | What it does | Main output |
 |---|---|---|---|
@@ -15,11 +15,11 @@ The pipeline has six steps. Each step is a separate Python module in `src/`, and
 | 5. Charts | `make_charts.py` | Draws figures for the report | `outputs/charts/*.png` |
 | 6. Tableau workbook | `build_dashboard.py` | Writes the dashboard file that reads the protected CSV | `dashboard/fraud_dashboard.twb` |
 
-The main design rule is that **Tableau only ever sees the protected file** (`data/processed/transactions_protected.csv`). It never sees the raw data. Settings such as file paths, the secret salt and rule settings are kept in one place, `src/config.py`.
+Tableau reads only `data/processed/transactions_protected.csv`, never the raw files. `src/config.py` holds the file paths, secret salt and rule settings.
 
-## 2.2 System Architecture Diagram
+## 2.2 System architecture
 
-Figure 2.1 shows the architecture. The dashed boundary separates the *raw zone*, where personal data exists, from the *protected zone*, where only de-identified data exists.
+Figure 2.1 separates the *raw zone*, which contains personal data, from the *protected zone*, which contains only de-identified data.
 
 ```mermaid
 flowchart LR
@@ -54,11 +54,11 @@ flowchart LR
 
 **Figure 2.1: System architecture of the privacy-preserving fraud analytics pipeline**
 
-**Explanation.** The two raw Kaggle files enter on the left. Step 1 loads and combines them, adds a `dataset_split` column (`train` or `test`), strips the `fraud_` prefix from merchant names and saves a data profile. Step 2 is the privacy layer and the trust boundary of the system: it is the last step that touches names, addresses, dates of birth and full card numbers. It uses the secret salt from `config.py` to create pseudonyms, and it checks k-anonymity before any data leaves it. Steps 3 and 4 work only on the protected columns. The rules learn their limits from training rows and are then measured on test rows. The protected CSV, which includes the rule results and an `outcome` label, is the only input of the Tableau workbook. Matplotlib charts from step 5 are used as figures in this report.
+The two Kaggle files enter the raw zone on the left. Step 1 combines them, records the source in `dataset_split` (`train` or `test`), removes the `fraud_` prefix from merchant names and saves a profile. Step 2 is the last part of the system allowed to touch names, addresses, dates of birth or full card numbers. It creates pseudonyms with the salt from `config.py` and checks k-anonymity before releasing any rows. Steps 3 and 4 use protected columns only. They learn the rule limits on training rows and measure the results on test rows. The Tableau workbook reads the protected CSV, including its rule results and `outcome` label. Step 5 supplies the Matplotlib figures used in this report.
 
-## 2.3 Methodology Flow Chart
+## 2.3 Methodology flow chart
 
-Figure 2.2 shows the order of work and the two main decision points: the k-anonymity check and the risk score threshold.
+Figure 2.2 follows the data through the k-anonymity check and the risk score threshold.
 
 ```mermaid
 flowchart TD
@@ -89,13 +89,13 @@ flowchart TD
 
 **Figure 2.2: Methodology flow chart**
 
-The k-anonymity loop is part of the design story. The first, more detailed version of the data (state and 7 narrow age bands) fails the check, with 659 of the 999 customers in groups smaller than 5. The data is then generalized to 4 Census regions and 5 age bands, and the check passes, with a smallest group of 5 customers. Both checks are saved, so the report can show the failure and the fix (Chapter 4).
+The first k-anonymity check fails. With state and 7 narrow age bands, 659 of the 999 customers fall into groups smaller than 5. Generalizing the data to 4 Census regions and 5 age bands raises the smallest group to 5, which passes the check. The pipeline saves both results for Chapter 4.
 
-## 2.4 Algorithms Used
+## 2.4 Algorithms used
 
 ### 2.4.1 Masking
 
-The full card number (`cc_num`) is replaced for display by a fixed pattern that keeps only the last 4 digits, for example `**** **** **** 2095`. This follows the PCI DSS display rule, which allows at most the BIN and the last four digits [6]. We keep fewer digits than allowed, because the analysis does not need the BIN.
+The displayed value replaces `cc_num` with a fixed pattern containing only the last 4 digits, for example `**** **** **** 2095`. PCI DSS allows at most the BIN and the last four digits [6]. The analysis does not need the BIN, so the output omits it.
 
 ```text
 function MASK(card_number):
@@ -103,11 +103,11 @@ function MASK(card_number):
     return "**** **** **** " + last4
 ```
 
-### 2.4.2 Pseudonymization with Salted SHA-256
+### 2.4.2 Pseudonymization with salted SHA-256
 
-SHA-256 is a cryptographic hash function defined in NIST FIPS 180-4 [17]. It turns any input into a fixed 256-bit value (64 hexadecimal characters). It is one-way: the input cannot be calculated from the output. Python provides it in the standard `hashlib` module [18].
+NIST FIPS 180-4 defines the SHA-256 cryptographic hash function [17]. It converts an input into a 256-bit value written as 64 hexadecimal characters. The output does not directly reveal the input. Python provides SHA-256 through the standard `hashlib` module [18].
 
-A card number has a limited and structured format, so an attacker could hash every possible card number and compare the results. To stop this, a secret *salt* is joined to the card number before hashing. Without the salt, the attacker cannot rebuild the pseudonyms. This matches the GDPR definition of pseudonymisation, where the "additional information" (here, the salt) is kept separately [7]. In this project the salt is stored in `src/config.py`; in a real system it would be kept in a secret vault.
+Card numbers have a limited, structured format. An attacker could hash possible numbers and compare the results. The pipeline first joins a secret *salt* to the card number, so the attacker cannot make the same comparison without that salt. This follows the GDPR definition of pseudonymisation, in which the "additional information" is kept separately [7]. For this project the salt is in `src/config.py`. A real deployment would keep it in a secrets vault.
 
 ```text
 function PSEUDONYMIZE(card_number, SALT):
@@ -115,15 +115,17 @@ function PSEUDONYMIZE(card_number, SALT):
     return "C_" + first 10 characters of digest       # e.g. C_3298fc2482
 ```
 
-The same card always gives the same `customer_id`, in both files. This lets rule R4 compare a transaction with the customer's usual spending without using the real card number. Ten hex characters give 16^10 (about 1.1 × 10^12) possible values, so for 999 customers the chance that two cards get the same code is about 1 in 2 million.
+The same card produces the same `customer_id` in both files. Rule R4 can then compare a transaction with that customer's usual spending without using the card number. Ten hexadecimal characters allow 16^10, about 1.1 × 10^12, values. With 999 customers, the chance of two cards receiving the same code is about 1 in 2 million.
 
-### 2.4.3 Generalization and Suppression
+### 2.4.3 Generalization and suppression
 
-* **Age band.** Age is calculated from `dob` at the time of each transaction and then placed in one of 5 bands: `<25`, `25-39`, `40-54`, `55-69`, `70+`. The exact date of birth is not kept.
-* **Region.** The state code is mapped to one of the 4 regions used by the US Census Bureau: Northeast, Midwest, South and West [19]. The exact state is not kept.
-* **Suppression.** Names (`first`, `last`), address fields (`street`, `city`, `zip`), coordinates (`lat`, `long`, `merch_lat`, `merch_long`), `city_pop`, `job`, `trans_num` and `unix_time` are deleted. These 13 columns are either direct identifiers, strong quasi-identifiers, or not needed by any rule.
+Age is calculated from `dob` at the time of each transaction, then placed in one of 5 bands: `<25`, `25-39`, `40-54`, `55-69`, `70+`. The exact birth date is discarded.
 
-### 2.4.4 k-Anonymity Check
+The state code becomes one of the 4 US Census regions: Northeast, Midwest, South or West [19]. The exact state is discarded.
+
+The pipeline deletes names (`first`, `last`), address fields (`street`, `city`, `zip`), coordinates (`lat`, `long`, `merch_lat`, `merch_long`), `city_pop`, `job`, `trans_num` and `unix_time`. These 13 fields either identify or help identify a person, or no rule needs them.
+
+### 2.4.4 k-anonymity check
 
 The quasi-identifiers (QI) are `age_band`, `gender` and `region`. Following Sweeney's definition [10], the check counts the number of *distinct customers* in every QI group. We count customers, not transactions, because one customer has many transactions, and counting rows would make groups look safer than they are.
 
@@ -136,13 +138,13 @@ function K_ANONYMITY_CHECK(data, QI = [age_band, gender, region], k = 5):
     else:              return FAIL, min(size), exposed
 ```
 
-With 5 age bands, 2 genders and 4 regions, there are at most 40 groups, which is small enough for every group to contain several customers.
+Five age bands, 2 genders and 4 regions produce no more than 40 groups. The check still has to confirm that each group contains at least 5 customers.
 
-### 2.4.5 Percentile Thresholds
+### 2.4.5 Percentile thresholds
 
-The p-th percentile of a list of numbers is the value below which p% of the numbers fall. Rule R1 uses the 99th percentile of the amount *within each category*, because a normal amount for `travel` is very different from a normal amount for `grocery_pos`. Rule R4 uses the *median* (50th percentile) of each customer's spending, because the median is not pulled up by a few large purchases. All percentiles and medians are calculated on the training file only.
+The p-th percentile is the value below which p% of the observations fall. R1 uses the 99th amount percentile within each category because a usual `travel` amount differs from a usual `grocery_pos` amount. R4 uses each customer's median, or 50th percentile. A few large purchases do not pull the median upward as they would pull the mean. The training file supplies every percentile and median.
 
-### 2.4.6 Fraud Rules and Risk Score
+### 2.4.6 Fraud rules and risk score
 
 | Rule | Fires when | Learned from train |
 |---|---|---|
@@ -151,7 +153,7 @@ The p-th percentile of a list of numbers is the value below which p% of the numb
 | **R3 Risky category** | the category's fraud rate is at least 2 times the overall rate | `grocery_pos`, `misc_net`, `shopping_net` |
 | **R4 Above usual spend** | the amount is at least 5 times the customer's median spend | median per `customer_id` (falls back to the category median for unseen customers) |
 
-Each rule gives 1 if it fires and 0 if not. The risk score is the number of rules that fire, and a transaction is flagged when the score reaches a threshold.
+Each rule returns 1 when it fires and 0 otherwise. Their sum is the risk score. A transaction is flagged when that score reaches the chosen threshold.
 
 ```text
 # learning (TRAIN rows only)
@@ -171,13 +173,13 @@ risk_score = R1 + R2 + R3 + R4                  # 0 to 4
 flagged    = 1 if risk_score >= T else 0
 ```
 
-The night hours are not typed in by hand: they are the hours that pass the 2 times test on the training data (the design expects 22, 23, 0, 1, 2 and 3). The threshold T is chosen on the training file by trying every value from 1 to 4 and keeping the one with the best F1 score. The design value is **T = 3**, and the full comparison is saved in `outputs/rule_tuning.csv`.
+The training data determines the night hours. Any hour with at least 2 times the overall fraud rate qualifies; the expected set is 22, 23, 0, 1, 2 and 3. The pipeline also tries every threshold T from 1 to 4 on the training file and keeps the one with the highest F1. The design value is **T = 3**. `outputs/rule_tuning.csv` stores the full comparison.
 
-A fifth rule, based on the distance between the customer and the merchant, was tested and dropped. The average distance is 76.1 km for normal transactions and 76.3 km for fraud, so it does not separate the two groups.
+A tested fifth rule used the distance between the customer and merchant. It was dropped because the averages barely differ: 76.1 km for normal transactions and 76.3 km for fraud.
 
-### 2.4.7 Evaluation Metrics
+### 2.4.7 Evaluation metrics
 
-Each test transaction falls into one of four outcomes, which are also shown on the dashboard.
+Every test transaction has one of the four outcomes shown on the dashboard.
 
 | | Actually fraud (`is_fraud` = 1) | Actually normal (`is_fraud` = 0) |
 |---|---|---|
@@ -191,9 +193,9 @@ From these four counts:
 * **F1 score** = 2 × Precision × Recall / (Precision + Recall): the balance of the two.
 * **Accuracy** = (TP + TN) / (TP + TN + FP + FN): the share of all decisions that were correct.
 
-**Why accuracy is misleading here.** Only 0.52% of all transactions are fraud, and 0.39% of the test file. A "rule" that flags nothing at all would be right on every normal transaction, so its accuracy on the test file would be about 99.6%, while its recall would be 0%. On such imbalanced data, precision and recall give a much more honest picture than accuracy [20], [3]. This project therefore uses F1 to choose the threshold, and reports precision and recall as the main results. All metrics are computed for each rule alone and for the combined score.
+Only 0.52% of all transactions are fraud, falling to 0.39% in the test file. A rule that flags nothing would classify every normal transaction correctly. Its test accuracy would be about 99.6%, despite 0% recall. Precision and recall are more useful on this imbalance [20], [3]. F1 selects the threshold, while the report gives precision and recall as the main results. The pipeline computes all metrics for each rule and for the combined score.
 
-## 2.5 Tools and Technologies
+## 2.5 Tools and technologies
 
 | Tool | Version / edition | Purpose in this project |
 |---|---|---|
@@ -208,9 +210,9 @@ From these four counts:
 | VS Code and terminal | n/a | Writing code and running the pipeline |
 | Mermaid | n/a | Drawing the diagrams in this report as code |
 
-The package versions are the ones fixed in `uv.lock`, so anyone who runs the project gets the same versions. The Tableau workbook (`.twb`) is an XML file, and it is generated by `build_dashboard.py` instead of being built by hand. This makes the dashboard consistent and easy to rebuild.
+`uv.lock` fixes the package versions for each run. `build_dashboard.py` generates the Tableau XML workbook (`.twb`), so a new run can rebuild the same dashboard.
 
-## 2.6 Experimental Setup Environment
+## 2.6 Experimental setup
 
 ### Hardware and software
 
@@ -226,19 +228,19 @@ The package versions are the ones fixed in `uv.lock`, so anyone who runs the pro
 
 ### Train and test protocol
 
-1. **Time-based split.** The dataset already comes as two files that follow each other in time. `fraudTrain.csv` covers 2019-01-01 to 2020-06-21 and `fraudTest.csv` covers 2020-06-21 to 2020-12-31. We keep this split and do not shuffle the rows, so the rules are tested on *later* data, which is how a real fraud system is used [3].
-2. **Learn on train only.** Every learned value (category percentiles, night hours, risky categories, customer medians and the score threshold) is computed from the training file only.
-3. **Freeze and apply.** The learned values are then fixed and applied to the test file. The label `is_fraud` of test rows is never used to set any rule.
-4. **Report on test.** Final metrics are reported on the 555,719 test rows, which the rules never saw. Training metrics are used only for choosing the threshold.
-5. **Repeatability.** No step uses random numbers, and the salt is fixed in `config.py`, so running the pipeline again gives the same pseudonyms, rule results and metrics.
+1. The dataset files follow each other in time. `fraudTrain.csv` covers 2019-01-01 to 2020-06-21, and `fraudTest.csv` covers 2020-06-21 to 2020-12-31. The rows are not shuffled. Testing on later data is closer to how a fraud system operates [3].
+2. The training file supplies the category percentiles, night hours, risky categories, customer medians and score threshold.
+3. Those values are fixed before the test file is processed. The test value of `is_fraud` never sets a rule.
+4. Final metrics use all 555,719 test rows. Training metrics are used only to choose the threshold.
+5. No step uses random numbers, and `config.py` contains a fixed salt. Repeated runs produce the same pseudonyms, rule results and metrics.
 
-## 2.7 Dataset Description
+## 2.7 Dataset description
 
 ### Source
 
-The data is the **"Credit Card Transactions Fraud Detection Dataset"** published on Kaggle by Kartik Shenoy under the CC0 (public domain) licence, available at https://www.kaggle.com/datasets/kartik2112/fraud-detection [16]. It was generated with **Sparkov**, an open-source credit card transaction simulator created by Brandon Harris [16], [23]. Sparkov uses the Python library Faker and a set of customer profiles (for example, by age group, gender and urban or rural area) to create realistic but fake customers, merchants and transactions, including fraud [16], [23]. Because the data is simulated, **it describes no real people**. It still has the same kinds of personal columns as real bank data, which makes it suitable for practising privacy protection safely.
+Kartik Shenoy published the "Credit Card Transactions Fraud Detection Dataset" on Kaggle under the CC0 public-domain licence: https://www.kaggle.com/datasets/kartik2112/fraud-detection [16]. Brandon Harris created the open-source Sparkov simulator used to generate it [16], [23]. Sparkov uses the Python Faker library and customer profiles based on factors such as age group, gender and urban or rural location. It produces fake customers, merchants, ordinary transactions and fraud [16], [23]. No row describes a real person. The columns resemble personal fields in bank data, so the file can be used to practise privacy protection without exposing customers.
 
-The Kaggle page describes the data as covering about 1,000 customers and a pool of 800 merchants [16]. Our own profile of the files finds 999 distinct cards and 693 distinct merchant names that actually appear in the data.
+Kaggle describes about 1,000 customers and a pool of 800 merchants [16]. The file profile finds 999 distinct cards and 693 merchant names in the actual rows.
 
 ### Dataset facts (measured by `src/load_data.py`)
 
@@ -258,7 +260,7 @@ The 14 categories are `entertainment`, `food_dining`, `gas_transport`, `grocery_
 
 ### Columns and how each is used or protected
 
-Each file has 23 columns. Table 2.1 lists them, classifies each one from a privacy point of view, and shows what the pipeline does with it.
+Each file has 23 columns. Table 2.1 gives the privacy class and pipeline treatment for each one.
 
 **Table 2.1: Raw columns, privacy class and treatment**
 
@@ -287,7 +289,7 @@ The pipeline also adds new columns: `dataset_split`, the four rule columns, `ris
 
 ### Data quirk: the `fraud_` merchant prefix
 
-Every merchant name in the dataset starts with `fraud_`, for example `fraud_Rippin, Kub and Mann`. This is a leftover of the simulator and **does not mean the transaction is fraud**. Both normal and fraud transactions have it. If it were left in, it could confuse dashboard users. The pipeline removes the prefix, so the name becomes `Rippin, Kub and Mann`.
+Every merchant name starts with `fraud_`, for example `fraud_Rippin, Kub and Mann`. The prefix comes from the simulator and is present on normal and fraudulent transactions. It is not a fraud label. The pipeline removes it before the dashboard sees the name, producing `Rippin, Kub and Mann`.
 
 ## References
 

@@ -1,6 +1,6 @@
-# Appendix A. Additional Screenshots
+# Appendix A. Additional screenshots
 
-This appendix collects extra figures and listings that support Chapters 3 and 4.
+These figures and listings support Chapters 3 and 4.
 
 ## A.1 k-anonymity before and after generalization
 
@@ -10,7 +10,7 @@ This appendix collects extra figures and listings that support Chapters 3 and 4.
 
 ## A.2 Threshold tuning on the training file
 
-Contents of `outputs/rule_tuning.csv`, shown as a table.
+Table A.1 reproduces `outputs/rule_tuning.csv`.
 
 | Threshold | Flagged | TP | FP | FN | TN | Precision | Recall | F1 | Accuracy |
 |---|---|---|---|---|---|---|---|---|---|
@@ -63,7 +63,7 @@ cbca-293-security/
 | `outputs/charts/k_anonymity_before_after.png` | 46,364 bytes | `make_charts.py` | Figures 3.6, 4.1 and A.1 |
 | `dashboard/fraud_dashboard.twb` | 86,534 bytes | `build_dashboard.py` | Tableau workbook (12 worksheets, 6 calculated fields, 6 filters) |
 
-**Table A.2: Files produced by one run of the pipeline**
+**Table A.2: Files from one pipeline run**
 
 ## A.5 Additional Tableau screenshots
 

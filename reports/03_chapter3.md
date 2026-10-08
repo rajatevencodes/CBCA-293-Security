@@ -1,8 +1,8 @@
-# Chapter 3. Project Implementation
+# Chapter 3. Project implementation
 
-This chapter explains how the design of Chapter 2 was turned into working code. All code is in the `src/` folder. Reference numbers in Chapters 3 to 5 refer to the consolidated list in Section 5.4.
+The Chapter 2 design is implemented in `src/`. Reference numbers in Chapters 3 to 5 use the consolidated list in Section 5.4.
 
-## 3.1 Development Environment
+## 3.1 Development environment
 
 | Item | Version / detail | Role |
 |---|---|---|
@@ -16,16 +16,16 @@ This chapter explains how the design of Chapter 2 was turned into working code. 
 | Tableau Desktop Public Edition | free edition, workbook saved locally | Opening and using the dashboard [13], [15] |
 | Editor | VS Code and the macOS terminal | Writing and running code |
 
-The project is a uv project. `pyproject.toml` lists the three libraries, `uv.lock` fixes their exact versions, and `.python-version` asks for Python 3.13. The whole project is set up and run with two commands from the project folder:
+This is a uv project. `pyproject.toml` lists the three libraries, `uv.lock` fixes their versions, and `.python-version` selects Python 3.13. Two commands set up and run the project:
 
 ```bash
 uv sync                               # create .venv and install the locked packages
 uv run python src/run_pipeline.py     # run steps 1 to 6
 ```
 
-The Tableau workbook can also be rebuilt on its own with `uv run python src/build_dashboard.py`, once the protected CSV exists.
+After the protected CSV exists, `uv run python src/build_dashboard.py` rebuilds only the Tableau workbook.
 
-The folders used by the code are:
+The code uses this folder structure:
 
 ```text
 cbca-293-security/
@@ -38,9 +38,9 @@ cbca-293-security/
 └── reports/             this report
 ```
 
-## 3.2 Module Description
+## 3.2 Module description
 
-Each step of the pipeline is a separate module, so each one can be read and tested on its own. Table 3.1 summarises them.
+Each pipeline step has its own module. Table 3.1 lists its inputs, outputs and main functions.
 
 **Table 3.1: Modules of the system**
 
@@ -54,11 +54,11 @@ Each step of the pipeline is a separate module, so each one can be read and test
 | `build_dashboard.py` | 6. Tableau workbook | `transactions_protected.csv` | `dashboard/fraud_dashboard.twb` | `build_datasource()`, `build_shared_views()`, `build_worksheet()`, `build_dashboard()`, `build()`, `validate()` |
 | `run_pipeline.py` | All | Raw files | All outputs | `main()`, `save_json()` |
 
-All settings live in `config.py`. For example, the secret salt, k = 5, the age bands, the state-to-region map and the rule factors (99th percentile, 2 times the overall fraud rate, 5 times the usual spend) are defined there and imported by the other modules.
+`config.py` holds the salt, k = 5, age bands, state-to-region map and rule factors. The factors are the 99th percentile, 2 times the overall fraud rate and 5 times the usual spend. Other modules import these values.
 
-## 3.3 Code Implementation
+## 3.3 Code implementation
 
-The excerpts below are copied from the source files. Comments in the code explain each step for a junior reader.
+The excerpts below come from the source files. Their comments describe the individual operations.
 
 ### 3.3.1 Loading and cleaning (`load_data.py`)
 
@@ -73,7 +73,7 @@ df = pd.concat(parts, ignore_index=True)
 df["merchant"] = df["merchant"].astype(str).str.removeprefix("fraud_")
 ```
 
-Both files are read and stacked into one table, and a new column `dataset_split` remembers which file each row came from. The unnamed row-number column is skipped by `usecols`. Text columns with few distinct values are stored as the pandas `category` type to save memory. The simulator's `fraud_` prefix is removed from every merchant name.
+The loop reads both files and stacks them into one table. `dataset_split` records the source file for each row. `usecols` skips the unnamed row-number field, while pandas stores text fields with few distinct values as `category` to reduce memory use. The last line removes the simulator's `fraud_` prefix from merchant names.
 
 ### 3.3.2 Masking (`privacy.py`)
 
@@ -83,7 +83,7 @@ def mask_card(card_number: int) -> str:
     return "**** **** **** " + str(card_number)[-4:]
 ```
 
-Only the last four digits are kept, which is within the PCI DSS display rule [6]. The output always has the same shape, whatever the length of the original number.
+The masked value keeps only the last four digits, within the PCI DSS display rule [6]. Its format stays the same for any input length.
 
 ### 3.3.3 Pseudonymization with salted SHA-256 (`privacy.py`)
 
@@ -93,7 +93,7 @@ def pseudonymize(card_number: int, salt: str = config.SALT) -> str:
     return "C_" + digest[:10]
 ```
 
-The salt is placed in front of the card number and the result is hashed with SHA-256 [17], [18]. The first 10 hex characters become the `customer_id`, for example `C_3298fc2482`. In `protect()`, each of the 999 distinct cards is hashed once and the result is mapped to all of its rows, which is much faster than hashing 1.85 million rows.
+The function places the salt before the card number and hashes the combined text with SHA-256 [17], [18]. The first 10 hexadecimal characters form the `customer_id`, such as `C_3298fc2482`. `protect()` hashes each of the 999 distinct cards once, then maps the result to its rows. It does not repeat the hash across all 1.85 million rows.
 
 ### 3.3.4 Generalization (`privacy.py` and `config.py`)
 
@@ -106,7 +106,7 @@ df["age_band"] = pd.cut(age, config.AGE_BINS, labels=config.AGE_LABELS)
 df["region"] = raw["state"].astype(str).map(config.STATE_TO_REGION)
 ```
 
-Age is calculated in whole years at the time of each transaction (days between birth date and transaction date, divided by 365.25). `pd.cut` puts each age into one of the 5 bands. Each state code is replaced by its US Census region [19]. The protected table is built column by column from the raw table, so any column that is not copied (names, address, coordinates, job, and so on) is suppressed automatically.
+Age is calculated at the transaction date by dividing the days since birth by 365.25 and keeping whole years. `pd.cut` assigns one of 5 bands. The state code becomes its US Census region [19]. The function builds the protected table one column at a time. Names, address, coordinates, job and other omitted fields never enter it.
 
 ### 3.3.5 k-anonymity check (`privacy.py`)
 
@@ -121,7 +121,7 @@ def k_anonymity(df: pd.DataFrame, quasi_identifiers: list[str], k: int = config.
     }
 ```
 
-The function groups the data by the quasi-identifiers and counts **distinct customers**, not rows, in each group [10]. Groups smaller than k are listed, and the customers inside them are counted as "exposed". `protect()` calls it twice: once on (narrow age band, gender, state) and once on (age band, gender, region).
+The function groups the data by its quasi-identifiers and counts distinct customers in each group [10]. Counting rows would overstate group size because each customer has many transactions. It lists groups below k and counts their customers as "exposed." `protect()` runs the check first on narrow age band, gender and state, then on age band, gender and region.
 
 ### 3.3.6 Learning the rule limits (`fraud_rules.py`)
 
@@ -141,7 +141,7 @@ def learn_limits(train: pd.DataFrame) -> RuleLimits:
     )
 ```
 
-This function only ever receives the training rows. It learns the 99th percentile amount of each category, the hours and categories whose fraud rate is at least 2 times the overall rate, and the median spend of each customer and each category. Note that the night hours are not typed in by hand: they are the hours that pass the 2 times test on the training data.
+This function receives training rows only. It calculates each category's 99th amount percentile, finds hours and categories with at least 2 times the overall fraud rate, and records the median spend for every customer and category. The night hours come from that rate test rather than a fixed list.
 
 ### 3.3.7 Applying the rules (`fraud_rules.py`)
 
@@ -154,7 +154,7 @@ df["rule_above_usual"] = (df["amount"] >= config.ABOVE_USUAL_FACTOR * usual).ast
 df["risk_score"] = df[RULE_COLUMNS].sum(axis=1)
 ```
 
-Each rule is one line and gives 0 or 1. A customer who has no training history gets the category median as their "usual" spend (`fillna`). The risk score is the sum of the four rule columns.
+Each rule returns 0 or 1. `fillna` assigns the category median as the usual spend when a customer has no training history. Adding the four columns gives the risk score.
 
 ### 3.3.8 Scoring and threshold tuning (`fraud_rules.py`)
 
@@ -168,7 +168,7 @@ def score(predicted: pd.Series, actual: pd.Series) -> dict:
     f1 = 2 * precision * recall / (precision + recall) if precision + recall else 0.0
 ```
 
-`score()` builds the confusion matrix and the four metrics from Section 2.4.7, and avoids division by zero. `tune_threshold()` calls it on the training rows for thresholds 1 to 4 and keeps the one with the highest F1. `evaluate()` calls it on the test rows for each rule, for the combined decision, and for a "flag nothing" baseline (written as `risk_score > 99`, which is never true). Finally, `add_decision()` adds `flagged` and the readable `outcome` label (`Caught`, `Missed`, `False alarm`, `Correctly passed`).
+`score()` builds the confusion matrix and metrics from Section 2.4.7, including guards against division by zero. `tune_threshold()` tests thresholds 1 through 4 on the training rows and keeps the highest F1. On the test rows, `evaluate()` scores each rule, the combined decision and a "flag nothing" baseline. The baseline uses `risk_score > 99`, which is always false. `add_decision()` then writes `flagged` and one of four `outcome` labels: `Caught`, `Missed`, `False alarm` or `Correctly passed`.
 
 ### 3.3.9 Keeping raw data out of later steps (`run_pipeline.py`)
 
@@ -177,14 +177,14 @@ df, privacy_report = privacy.protect(raw)
 del raw  # the raw data is not used after this point
 ```
 
-After the privacy layer, the raw table is deleted from memory. Steps 3 to 6 can only use the protected table, which enforces the trust boundary shown in Figure 2.1. The protected CSV is written with exactly 19 columns (Section 4.2).
+After `privacy.protect()` returns, the pipeline drops its reference to the raw table. Steps 3 through 6 receive only the protected table, matching the trust boundary in Figure 2.1. The protected CSV has exactly 19 columns (Section 4.2).
 
 ### 3.3.10 Generating and validating the Tableau workbook (`build_dashboard.py`)
 
-A Tableau workbook (`.twb`) is an XML text file. Instead of building the dashboard by hand, `build_dashboard.py` writes this XML with Python's `xml.etree.ElementTree` module [24]. This makes the dashboard consistent and rebuildable with one command. The script defines:
+A Tableau workbook (`.twb`) is an XML text file. `build_dashboard.py` writes it with Python's `xml.etree.ElementTree` module [24]. One command can rebuild the workbook. The script defines:
 
-* the **data source**: a text connection to `transactions_protected.csv` and its 19 columns;
-* six **calculated fields** for the KPIs, written in Tableau's formula language, for example:
+* a text data-source connection to the 19 columns in `transactions_protected.csv`;
+* six KPI calculated fields in Tableau's formula language, for example:
 
 ```python
 "recall": Calc("Calculation_7310000000000000005", "Rule Recall %", "real",
@@ -193,21 +193,21 @@ A Tableau workbook (`.twb`) is an XML text file. Instead of building the dashboa
                   "SUM([flagged] * [is_fraud]) / SUM([flagged])", FMT_PCT1),
 ```
 
-* six **shared filters** (date range, category, region, age band, gender, dataset split), stored so that they apply to all worksheets that use the data source;
-* twelve **worksheets**: 6 KPI tiles (Total Transactions, Fraud Transactions, Fraud Rate %, Fraud Amount $, Rule Recall %, Rule Precision %) and 6 charts (Fraud Rate by Hour, Fraud Count by Category, Fraud by Age Band, Fraud by Region, Monthly Fraud Trend, Rule Outcomes);
-* one **dashboard**, "Fraud & Privacy Dashboard", with a fixed size of 1400 x 900 pixels: a title, a row of 6 KPI tiles, a 2 x 3 grid of charts and a filter panel on the right.
+* six shared filters for date range, category, region, age band, gender and dataset split, applied to every worksheet that uses the source;
+* twelve worksheets: 6 KPI tiles (Total Transactions, Fraud Transactions, Fraud Rate %, Fraud Amount $, Rule Recall %, Rule Precision %) and 6 charts (Fraud Rate by Hour, Fraud Count by Category, Fraud by Age Band, Fraud by Region, Monthly Fraud Trend, Rule Outcomes);
+* a 1400 x 900 pixel dashboard named "Fraud & Privacy Dashboard," with a title, 6 KPI tiles, a 2 x 3 chart grid and a filter panel.
 
-The "Rule Outcomes" chart hides the very large `Correctly passed` group, so the `Caught`, `Missed` and `False alarm` bars can be compared. The "Fraud by Age Band" chart uses a manual order, because alphabetical order would put `<25` last.
+The "Rule Outcomes" chart omits the much larger `Correctly passed` group so the `Caught`, `Missed` and `False alarm` bars remain readable. "Fraud by Age Band" uses a manual order because alphabetical sorting would put `<25` last.
 
-After writing the file, `build()` calls `validate()`, which reads the XML back and checks it. It confirms that the XML parses, every field used on a shelf, filter or calculation is defined, each worksheet declares the fields it uses, every worksheet is placed on the dashboard, every layout zone sits inside its parent, and every sheet has a tab. If any check fails, the script stops with an error. On the final run it printed: `Validated fraud_dashboard.twb: 12 worksheets, 6 calculated fields, 6 shared filters.`
+After writing the file, `build()` calls `validate()` and reads the XML back. It checks that the XML parses, referenced fields exist, worksheets declare their fields, the dashboard contains every worksheet, layout zones stay inside their parents and each sheet has a tab. A failed check stops the script. The final run printed: `Validated fraud_dashboard.twb: 12 worksheets, 6 calculated fields, 6 shared filters.`
 
-The workbook stores the folder of the CSV file as an absolute path. If the workbook is opened on another computer, it can be rebuilt with the option `--tableau-data-dir` so that Tableau looks in the right folder.
+The workbook stores an absolute path to the CSV folder. On another computer, `--tableau-data-dir` rebuilds it with the correct folder.
 
-## 3.4 System Interface / Screenshots
+## 3.4 System interface and screenshots
 
 ### 3.4.1 Pipeline console output
 
-The pipeline is run from the terminal with `uv run python src/run_pipeline.py`. The full output of the final run is shown below.
+The terminal command is `uv run python src/run_pipeline.py`. Its final output is below.
 
 ```text
 [1/6] Loading raw Kaggle files ...
@@ -234,7 +234,7 @@ Done in 114 seconds.
 
 **Figure 3.1: Console output of the complete pipeline run**
 
-The whole run, from 1.85 million raw rows to the finished Tableau workbook, took 114 seconds on the MacBook Air.
+The MacBook Air processed 1.85 million raw rows and wrote the Tableau workbook in 114 seconds.
 
 ### 3.4.2 Report charts produced by the pipeline
 
@@ -258,11 +258,11 @@ The whole run, from 1.85 million raw rows to the finished Tableau workbook, took
 
 **Figure 3.6: Customers in groups smaller than k = 5, before and after generalization**
 
-These charts are discussed in Chapter 4.
+Chapter 4 discusses these results.
 
 ### 3.4.3 Tableau dashboard
 
-The workbook `dashboard/fraud_dashboard.twb` is opened in Tableau Desktop Public Edition. Figure 3.7 shows the full dashboard with all data, and Figure 3.8 shows the same dashboard with the Dataset Split filter set to `test`, so the KPIs match the test results in Chapter 4.
+`dashboard/fraud_dashboard.twb` opens in Tableau Desktop Public Edition. Figure 3.7 uses all rows. Figure 3.8 sets Dataset Split to `test`, which makes the KPIs match Chapter 4.
 
 <!-- screenshot pending: capture after opening in Tableau -->
 ![Tableau dashboard overview](../dashboard/screenshots/01_dashboard_overview.png)
@@ -274,4 +274,4 @@ The workbook `dashboard/fraud_dashboard.twb` is opened in Tableau Desktop Public
 
 **Figure 3.8: Fraud & Privacy Dashboard with Dataset Split = test**
 
-The dashboard has three parts. The top row shows the 6 KPI tiles. The middle and bottom rows show the 6 charts. The right panel holds the 6 filters, and every filter changes all KPIs and charts at the same time. The dashboard only shows protected fields: the customer appears as a pseudonym and a masked card number, the location as a region and the age as a band.
+Six KPI tiles run across the top. Six charts fill the middle and bottom rows, and the right panel contains 6 filters that update every view. Only protected fields appear. A customer is represented by a pseudonym and masked card number, a location by its region, and an age by its band.

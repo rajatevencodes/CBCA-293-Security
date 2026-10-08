@@ -9,7 +9,7 @@ CBCA293 Security and Privacy for Big Data Analytics · Bennett University · Raj
 * Team members and enrolment numbers
 * Faculty guide: ____________________
 
-*Speaker note: One line: we hide private customer details first, then find fraud and show it in Tableau.*
+*Speaker note: We protect customer details before fraud analysis or Tableau can access the data.*
 
 ## Slide 2: Problem
 
@@ -18,7 +18,7 @@ CBCA293 Security and Privacy for Big Data Analytics · Bennett University · Raj
 * Analysts need patterns, not identities
 * Fraud is rare (0.52%), so accuracy is misleading
 
-*Speaker note: The question is how to analyse fraud without exposing who the customers are.*
+*Speaker note: Fraud analysis needs transaction patterns, not the identity fields stored beside them.*
 
 ## Slide 3: Objectives
 
@@ -27,7 +27,7 @@ CBCA293 Security and Privacy for Big Data Analytics · Bennett University · Raj
 * Detect fraud with 4 explainable rules, tested on unseen data
 * Build a Tableau dashboard with 6 KPIs, 6 charts, 6 filters
 
-*Speaker note: Every objective has a number we can check, and each one is checked in the results.*
+*Speaker note: The results use these targets, so none of the objectives depends on a subjective claim.*
 
 ## Slide 4: Dataset
 
@@ -36,7 +36,7 @@ CBCA293 Security and Privacy for Big Data Analytics · Bennett University · Raj
 * Train 2019-01-01 to 2020-06-21, test 2020-06-21 to 2020-12-31
 * 9,651 fraud rows (0.52%); 0 missing values
 
-*Speaker note: Every merchant name starts with "fraud_", which is a simulator quirk, not a fraud label; we strip it.*
+*Speaker note: The simulator puts "fraud_" before every merchant name, including normal transactions. The pipeline removes it.*
 
 ## Slide 5: Architecture
 
@@ -45,7 +45,7 @@ CBCA293 Security and Privacy for Big Data Analytics · Bennett University · Raj
 * Tableau only reads `transactions_protected.csv`
 * One command runs everything in 114 seconds
 
-*Speaker note: Show Figure 2.1; the privacy layer is the trust boundary.*
+*Speaker note: In Figure 2.1, raw personal fields stop at the privacy layer. Later steps receive the protected table only.*
 
 ## Slide 6: Privacy layer
 
@@ -54,7 +54,7 @@ CBCA293 Security and Privacy for Big Data Analytics · Bennett University · Raj
 * Date of birth → 5 age bands; state → 4 Census regions
 * k-anonymity: before FAIL (659 customers exposed), after PASS (smallest group 5)
 
-*Speaker note: We measured privacy instead of assuming it; the failure and the fix are both saved.*
+*Speaker note: The first privacy design failed. Saving that result shows why the extra generalization was needed.*
 
 ## Slide 7: Fraud rules
 
@@ -63,7 +63,7 @@ CBCA293 Security and Privacy for Big Data Analytics · Bennett University · Raj
 * R4 amount ≥ 5× the customer's median spend
 * Flag if 3 or more rules fire (best F1 on train)
 
-*Speaker note: All limits are learned from the train file only, then frozen.*
+*Speaker note: The training file sets every limit. Those values are fixed before the test file is scored.*
 
 ## Slide 8: Results on the unseen test file
 
@@ -72,7 +72,7 @@ CBCA293 Security and Privacy for Big Data Analytics · Bennett University · Raj
 * Best single rule: F1 0.179; combining rules raises precision 2.7×
 * Flag-nothing baseline: 99.61% accuracy but 0% recall
 
-*Speaker note: Show the confusion matrix; explain why accuracy is not used to judge the system.*
+*Speaker note: The confusion matrix shows why accuracy fails here. The baseline reaches 99.61% by missing every fraud.*
 
 ## Slide 9: Live demo
 
@@ -81,13 +81,13 @@ CBCA293 Security and Privacy for Big Data Analytics · Bennett University · Raj
 * Set Dataset Split = test: KPIs match the report (recall 57.1%, precision 34.1%)
 * Filter by category or region and show the charts update
 
-*Speaker note: About 5 minutes; if the run is slow, show the saved console output and open the workbook directly.*
+*Speaker note: Allow about 5 minutes. If the pipeline runs slowly, use the saved console output and open the workbook.*
 
-## Slide 10: Conclusion and future scope
+## Slide 10: Conclusion and further work
 
 * Privacy and fraud detection did not conflict: the rules never needed identity fields
 * Limits: simulated data, rules only, k-anonymity does not stop attribute disclosure, salt in code
 * Next: l-diversity, differential privacy for KPIs, a machine learning layer, salt in a vault
 * Questions
 
-*Speaker note: End with the one-line takeaway: protect first, then analyse.*
+*Speaker note: The raw identity fields stop before analysis. The rules and dashboard still have the fields they need.*

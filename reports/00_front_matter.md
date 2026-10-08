@@ -72,7 +72,7 @@ Date: ____________________
 
 <div style="page-break-after: always;"></div>
 
-## Plagiarism Report Certificate
+## Plagiarism report certificate
 
 This is to certify that the project report titled **"Privacy-Preserving Credit Card Fraud Detection and Visual Analytics using Python and Tableau"** has been checked for plagiarism using Turnitin. The results of the check are given below.
 
@@ -97,7 +97,7 @@ Faculty Signature: ____________________
 
 <div style="page-break-after: always;"></div>
 
-## Teamwork and Collaboration
+## Teamwork and collaboration
 
 | S. No. | Member Name | Enrolment No. | Individual Contribution |
 |---|---|---|---|
@@ -108,60 +108,60 @@ Faculty Signature: ____________________
 
 <div style="page-break-after: always;"></div>
 
-## Table of Contents
+## Table of contents
 
-**Front Matter**
+**Front matter**
 
-* Cover Page
+* Cover page
 * Declaration
-* Plagiarism Report Certificate
-* Teamwork and Collaboration
-* Table of Contents
+* Plagiarism report certificate
+* Teamwork and collaboration
+* Table of contents
 
-**[Chapter 1. Problem Analysis Introduction](01_chapter1.md)**
+**[Chapter 1. Problem analysis and introduction](01_chapter1.md)**
 
-* 1.1 Background of the Study
-* 1.2 Problem Statement
+* 1.1 Background of the study
+* 1.2 Problem statement
 * 1.3 Objectives
 * 1.4 Scope
-* 1.5 Review of Existing Systems
-  * 1.5.1 Fraud Detection Approaches
-  * 1.5.2 Privacy Protection Techniques
-  * 1.5.3 Business Intelligence Tools
-  * 1.5.4 Comparison and Identified Gap
-  * 1.5.5 Feasibility Analysis
+* 1.5 Review of existing systems
+  * 1.5.1 Fraud detection approaches
+  * 1.5.2 Privacy protection techniques
+  * 1.5.3 Business intelligence tools
+  * 1.5.4 Comparison and identified gap
+  * 1.5.5 Feasibility analysis
 * References for Chapter 1
 
-**[Chapter 2. Project Design and Methodology](02_chapter2.md)**
+**[Chapter 2. Project design and methodology](02_chapter2.md)**
 
-* 2.1 System Overview
-* 2.2 System Architecture Diagram
-* 2.3 Methodology Flow Chart
-* 2.4 Algorithms Used
-* 2.5 Tools and Technologies
-* 2.6 Experimental Setup Environment
-* 2.7 Dataset Description
+* 2.1 System overview
+* 2.2 System architecture
+* 2.3 Methodology flow chart
+* 2.4 Algorithms used
+* 2.5 Tools and technologies
+* 2.6 Experimental setup
+* 2.7 Dataset description
 * References for Chapter 2
 
-**[Chapter 3. Project Implementation](03_chapter3.md)**
+**[Chapter 3. Project implementation](03_chapter3.md)**
 
-* 3.1 Development Environment
-* 3.2 Module Description
-* 3.3 Code Implementation
-* 3.4 System Interface / Screenshots
+* 3.1 Development environment
+* 3.2 Module description
+* 3.3 Code implementation
+* 3.4 System interface and screenshots
 
-**[Chapter 4. Results and Discussion](04_chapter4.md)**
+**[Chapter 4. Results and discussion](04_chapter4.md)**
 
-* 4.1 Experimental Setup
-* 4.2 Output Results
-* 4.3 Performance Analysis
+* 4.1 Experimental setup
+* 4.2 Output results
+* 4.3 Performance analysis
 * 4.4 Discussion
 
 **[Chapter 5. Conclusion](05_chapter5.md)**
 
 * 5.1 Conclusion
 * 5.2 Limitations
-* 5.3 Future Scope
+* 5.3 Further work
 * 5.4 References
 
-**[Appendix A. Additional Screenshots](appendix_a.md)**
+**[Appendix A. Additional screenshots](appendix_a.md)**
