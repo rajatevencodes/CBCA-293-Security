@@ -1,4 +1,15 @@
 # Downloaded source data and generated pipeline output are too large for GitHub.
 data/raw/*.csv
 data/processed/*.csv
+data/processed/*.zip
 
+# Local environment and OS files
+.venv/
+__pycache__/
+*.pyc
+.DS_Store
+
+# Superseded report PDFs (the final ones are the two milestone PDFs)
+reports/CBCA293_Project_Report.pdf
+reports/CBCA293_Phase1_Milestone1_Ch1-2.pdf
+reports/CBCA293_Phase2_Milestone2_Ch2-5.pdf

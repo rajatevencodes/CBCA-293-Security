@@ -1,13 +1,16 @@
 # Privacy-Preserving Credit Card Fraud Detection and Visual Analytics using Python and Tableau
 
-CBCA293 Security and Privacy for Big Data Analytics · Bennett University · Rajat Sharma (S24BCAU0134) and team
+CBCA293 Security and Privacy for Big Data Analytics · Bennett University · Rajat Sharma (S24BCAU0134) · Ishan Chaudary (S24BCAU0002) · Piyush Agarwal (S24BCAU0182) · Suraj Tiwari (S24BCAU0136)
 
 ## Slide 1: Title
 
 * Privacy-Preserving Credit Card Fraud Detection and Visual Analytics
 * Python pipeline + Tableau dashboard
-* Team members and enrolment numbers
-* Faculty guide: ____________________
+* Rajat Sharma (S24BCAU0134)
+* Ishan Chaudary (S24BCAU0002)
+* Piyush Agarwal (S24BCAU0182)
+* Suraj Tiwari (S24BCAU0136)
+* Faculty guide: Ms. Monia
 
 *Speaker note: We protect customer details before fraud analysis or Tableau can access the data.*
 
@@ -40,9 +43,9 @@ CBCA293 Security and Privacy for Big Data Analytics · Bennett University · Raj
 
 ## Slide 5: Architecture
 
-* Raw CSVs → Load → Privacy layer → Fraud rules → Evaluate → Charts → Tableau workbook
+* Raw CSVs → Load → Privacy layer → Fraud rules → Evaluate → Charts → Tableau extract + workbook
 * Raw data is deleted from memory after the privacy layer
-* Tableau only reads `transactions_protected.csv`
+* Tableau only reads the protected data (`transactions_protected.hyper` extract)
 * One command runs everything in 114 seconds
 
 *Speaker note: In Figure 2.1, raw personal fields stop at the privacy layer. Later steps receive the protected table only.*
@@ -77,7 +80,7 @@ CBCA293 Security and Privacy for Big Data Analytics · Bennett University · Raj
 ## Slide 9: Live demo
 
 * Run `uv run python src/run_pipeline.py` and show the console output
-* Open `dashboard/fraud_dashboard.twb` in Tableau Desktop Public Edition
+* Open `dashboard/fraud_dashboard.twbx` in Tableau Public (Window → Presentation Mode)
 * Set Dataset Split = test: KPIs match the report (recall 57.1%, precision 34.1%)
 * Filter by category or region and show the charts update
 

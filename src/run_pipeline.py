@@ -1,8 +1,10 @@
+# CBCA293 Security and Privacy for Big Data Analytics, Bennett University
+# Team: Rajat Sharma (S24BCAU0134), Ishan Chaudary (S24BCAU0002), Piyush Agarwal (S24BCAU0182), Suraj Tiwari (S24BCAU0136)
 """Run the whole project, start to finish:
 
     uv run python src/run_pipeline.py
 
-Step 1 load -> 2 privacy -> 3 rules -> 4 evaluate -> 5 charts -> 6 Tableau workbook
+Step 1 load -> 2 privacy -> 3 rules -> 4 evaluate -> 5 charts -> 6 Tableau extract + workbook
 """
 
 import argparse
@@ -79,8 +81,18 @@ def main() -> None:
     df[columns].to_csv(config.PROCESSED_CSV, index=False, float_format="%.2f",
                        date_format="%Y-%m-%d %H:%M:%S")
     print(f"   saved {config.PROCESSED_CSV.relative_to(config.ROOT)}")
+    # Tableau Public only accepts an extract (.hyper). The Hyper API is optional:
+    #   uv run --with tableauhyperapi python src/run_pipeline.py
+    try:
+        import make_extract
+        rows = make_extract.make_extract(config.PROCESSED_CSV, config.PROCESSED_CSV.with_suffix(".hyper"))
+        print(f"   saved {config.PROCESSED_CSV.with_suffix('.hyper').relative_to(config.ROOT)} ({rows:,} rows)")
+    except ImportError:
+        print("   tableauhyperapi not installed: keeping the existing .hyper extract "
+              "(rebuild it with: uv run --with tableauhyperapi python src/make_extract.py)")
     build_dashboard.build(config.PROCESSED_CSV, config.DASHBOARD_TWB, args.tableau_data_dir)
     print(f"   saved {config.DASHBOARD_TWB.relative_to(config.ROOT)}")
+    print(f"   saved {config.DASHBOARD_TWB.with_suffix('.twbx').relative_to(config.ROOT)}")
 
     print(f"Done in {time.time() - start:.0f} seconds.")
 

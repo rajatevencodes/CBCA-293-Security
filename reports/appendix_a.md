@@ -24,22 +24,23 @@ Table A.1 reproduces `outputs/rule_tuning.csv`.
 ## A.3 Project folder structure
 
 ```text
-cbca-293-security/
+CBCA-293-Security/
 ├── pyproject.toml, uv.lock     uv project (Python 3.13)
 ├── .python-version             3.13
 ├── data/
 │   ├── raw/                    fraudTrain.csv, fraudTest.csv (Kaggle)
-│   └── processed/              transactions_protected.csv (Tableau input)
+│   └── processed/              transactions_protected.csv and .hyper (Tableau input)
 ├── src/
 │   ├── config.py               paths, salt, rule settings
 │   ├── load_data.py            step 1: load, combine, clean, profile
 │   ├── privacy.py              step 2: mask, hash, generalize, k-anonymity
 │   ├── fraud_rules.py          steps 3-4: rules, score, metrics
 │   ├── make_charts.py          step 5: report charts
-│   ├── build_dashboard.py      step 6: writes the Tableau .twb
+│   ├── build_dashboard.py      step 6: writes the Tableau .twb and .twbx
+│   ├── make_extract.py         writes the Tableau extract (.hyper)
 │   └── run_pipeline.py         runs steps 1-6 in order
 ├── outputs/                    JSON/CSV results, charts/*.png
-├── dashboard/                  fraud_dashboard.twb, screenshots/
+├── dashboard/                  fraud_dashboard.twb, fraud_dashboard.twbx, screenshots/
 ├── reports/                    00_front_matter.md ... 05_chapter5.md, appendix_a.md,
 │                               presentation.md, assets/
 └── docs/                       requirements, project understanding, decisions, plan
@@ -52,7 +53,7 @@ cbca-293-security/
 | File | Size | Produced by | Content |
 |---|---|---|---|
 | `data/processed/transactions_protected.csv` | about 265 MB | `run_pipeline.py` | 1,852,394 protected rows, 19 columns |
-| `outputs/data_profile.json` | 680 bytes | `load_data.py` | Dataset facts |
+| `outputs/data_profile.json` | 703 bytes | `load_data.py` | Dataset facts |
 | `outputs/privacy_report.json` | 1,224 bytes | `privacy.py` | k-anonymity before and after, example record, removed columns |
 | `outputs/rule_tuning.csv` | 294 bytes | `fraud_rules.py` | Train results for thresholds 1 to 4 |
 | `outputs/metrics.json` | 1,562 bytes | `fraud_rules.py` | Learned settings and test metrics |
@@ -61,18 +62,18 @@ cbca-293-security/
 | `outputs/charts/rule_comparison.png` | 43,885 bytes | `make_charts.py` | Figures 3.4 and 4.2 |
 | `outputs/charts/confusion_matrix.png` | 37,315 bytes | `make_charts.py` | Figures 3.5 and 4.3 |
 | `outputs/charts/k_anonymity_before_after.png` | 46,364 bytes | `make_charts.py` | Figures 3.6, 4.1 and A.1 |
-| `dashboard/fraud_dashboard.twb` | 86,534 bytes | `build_dashboard.py` | Tableau workbook (12 worksheets, 6 calculated fields, 6 filters) |
+| `dashboard/fraud_dashboard.twb` | 100,489 bytes | `build_dashboard.py` | Tableau workbook (12 worksheets, 6 calculated fields, 6 filters) |
+| `data/processed/transactions_protected.hyper` | about 36 MB | `make_extract.py` | Tableau extract, 1,852,394 rows |
+| `dashboard/fraud_dashboard.twbx` | about 21 MB | `build_dashboard.py` | Packaged workbook (dashboard + extract) |
 
 **Table A.2: Files from one pipeline run**
 
 ## A.5 Additional Tableau screenshots
 
-<!-- screenshot pending: capture after opening in Tableau -->
 ![Tableau filter panel](../dashboard/screenshots/03_filter_panel.png)
 
 **Figure A.3: The filter panel (date range, category, region, age band, gender, dataset split)**
 
-<!-- screenshot pending: capture after opening in Tableau -->
 ![Tableau tooltip](../dashboard/screenshots/04_tooltip.png)
 
 **Figure A.4: A tooltip on the Fraud Count by Category chart, showing protected fields only**

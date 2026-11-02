@@ -6,6 +6,8 @@
 
 # Privacy-Preserving Credit Card Fraud Detection and Visual Analytics using Python and Tableau
 
+**Milestone 1: Research Definition and Planning (Chapters 1 and 2)**
+
 Submitted in **CBCA293 Security and Privacy for Big Data Analytics**
 
 of
@@ -18,12 +20,12 @@ of
 
 **By:**
 
-| Student | Enrolment No. |
-|---|---|
-| Rajat Sharma | S24BCAU0134 |
-| Student 2: ____________________ | ____________________ |
-| Student 3: ____________________ | ____________________ |
-| Student 4: ____________________ | ____________________ |
+| S. No. | Student Name | Enrolment No. |
+|---|---|---|
+| 1 | Rajat Sharma | S24BCAU0134 |
+| 2 | Ishan Chaudary | S24BCAU0002 |
+| 3 | Piyush Agarwal | S24BCAU0182 |
+| 4 | Suraj Tiwari | S24BCAU0136 |
 
 <br>
 
@@ -33,9 +35,7 @@ of
 
 **Under the guidance of:**
 
-Faculty Name: ____________________
-
-Designation: ____________________
+Ms. Monia
 
 <br>
 
@@ -62,9 +62,9 @@ We further declare that:
 | Name | Enrolment No. | Signature |
 |---|---|---|
 | Rajat Sharma | S24BCAU0134 | ____________________ |
-| ____________________ | ____________________ | ____________________ |
-| ____________________ | ____________________ | ____________________ |
-| ____________________ | ____________________ | ____________________ |
+| Ishan Chaudary | S24BCAU0002 | ____________________ |
+| Piyush Agarwal | S24BCAU0182 | ____________________ |
+| Suraj Tiwari | S24BCAU0136 | ____________________ |
 
 Place: Greater Noida
 
@@ -72,96 +72,29 @@ Date: ____________________
 
 <div style="page-break-after: always;"></div>
 
-## Plagiarism report certificate
-
-This is to certify that the project report titled **"Privacy-Preserving Credit Card Fraud Detection and Visual Analytics using Python and Tableau"** has been checked for plagiarism using Turnitin. The results of the check are given below.
-
-| Check | Result |
-|---|---|
-| Turnitin similarity index | ______ % |
-| AI plagiarism (must be 0%) | ______ % |
-| Date of check | ____________________ |
-
-The full Turnitin report is attached with the LMS submission.
-
-| Name | Enrolment No. | Signature |
-|---|---|---|
-| Rajat Sharma | S24BCAU0134 | ____________________ |
-| ____________________ | ____________________ | ____________________ |
-| ____________________ | ____________________ | ____________________ |
-| ____________________ | ____________________ | ____________________ |
-
-Faculty Name: ____________________
-
-Faculty Signature: ____________________
-
-<div style="page-break-after: always;"></div>
-
 ## Teamwork and collaboration
 
 | S. No. | Member Name | Enrolment No. | Individual Contribution |
 |---|---|---|---|
-| 1 | Rajat Sharma | S24BCAU0134 | Data pipeline, privacy layer, fraud rules, Tableau dashboard, report |
-| 2 | ____________________ | ____________________ | ____________________ |
-| 3 | ____________________ | ____________________ | ____________________ |
-| 4 | ____________________ | ____________________ | ____________________ |
+| 1 | Rajat Sharma | S24BCAU0134 | Contributed equally to design, code, dashboard and report |
+| 2 | Ishan Chaudary | S24BCAU0002 | Contributed equally to design, code, dashboard and report |
+| 3 | Piyush Agarwal | S24BCAU0182 | Contributed equally to design, code, dashboard and report |
+| 4 | Suraj Tiwari | S24BCAU0136 | Contributed equally to design, code, dashboard and report |
 
 <div style="page-break-after: always;"></div>
 
 ## Table of contents
 
-**Front matter**
+**Milestone 1 (`CBCA293_Milestone1_Ch1-2.pdf`)**
 
-* Cover page
-* Declaration
-* Plagiarism report certificate
-* Teamwork and collaboration
-* Table of contents
+* Cover page, declaration, teamwork and collaboration, table of contents
+* [Chapter 1. Problem analysis and introduction](01_chapter1.md): 1.1 Background of the study · 1.2 Problem statement · 1.3 Objectives · 1.4 Scope · 1.5 Review of existing systems
+* [Chapter 2. Project design and methodology](02_chapter2.md): 2.1 System overview · 2.2 System architecture diagram · 2.3 Methodology flow chart · 2.4 Algorithms used · 2.5 Tools and technologies · 2.6 Experimental setup environment · 2.7 Dataset description
+* References (end of Chapter 2)
 
-**[Chapter 1. Problem analysis and introduction](01_chapter1.md)**
+**Milestone 2 (`CBCA293_Milestone2_Ch3-5.pdf`)**
 
-* 1.1 Background of the study
-* 1.2 Problem statement
-* 1.3 Objectives
-* 1.4 Scope
-* 1.5 Review of existing systems
-  * 1.5.1 Fraud detection approaches
-  * 1.5.2 Privacy protection techniques
-  * 1.5.3 Business intelligence tools
-  * 1.5.4 Comparison and identified gap
-  * 1.5.5 Feasibility analysis
-* References for Chapter 1
-
-**[Chapter 2. Project design and methodology](02_chapter2.md)**
-
-* 2.1 System overview
-* 2.2 System architecture
-* 2.3 Methodology flow chart
-* 2.4 Algorithms used
-* 2.5 Tools and technologies
-* 2.6 Experimental setup
-* 2.7 Dataset description
-* References for Chapter 2
-
-**[Chapter 3. Project implementation](03_chapter3.md)**
-
-* 3.1 Development environment
-* 3.2 Module description
-* 3.3 Code implementation
-* 3.4 System interface and screenshots
-
-**[Chapter 4. Results and discussion](04_chapter4.md)**
-
-* 4.1 Experimental setup
-* 4.2 Output results
-* 4.3 Performance analysis
-* 4.4 Discussion
-
-**[Chapter 5. Conclusion](05_chapter5.md)**
-
-* 5.1 Conclusion
-* 5.2 Limitations
-* 5.3 Further work
-* 5.4 References
-
-**[Appendix A. Additional screenshots](appendix_a.md)**
+* [Chapter 3. Project implementation](03_chapter3.md): 3.1 Development environment · 3.2 Module description · 3.3 Code implementation · 3.4 System interface / screenshots
+* [Chapter 4. Results and discussion](04_chapter4.md): 4.1 Experimental setup · 4.2 Output results · 4.3 Performance analysis · 4.4 Discussion
+* [Chapter 5. Conclusion](05_chapter5.md): 5.1 Conclusion · 5.2 Limitations · 5.3 Future scope · 5.4 References
+* [Appendix A. Additional screenshots](appendix_a.md)

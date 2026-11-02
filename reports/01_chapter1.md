@@ -10,7 +10,7 @@ Bolton and Hand distinguish fraud detection from prevention. Prevention tries to
 
 Fraud is rare. Only 0.52% of the 1,852,394 transactions used here are fraud. This class imbalance makes accuracy misleading [3]. Fraud patterns also change, so a method tuned on old data needs to be tested on newer transactions [3].
 
-Transaction records also contain personal information. One row can include a name, home address, date of birth, job and full card number. The European Union's General Data Protection Regulation (GDPR) defines information about an identified or identifiable person as "personal data" [7]. The US National Institute of Standards and Technology (NIST) uses the term personally identifiable information (PII) and advises organisations to minimise its use, collection and retention [8]. The Payment Card Industry Data Security Standard (PCI DSS) also limits how much of a card number may appear on screens and in reports [5], [6].
+Transaction records also contain personal information. One row can include a name, home address, date of birth, job and full card number. The European Union's General Data Protection Regulation (GDPR) defines information about an identified or identifiable person as "personal data" [4]. The US National Institute of Standards and Technology (NIST) uses the term personally identifiable information (PII) and advises organisations to minimise its use, collection and retention [5]. The Payment Card Industry Data Security Standard (PCI DSS) also limits how much of a card number may appear on screens and in reports [6], [7].
 
 Fraud analysts need transaction patterns, not customer identities. Giving analysts or a dashboard the raw file adds another copy that can leak. The pipeline deals with this by protecting the data before fraud analysis or Tableau can access it.
 
@@ -35,7 +35,7 @@ Each objective has a measurable target. Chapter 4 reports the results.
 
 1. Load both source files (1,296,675 + 555,719 = 1,852,394 rows), count missing values and duplicate rows, and save the profile to `outputs/data_profile.json`.
 2. Keep names, street address, city, ZIP code, coordinates, job, date of birth and full card number out of Tableau. Of the 23 raw columns, delete 13 personal or linkable columns and the row-number column. Transform the card number, date of birth and state.
-3. Show no more than the last 4 digits of a card, which is stricter than the PCI DSS limit of the BIN plus the last 4 digits [6]. Replace the full number with a salted SHA-256 pseudonym that links the customer's transactions without displaying the number.
+3. Show no more than the last 4 digits of a card, which is stricter than the PCI DSS limit of the BIN plus the last 4 digits [7]. Replace the full number with a salted SHA-256 pseudonym that links the customer's transactions without displaying the number.
 4. Reach k-anonymity with k ≥ 5 for age band, gender and region. Every combination must contain at least 5 distinct customers. Run the check on a detailed version (state and 7 age bands) and the final version (region and 5 age bands), then save both results to `outputs/privacy_report.json`.
 5. Build four readable fraud rules for high amount, night time, risky category and spending above the customer's usual amount. Learn their limits from `fraudTrain.csv` only, add them into a score from 0 to 4, and choose the score threshold with the best training F1. Save the comparison to `outputs/rule_tuning.csv`.
 6. Apply the fixed rules to the 555,719 rows in `fraudTest.csv`. Report precision, recall, F1, accuracy and a confusion matrix for every rule and the combined score in `outputs/metrics.json`. Compare them with a "flag nothing" baseline.
@@ -46,7 +46,7 @@ Each objective has a measurable target. Chapter 4 reports the results.
 
 ### In scope
 
-* The public Kaggle "Credit Card Transactions Fraud Detection Dataset" [16], both files (train and test).
+* The public Kaggle "Credit Card Transactions Fraud Detection Dataset" [8], both files (train and test).
 * A Python pipeline that loads, cleans and profiles the data.
 * A privacy layer using masking, pseudonymization, generalization and suppression, plus an automatic k-anonymity check.
 * Four rule-based fraud indicators, a combined risk score, and threshold tuning on the training file.
@@ -61,7 +61,7 @@ Each objective has a measurable target. Chapter 4 reports the results.
 * The pipeline works on files in batch mode, not on real-time or streaming data.
 * Advanced privacy models such as l-diversity and differential privacy are reviewed in Section 1.5 and left for further work.
 * Infrastructure security, including encryption at rest, access control and big data platforms (Hadoop, Spark, Kerberos, Ranger), belongs to other course tracks.
-* The dashboard is not published on Tableau Public, where published work is visible to everyone [15]. It is kept locally.
+* The dashboard is not published on Tableau Public, where published work is visible to everyone [9]. It is kept locally.
 
 ## 1.5 Review of existing systems
 
@@ -71,15 +71,15 @@ The project combines fraud detection, privacy protection and business intelligen
 
 #### Rule-based systems
 
-Fraud experts write "if-then" rules such as "if the amount is very large and the card is used at night, raise an alert". Le Borgne et al. describe a layered system in which blocking rules stop clearly fraudulent payments at the terminal and scoring rules assign a fraud score to accepted transactions [4]. Rules are fast and readable, but they catch only known patterns. Different experts may write different rules, and a large set becomes hard to maintain [4].
+Fraud experts write "if-then" rules such as "if the amount is very large and the card is used at night, raise an alert". Le Borgne et al. describe a layered system in which blocking rules stop clearly fraudulent payments at the terminal and scoring rules assign a fraud score to accepted transactions [10]. Rules are fast and readable, but they catch only known patterns. Different experts may write different rules, and a large set becomes hard to maintain [10].
 
 #### Machine learning systems
 
-A decision tree, random forest or neural network can learn from past transactions labelled as fraud or genuine, then assign a fraud probability to a new transaction. Bolton and Hand cover both supervised methods, which use labels, and unsupervised methods, which look for unusual behaviour without them [2]. These models can find patterns that rules miss. Their decisions are harder to explain, and training must account for class imbalance and changing fraud patterns [3], [4].
+A decision tree, random forest or neural network can learn from past transactions labelled as fraud or genuine, then assign a fraud probability to a new transaction. Bolton and Hand cover both supervised methods, which use labels, and unsupervised methods, which look for unusual behaviour without them [2]. These models can find patterns that rules miss. Their decisions are harder to explain, and training must account for class imbalance and changing fraud patterns [3], [10].
 
 #### Hybrid systems
 
-Banks use rules and models together. In the system described by Le Borgne et al., both produce alerts for human investigators [4]. Investigators can review only a limited number each day, so false alarms matter. Dal Pozzolo et al. make the same point using data from an industry partner: evaluation has to reflect class imbalance, changing fraud and limited review time [3].
+Banks use rules and models together. In the system described by Le Borgne et al., both produce alerts for human investigators [10]. Investigators can review only a limited number each day, so false alarms matter. Dal Pozzolo et al. make the same point using data from an industry partner: evaluation has to reflect class imbalance, changing fraud and limited review time [3].
 
 This project implements a small scoring-rules layer. Each decision can be traced to a readable rule. The limits, including what counts as a high amount, come from training data rather than an expert guess. Later transactions are kept aside for testing [3].
 
@@ -87,31 +87,31 @@ This project implements a small scoring-rules layer. Each decision can be traced
 
 #### Direct identifiers and quasi-identifiers
 
-A *direct identifier* points to one person on its own, such as a name or a full card number. A *quasi-identifier* does not identify anyone alone, but a combination of them can. For example, age, gender and state together may match only one person in a dataset. NIST lists removing direct identifiers and transforming quasi-identifiers as two of the main de-identification methods [9].
+A *direct identifier* points to one person on its own, such as a name or a full card number. A *quasi-identifier* does not identify anyone alone, but a combination of them can. For example, age, gender and state together may match only one person in a dataset. NIST lists removing direct identifiers and transforming quasi-identifiers as two of the main de-identification methods [11].
 
 #### Masking
 
-Masking hides part of a value when it is displayed. PCI DSS v4.0 was published by the PCI Security Standards Council in March 2022 [5]. Its Requirement 3.4.1 says that the card number (Primary Account Number, PAN) must be masked when displayed, so that no more than the BIN (the first digits, which identify the issuer) and the last four digits are shown, unless there is a documented business need [6]. Masking is simple and familiar ("card ending 2095"), but it does not let an analyst follow one customer, because many cards share the same last four digits.
+Masking hides part of a value when it is displayed. PCI DSS v4.0 was published by the PCI Security Standards Council in March 2022 [6]. Its Requirement 3.4.1 says that the card number (Primary Account Number, PAN) must be masked when displayed, so that no more than the BIN (the first digits, which identify the issuer) and the last four digits are shown, unless there is a documented business need [7]. Masking is simple and familiar ("card ending 2095"), but it does not let an analyst follow one customer, because many cards share the same last four digits.
 
 #### Pseudonymization (hashing)
 
-GDPR Article 4(5) defines pseudonymisation as processing personal data so that it "can no longer be attributed to a specific data subject without the use of additional information", which must be stored separately and protected [7]. One method replaces an identifier with a cryptographic hash such as SHA-256. The hash does not reveal the original value directly. A structured input such as a card number is still vulnerable to guessing: an attacker can hash possible numbers and compare the outputs. Adding a secret *salt* before hashing blocks that comparison unless the attacker also obtains the salt. The salt is the additional information that must be kept separate.
+GDPR Article 4(5) defines pseudonymisation as processing personal data so that it "can no longer be attributed to a specific data subject without the use of additional information", which must be stored separately and protected [4]. One method replaces an identifier with a cryptographic hash such as SHA-256. The hash does not reveal the original value directly. A structured input such as a card number is still vulnerable to guessing: an attacker can hash possible numbers and compare the outputs. Adding a secret *salt* before hashing blocks that comparison unless the attacker also obtains the salt. The salt is the additional information that must be kept separate.
 
 #### Generalization and suppression
 
-Generalization replaces an exact value with a broader one, for example a date of birth with an age band, or a state with a region. Suppression deletes a value or a whole column. Both reduce the detail in the data so that people are harder to single out [9].
+Generalization replaces an exact value with a broader one, for example a date of birth with an age band, or a state with a region. Suppression deletes a value or a whole column. Both reduce the detail in the data so that people are harder to single out [11].
 
 #### k-anonymity
 
-Sweeney proposed k-anonymity as a formal privacy model [10]. A released table is k-anonymous if every person in it cannot be distinguished from at least k − 1 other people on the quasi-identifiers. For example, with k = 5, every combination of age band, gender and region must cover at least 5 people. k-anonymity is easy to understand and easy to check, which is why it is used in this project. Its known weakness is that if all people in a group share the same sensitive value, an attacker still learns that value [11].
+Sweeney proposed k-anonymity as a formal privacy model [12]. A released table is k-anonymous if every person in it cannot be distinguished from at least k − 1 other people on the quasi-identifiers. For example, with k = 5, every combination of age band, gender and region must cover at least 5 people. k-anonymity is easy to understand and easy to check, which is why it is used in this project. Its known weakness is that if all people in a group share the same sensitive value, an attacker still learns that value [13].
 
 #### l-diversity
 
-Machanavajjhala et al. showed two attacks on k-anonymity: the *homogeneity attack*, where everyone in a group has the same sensitive value, and the *background knowledge attack*, where the attacker uses outside information [11]. They proposed l-diversity, which requires each group to contain at least l "well-represented" values of the sensitive attribute [11].
+Machanavajjhala et al. showed two attacks on k-anonymity: the *homogeneity attack*, where everyone in a group has the same sensitive value, and the *background knowledge attack*, where the attacker uses outside information [13]. They proposed l-diversity, which requires each group to contain at least l "well-represented" values of the sensitive attribute [13].
 
 #### Differential privacy
 
-Dwork introduced differential privacy, which limits how much an analysis can change when one person's data is added or removed [12]. Implementations usually add calibrated random noise. It gives a stronger formal guarantee than the other methods reviewed here, but the noise reduces accuracy and row-level dashboards are a poor fit.
+Dwork introduced differential privacy, which limits how much an analysis can change when one person's data is added or removed [14]. Implementations usually add calibrated random noise. It gives a stronger formal guarantee than the other methods reviewed here, but the noise reduces accuracy and row-level dashboards are a poor fit.
 
 Table 1.1 compares these techniques.
 
@@ -119,13 +119,13 @@ Table 1.1 compares these techniques.
 
 | Technique | What it does | Main strength | Main weakness | Used in this project |
 |---|---|---|---|---|
-| Masking | Hides most digits when displayed | Simple, required by PCI DSS [6] | Cannot link transactions of one customer | Yes, card number |
-| Salted hashing (pseudonymization) | Replaces an identifier with a one-way code | Keeps linkage without revealing identity | Data is still personal data if the salt leaks [7] | Yes, card number |
+| Masking | Hides most digits when displayed | Simple, required by PCI DSS [7] | Cannot link transactions of one customer | Yes, card number |
+| Salted hashing (pseudonymization) | Replaces an identifier with a one-way code | Keeps linkage without revealing identity | Data is still personal data if the salt leaks [4] | Yes, card number |
 | Generalization | Replaces exact values with ranges or groups | Reduces re-identification risk | Loses detail | Yes, date of birth, state |
 | Suppression | Deletes values or columns | Removes risk completely | Information is lost | Yes, 13 columns |
-| k-anonymity | Guarantees groups of at least k people [10] | Easy to check and explain | Weak if a group shares one sensitive value [11] | Yes, k = 5 |
-| l-diversity | Requires varied sensitive values per group [11] | Stops homogeneity attack | More complex, more data loss | No (future work) |
-| Differential privacy | Adds calibrated noise to results [12] | Strongest formal guarantee | Reduces accuracy, harder to explain | No (future work) |
+| k-anonymity | Guarantees groups of at least k people [12] | Easy to check and explain | Weak if a group shares one sensitive value [13] | Yes, k = 5 |
+| l-diversity | Requires varied sensitive values per group [13] | Stops homogeneity attack | More complex, more data loss | No (future work) |
+| Differential privacy | Adds calibrated noise to results [14] | Strongest formal guarantee | Reduces accuracy, harder to explain | No (future work) |
 
 ### 1.5.3 Business intelligence tools
 
@@ -136,12 +136,12 @@ The course allows Microsoft Power BI or Tableau. Both have the required charts, 
 | Point | Microsoft Power BI Desktop | Tableau Desktop Public Edition |
 |---|---|---|
 | Cost | Free desktop app | Free desktop app |
-| Operating system | Windows 10 or later only [14] | Windows and macOS |
-| Saving work locally | Yes | Yes, since April 2024 [13] |
-| Private data | Supported | Supported when saved locally [15] |
+| Operating system | Windows 10 or later only [15] | Windows and macOS |
+| Saving work locally | Yes | Yes, since April 2024 [16] |
+| Private data | Supported | Supported when saved locally [9] |
 | Fit for this project (Apple Silicon Mac) | Not possible without a Windows machine | Runs natively |
 
-Power BI Desktop requires Windows [14], while the project laptop is an Apple Silicon Mac. Tableau Desktop Public Edition is free and, since April 2024, can save workbooks locally and work offline [13]. Tableau's documentation notes that workbooks published to a Tableau Public profile "are not private and are freely accessible to anyone" [15]. That matters for a privacy project, so the dashboard is kept local and reads only the protected file.
+Power BI Desktop requires Windows [15], while the project laptop is an Apple Silicon Mac. Tableau Desktop Public Edition is free and, since April 2024, can save workbooks locally and work offline [16]. Tableau's documentation notes that workbooks published to a Tableau Public profile "are not private and are freely accessible to anyone" [9]. That matters for a privacy project, so the dashboard is kept local and reads only the protected file.
 
 ### 1.5.4 Comparison and identified gap
 
@@ -151,14 +151,14 @@ Table 1.3 compares common existing approaches with this project on the features 
 
 | Approach | Detects fraud | Protects personal data | Privacy level measured | Explainable decisions | Tested on unseen later data | Interactive dashboard |
 |---|---|---|---|---|---|---|
-| Expert rule engine [4] | Yes | Not its purpose | No | Yes | Depends on the team | No |
+| Expert rule engine [10] | Yes | Not its purpose | No | Yes | Depends on the team | No |
 | Machine learning model [2], [3] | Yes | Not its purpose | No | Limited | Yes, when done well [3] | No |
-| Industry hybrid system [4] | Yes | Inside a secure bank system | Not public | Partly | Yes | Internal tools |
-| Privacy models alone (k-anonymity, l-diversity, DP) [10]-[12] | No | Yes | Yes | Not applicable | Not applicable | No |
+| Industry hybrid system [10] | Yes | Inside a secure bank system | Not public | Partly | Yes | Internal tools |
+| Privacy models alone (k-anonymity, l-diversity, DP) [12]-[14] | No | Yes | Yes | Not applicable | Not applicable | No |
 | BI dashboard on raw data | Shows patterns only | No | No | Not applicable | No | Yes |
 | **This project** | **Yes (4 rules + score)** | **Yes (mask, hash, generalize, suppress)** | **Yes (k ≥ 5 check)** | **Yes** | **Yes (train/test by time)** | **Yes (Tableau)** |
 
-The reviewed work usually treats fraud detection, privacy protection and visual analytics separately. Fraud studies measure detection quality [2]-[4]. Privacy research studies safe data release [10]-[12]. BI tools display the result. This project puts the three parts in one student-scale pipeline: it measures privacy before analysis, tests readable rules on later data, and keeps raw personal data out of the dashboard.
+The reviewed work usually treats fraud detection, privacy protection and visual analytics separately. Fraud studies measure detection quality [2], [3], [10]. Privacy research studies safe data release [12]-[14]. BI tools display the result. This project puts the three parts in one student-scale pipeline: it measures privacy before analysis, tests readable rules on later data, and keeps raw personal data out of the dashboard.
 
 ### 1.5.5 Feasibility analysis
 
@@ -168,7 +168,7 @@ The raw files contain 1,852,394 rows and take about 502 MB (351 MB and 150 MB). 
 
 #### Cost
 
-The project has no direct software or data cost. Python, uv, pandas, NumPy and Matplotlib are free and open source. Tableau Desktop Public Edition is free [13], and Kaggle distributes the dataset under the CC0 public-domain licence [16]. The remaining inputs are an existing laptop and student time.
+The project has no direct software or data cost. Python, uv, pandas, NumPy and Matplotlib are free and open source. Tableau Desktop Public Edition is free [16], and Kaggle distributes the dataset under the CC0 public-domain licence [8]. The remaining inputs are an existing laptop and student time.
 
 #### Operation
 
@@ -187,39 +187,3 @@ The course has two fixed milestones. Table 1.4 assigns the work to them.
 | M2: Final report, demo and presentation | 15 October to 5 November 2026 | Results, screenshots, final report, presentation, live demo | Report Chapters 3 to 5, Appendix A, presentation, code and data |
 
 The schedule depends on the narrow scope: rules instead of machine learning, and k-anonymity instead of differential privacy.
-
-## References
-
-Reference numbers follow the consolidated list in Section 5.4.
-
-[1] The Nilson Report, "Payment Card Fraud Losses Approach $34 Billion," press release, Jan. 6, 2025. [Online]. Available: https://www.fintechfutures.com/press-releases/payment-card-fraud-losses-approach-34-billion
-
-[2] R. J. Bolton and D. J. Hand, "Statistical fraud detection: A review," *Statistical Science*, vol. 17, no. 3, pp. 235-249, 2002, doi: 10.1214/ss/1042727940.
-
-[3] A. Dal Pozzolo, O. Caelen, Y.-A. Le Borgne, S. Waterschoot, and G. Bontempi, "Learned lessons in credit card fraud detection from a practitioner perspective," *Expert Systems with Applications*, vol. 41, no. 10, pp. 4915-4928, 2014, doi: 10.1016/j.eswa.2014.02.026.
-
-[4] Y.-A. Le Borgne, W. Siblini, B. Lebichot, and G. Bontempi, *Reproducible Machine Learning for Credit Card Fraud Detection: Practical Handbook*. Brussels, Belgium: Université Libre de Bruxelles, 2022. [Online]. Available: https://fraud-detection-handbook.github.io/fraud-detection-handbook/Chapter_2_Background/FDS.html
-
-[5] PCI Security Standards Council, "Securing the future of payments: PCI SSC publishes PCI Data Security Standard v4.0," press release, Mar. 31, 2022. [Online]. Available: https://www.pcisecuritystandards.org/about_us/press_releases/securing-the-future-of-payments-pci-ssc-publishes-pci-data-security-standard-v4-0/
-
-[6] PCI Security Standards Council, "How can an entity meet PCI DSS requirements for PAN masking and truncation if it has migrated to 8-digit BINs?," FAQ 1492, Apr. 2024. [Online]. Available: https://www.pcisecuritystandards.org/faqs/1492/
-
-[7] European Parliament and Council of the European Union, "Regulation (EU) 2016/679 (General Data Protection Regulation)," Art. 4(1) and Art. 4(5), Apr. 27, 2016. [Online]. Available: https://eur-lex.europa.eu/eli/reg/2016/679/oj
-
-[8] E. McCallister, T. Grance, and K. Scarfone, "Guide to protecting the confidentiality of personally identifiable information (PII)," NIST Special Publication 800-122, Apr. 2010, doi: 10.6028/NIST.SP.800-122.
-
-[9] S. Garfinkel, J. Near, A. Dajani, P. Singer, and B. Guttman, "De-identifying government datasets: Techniques and governance," NIST Special Publication 800-188, Sep. 2023, doi: 10.6028/NIST.SP.800-188.
-
-[10] L. Sweeney, "k-anonymity: A model for protecting privacy," *International Journal of Uncertainty, Fuzziness and Knowledge-Based Systems*, vol. 10, no. 5, pp. 557-570, 2002, doi: 10.1142/S0218488502001648.
-
-[11] A. Machanavajjhala, D. Kifer, J. Gehrke, and M. Venkitasubramaniam, "l-diversity: Privacy beyond k-anonymity," *ACM Transactions on Knowledge Discovery from Data*, vol. 1, no. 1, Art. 3, Mar. 2007, doi: 10.1145/1217299.1217302.
-
-[12] C. Dwork, "Differential privacy," in *Automata, Languages and Programming (ICALP 2006)*, Lecture Notes in Computer Science, vol. 4052. Berlin, Germany: Springer, 2006, pp. 1-12, doi: 10.1007/11787006_1.
-
-[13] B. Staniar, "Local file save with Tableau Desktop Public Edition," Tableau Blog, Apr. 30, 2024. [Online]. Available: https://www.tableau.com/en-gb/blog/local-file-save-tableau-desktop-public-edition
-
-[14] Microsoft, "Download Power BI Desktop," Microsoft Learn. [Online]. Available: https://learn.microsoft.com/en-us/power-bi/fundamentals/desktop-get-the-desktop (accessed Oct. 8, 2026).
-
-[15] Tableau, "Save workbooks to Tableau Public," Tableau Desktop Help. [Online]. Available: https://help.tableau.com/current/pro/desktop/en-us/publish_workbooks_tableaupublic.htm (accessed Oct. 8, 2026).
-
-[16] K. Shenoy, "Credit Card Transactions Fraud Detection Dataset," Kaggle, 2020. [Online]. Available: https://www.kaggle.com/datasets/kartik2112/fraud-detection

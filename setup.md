@@ -8,8 +8,8 @@ This guide assumes you have **never run this project before**. Follow the steps 
 ## The big picture (read this once)
 
 ```text
-data/raw/*.csv  →  Python pipeline  →  data/processed/transactions_protected.csv  →  Tableau dashboard
- (private data)    (hides + checks)     (safe data, no names or card numbers)        (charts + filters)
+data/raw/*.csv  →  Python pipeline  →  data/processed/transactions_protected.csv (+ .hyper extract)  →  Tableau dashboard (.twbx)
+ (private data)    (hides + checks)     (safe data, no names or card numbers)                         (charts + filters)
 ```
 
 * **Python** does all the work: it hides private data, finds suspicious transactions and measures how good the rules are.
@@ -47,11 +47,13 @@ uv --version
 ## Step 3: Go to the project folder
 
 ```bash
-cd ~/Desktop/cbca-293-security
+cd ~/Desktop/CBCA-293-Security
 ls
 ```
 
 **You should see:** `README.md  setup.md  pyproject.toml  data  src  dashboard  outputs  reports  docs`
+
+**Got the project from GitHub?** Clone it first: `git clone https://github.com/rajatevencodes/CBCA-293-Security.git ~/Desktop/CBCA-293-Security`. The CSV files are not in GitHub (too large), so do Step 4 to download them.
 
 ## Step 4: Check the dataset is there
 
@@ -101,7 +103,9 @@ uv run python src/run_pipeline.py
    precision 34.1%, recall 57.1%, F1 0.427
 [5/6] Drawing report charts ...
 [6/6] Writing protected CSV and Tableau workbook ...
+   tableauhyperapi not installed: keeping the existing .hyper extract (...)
 Validated fraud_dashboard.twb: 12 worksheets, 6 calculated fields, 6 shared filters.
+Wrote fraud_dashboard.twbx (workbook + extract in one file)
 Done in ... seconds.
 ```
 
@@ -114,7 +118,15 @@ Done in ... seconds.
 | 3 Rules | Learn what "too big", "night", "risky shop" and "unusual for this person" mean, from the **train** file only |
 | 4 Evaluate | Test the rules on the **test** file they never saw: how many frauds did we catch? |
 | 5 Charts | Save the report pictures in `outputs/charts/` |
-| 6 Dashboard | Save the safe CSV and write the Tableau file `dashboard/fraud_dashboard.twb` |
+| 6 Dashboard | Save the safe CSV, link it to the Tableau extract (`.hyper`) and write `dashboard/fraud_dashboard.twb` and the packaged `fraud_dashboard.twbx` |
+
+**Changed the data or the rules?** Tableau Public only opens workbooks that use an extract, so rebuild the extract too:
+
+```bash
+uv run --with tableauhyperapi python src/run_pipeline.py
+```
+
+This installs the Tableau Hyper API for that one run and rewrites `data/processed/transactions_protected.hyper`. Without it, the pipeline keeps the existing extract (fine when the data has not changed).
 
 ## Step 7: Look at the results
 
@@ -124,16 +136,22 @@ Done in ... seconds.
 | `outputs/privacy_report.json` | The k-anonymity checks (FAIL then PASS) and a before/after example |
 | `outputs/rule_tuning.csv` | Why the threshold is 3 (it had the best F1 on train) |
 | `outputs/charts/*.png` | The 5 report charts |
-| `data/processed/transactions_protected.csv` | The safe data Tableau uses (about 265 MB) |
+| `data/processed/transactions_protected.csv` | The safe data (about 265 MB) |
+| `data/processed/transactions_protected.hyper` | The same safe data as a Tableau extract (about 36 MB) |
 
 ## Step 8: Open the dashboard in Tableau
 
-1. Open **Tableau Public**.
-2. Click **File → Open** and choose `dashboard/fraud_dashboard.twb`.
-3. Wait 20 to 60 seconds while Tableau reads 1.85 million rows.
-4. The **Fraud & Privacy Dashboard** appears, with KPIs on top, 6 charts and filters on the right.
+```bash
+open dashboard/fraud_dashboard.twbx
+```
 
-**If Tableau says it cannot find the data file:** click **Browse**, choose `data/processed/transactions_protected.csv`, and click **Open**.
+Or: open **Tableau Public**, click **File → Open** and choose `dashboard/fraud_dashboard.twbx`.
+
+1. Wait 10 to 30 seconds while Tableau loads the extract (1.85 million rows).
+2. The **Fraud & Privacy Dashboard** appears: team names in the title, 6 KPI tiles, 6 charts and 6 filters on the right.
+3. For the class demo, use **Window → Presentation Mode** (Option + Return leaves it). The dashboard (1265 x 760) fits a 13-inch MacBook screen.
+
+**Use the `.twbx`, not the `.twb`:** the `.twbx` carries the extract inside, so it opens on any computer. The `.twb` only works if `data/processed/transactions_protected.hyper` is at the same path.
 
 **To match the report numbers:** in the **Dataset Split** filter, select only **test**. By default the dashboard shows train and test together.
 
@@ -141,9 +159,8 @@ Done in ... seconds.
 
 ## Step 9: Save and take screenshots
 
-* **Save on your Mac:** File → Save As (`.twbx` packs the data inside the file).
-* **Publish online (optional):** File → Save to Tableau Public. It is safe, because the file contains no names, card numbers or addresses.
-* **Screenshots for the report:** press Cmd + Shift + 4, then Space, then click the Tableau window. Rename the files and move them into `dashboard/screenshots/`:
+* **Save on your Mac:** File → Save As. Never use Save to Tableau Public, which publishes the dashboard online.
+* **Screenshots for the report** (already taken, in `dashboard/screenshots/`). To retake: press Cmd + Shift + 4, then Space, then click the Tableau window, and save as:
   * `01_dashboard_overview.png`: the full dashboard, no filters
   * `02_dashboard_test_filter.png`: with Dataset Split = test
   * `03_filter_panel.png`: the filter panel
@@ -155,7 +172,8 @@ Done in ... seconds.
 |---|---|
 | `uv: command not found` | Reopen Terminal, or redo Step 1 |
 | `FileNotFoundError: data/raw/fraudTrain.csv` | Redo Step 4 |
-| You moved the project folder and Tableau cannot find the data | Run Step 6 again. It rewrites the `.twb` with the new folder path |
+| You moved the project folder and the `.twb` cannot find the data | Open the `.twbx` instead, or run Step 6 again to rewrite the `.twb` with the new folder path |
+| Tableau says workbooks must use extracts | Open `dashboard/fraud_dashboard.twbx`, or rebuild the extract with the `--with tableauhyperapi` command in Step 6 |
 | Tableau shows a red `!` next to the data source | Right-click the data source → Edit Data Source → pick the CSV again |
 | A chart looks empty | Check the filters, and click "All" in each one |
 | Your Mac is slow during Step 6 | Normal. It is processing 1.85 million rows. Wait about 2 minutes |

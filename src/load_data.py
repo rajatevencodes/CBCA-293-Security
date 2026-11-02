@@ -1,3 +1,5 @@
+# CBCA293 Security and Privacy for Big Data Analytics, Bennett University
+# Team: Rajat Sharma (S24BCAU0134), Ishan Chaudary (S24BCAU0002), Piyush Agarwal (S24BCAU0182), Suraj Tiwari (S24BCAU0136)
 """Step 1: load the two Kaggle files, combine them, clean them, and profile them."""
 
 import pandas as pd

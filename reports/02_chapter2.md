@@ -17,7 +17,7 @@ The pipeline has six steps, each in a separate module under `src/`. `src/run_pip
 
 Tableau reads only `data/processed/transactions_protected.csv`, never the raw files. `src/config.py` holds the file paths, secret salt and rule settings.
 
-## 2.2 System architecture
+## 2.2 System architecture diagram
 
 Figure 2.1 separates the *raw zone*, which contains personal data, from the *protected zone*, which contains only de-identified data.
 
@@ -26,16 +26,16 @@ flowchart LR
     subgraph RAW["Raw zone (personal data)"]
         A["fraudTrain.csv<br/>1,296,675 rows"]
         B["fraudTest.csv<br/>555,719 rows"]
-        L["[17] Load and profile<br/>load_data.py"]
-        P["[18] Privacy layer<br/>mask, hash, generalize,<br/>suppress, k-anonymity check<br/>privacy.py"]
+        L["Load and profile<br/>load_data.py"]
+        P["Privacy layer<br/>mask, hash, generalize,<br/>suppress, k-anonymity check<br/>privacy.py"]
         S[("Secret salt<br/>config.py")]
     end
     subgraph SAFE["Protected zone (no direct identifiers)"]
-        R["[7] Fraud rules<br/>R1 to R4, risk_score, flagged<br/>fraud_rules.py"]
-        E["[6] Evaluate<br/>precision, recall, F1,<br/>accuracy, confusion matrix"]
-        C["[10] Charts<br/>make_charts.py"]
+        R["Fraud rules<br/>R1 to R4, risk_score, flagged<br/>fraud_rules.py"]
+        E["Evaluate<br/>precision, recall, F1,<br/>accuracy, confusion matrix"]
+        C["Charts<br/>make_charts.py"]
         CSV[["transactions_protected.csv"]]
-        T["[19] Tableau workbook<br/>fraud_dashboard.twb"]
+        T["Tableau workbook<br/>fraud_dashboard.twb"]
         D(["Tableau Desktop<br/>Public Edition dashboard"])
     end
     A --> L
@@ -95,7 +95,7 @@ The first k-anonymity check fails. With state and 7 narrow age bands, 659 of the
 
 ### 2.4.1 Masking
 
-The displayed value replaces `cc_num` with a fixed pattern containing only the last 4 digits, for example `**** **** **** 2095`. PCI DSS allows at most the BIN and the last four digits [6]. The analysis does not need the BIN, so the output omits it.
+The displayed value replaces `cc_num` with a fixed pattern containing only the last 4 digits, for example `**** **** **** 2095`. PCI DSS allows at most the BIN and the last four digits [7]. The analysis does not need the BIN, so the output omits it.
 
 ```text
 function MASK(card_number):
@@ -107,7 +107,7 @@ function MASK(card_number):
 
 NIST FIPS 180-4 defines the SHA-256 cryptographic hash function [17]. It converts an input into a 256-bit value written as 64 hexadecimal characters. The output does not directly reveal the input. Python provides SHA-256 through the standard `hashlib` module [18].
 
-Card numbers have a limited, structured format. An attacker could hash possible numbers and compare the results. The pipeline first joins a secret *salt* to the card number, so the attacker cannot make the same comparison without that salt. This follows the GDPR definition of pseudonymisation, in which the "additional information" is kept separately [7]. For this project the salt is in `src/config.py`. A real deployment would keep it in a secrets vault.
+Card numbers have a limited, structured format. An attacker could hash possible numbers and compare the results. The pipeline first joins a secret *salt* to the card number, so the attacker cannot make the same comparison without that salt. This follows the GDPR definition of pseudonymisation, in which the "additional information" is kept separately [4]. For this project the salt is in `src/config.py`. A real deployment would keep it in a secrets vault.
 
 ```text
 function PSEUDONYMIZE(card_number, SALT):
@@ -127,7 +127,7 @@ The pipeline deletes names (`first`, `last`), address fields (`street`, `city`, 
 
 ### 2.4.4 k-anonymity check
 
-The quasi-identifiers (QI) are `age_band`, `gender` and `region`. Following Sweeney's definition [10], the check counts the number of *distinct customers* in every QI group. We count customers, not transactions, because one customer has many transactions, and counting rows would make groups look safer than they are.
+The quasi-identifiers (QI) are `age_band`, `gender` and `region`. Following Sweeney's definition [12], the check counts the number of *distinct customers* in every QI group. We count customers, not transactions, because one customer has many transactions, and counting rows would make groups look safer than they are.
 
 ```text
 function K_ANONYMITY_CHECK(data, QI = [age_band, gender, region], k = 5):
@@ -193,7 +193,7 @@ From these four counts:
 * **F1 score** = 2 × Precision × Recall / (Precision + Recall): the balance of the two.
 * **Accuracy** = (TP + TN) / (TP + TN + FP + FN): the share of all decisions that were correct.
 
-Only 0.52% of all transactions are fraud, falling to 0.39% in the test file. A rule that flags nothing would classify every normal transaction correctly. Its test accuracy would be about 99.6%, despite 0% recall. Precision and recall are more useful on this imbalance [20], [3]. F1 selects the threshold, while the report gives precision and recall as the main results. The pipeline computes all metrics for each rule and for the combined score.
+Only 0.52% of all transactions are fraud, falling to 0.39% in the test file. A rule that flags nothing would classify every normal transaction correctly. Its test accuracy would be about 99.6%, despite 0% recall. Precision and recall are more useful on this imbalance [3], [20]. F1 selects the threshold, while the report gives precision and recall as the main results. The pipeline computes all metrics for each rule and for the combined score.
 
 ## 2.5 Tools and technologies
 
@@ -205,14 +205,14 @@ Only 0.52% of all transactions are fraud, falling to 0.39% in the test file. A r
 | NumPy | 2.5.3 | Fast numeric operations on columns |
 | Matplotlib | 3.11.2 | Report charts (fraud by hour, by category, rule comparison, confusion matrix, k-anonymity group sizes) |
 | hashlib | Python standard library | SHA-256 hashing for pseudonyms [18] |
-| Tableau Desktop Public Edition | free edition | Opening, checking and saving the dashboard locally [15] |
+| Tableau Desktop Public Edition | free edition | Opening, checking and saving the dashboard locally [9] |
 | macOS on Apple Silicon | arm64 | Operating system and hardware platform |
 | VS Code and terminal | n/a | Writing code and running the pipeline |
 | Mermaid | n/a | Drawing the diagrams in this report as code |
 
 `uv.lock` fixes the package versions for each run. `build_dashboard.py` generates the Tableau XML workbook (`.twb`), so a new run can rebuild the same dashboard.
 
-## 2.6 Experimental setup
+## 2.6 Experimental setup environment
 
 ### Hardware and software
 
@@ -238,9 +238,9 @@ Only 0.52% of all transactions are fraud, falling to 0.39% in the test file. A r
 
 ### Source
 
-Kartik Shenoy published the "Credit Card Transactions Fraud Detection Dataset" on Kaggle under the CC0 public-domain licence: https://www.kaggle.com/datasets/kartik2112/fraud-detection [16]. Brandon Harris created the open-source Sparkov simulator used to generate it [16], [23]. Sparkov uses the Python Faker library and customer profiles based on factors such as age group, gender and urban or rural location. It produces fake customers, merchants, ordinary transactions and fraud [16], [23]. No row describes a real person. The columns resemble personal fields in bank data, so the file can be used to practise privacy protection without exposing customers.
+Kartik Shenoy published the "Credit Card Transactions Fraud Detection Dataset" on Kaggle under the CC0 public-domain licence: https://www.kaggle.com/datasets/kartik2112/fraud-detection [8]. Brandon Harris created the open-source Sparkov simulator used to generate it [8], [23]. Sparkov uses the Python Faker library and customer profiles based on factors such as age group, gender and urban or rural location. It produces fake customers, merchants, ordinary transactions and fraud [8], [23]. No row describes a real person. The columns resemble personal fields in bank data, so the file can be used to practise privacy protection without exposing customers.
 
-Kaggle describes about 1,000 customers and a pool of 800 merchants [16]. The file profile finds 999 distinct cards and 693 merchant names in the actual rows.
+Kaggle describes about 1,000 customers and a pool of 800 merchants [8]. The file profile finds 999 distinct cards and 693 merchant names in the actual rows.
 
 ### Dataset facts (measured by `src/load_data.py`)
 
@@ -291,21 +291,39 @@ The pipeline also adds new columns: `dataset_split`, the four rule columns, `ris
 
 Every merchant name starts with `fraud_`, for example `fraud_Rippin, Kub and Mann`. The prefix comes from the simulator and is present on normal and fraudulent transactions. It is not a fraud label. The pipeline removes it before the dashboard sees the name, producing `Rippin, Kub and Mann`.
 
-## References
+## References (Milestone 1: Chapters 1 and 2)
 
-Reference numbers follow the consolidated list in Section 5.4.
+[1] The Nilson Report, "Payment Card Fraud Losses Approach $34 Billion," press release, Jan. 6, 2025. [Online]. Available: https://www.fintechfutures.com/press-releases/payment-card-fraud-losses-approach-34-billion
+
+[2] R. J. Bolton and D. J. Hand, "Statistical fraud detection: A review," *Statistical Science*, vol. 17, no. 3, pp. 235-249, 2002, doi: 10.1214/ss/1042727940.
 
 [3] A. Dal Pozzolo, O. Caelen, Y.-A. Le Borgne, S. Waterschoot, and G. Bontempi, "Learned lessons in credit card fraud detection from a practitioner perspective," *Expert Systems with Applications*, vol. 41, no. 10, pp. 4915-4928, 2014, doi: 10.1016/j.eswa.2014.02.026.
 
-[6] PCI Security Standards Council, "How can an entity meet PCI DSS requirements for PAN masking and truncation if it has migrated to 8-digit BINs?," FAQ 1492, Apr. 2024. [Online]. Available: https://www.pcisecuritystandards.org/faqs/1492/
+[4] European Parliament and Council of the European Union, "Regulation (EU) 2016/679 (General Data Protection Regulation)," Art. 4(1) and Art. 4(5), Apr. 27, 2016. [Online]. Available: https://eur-lex.europa.eu/eli/reg/2016/679/oj
 
-[7] European Parliament and Council of the European Union, "Regulation (EU) 2016/679 (General Data Protection Regulation)," Art. 4(5), Apr. 27, 2016. [Online]. Available: https://eur-lex.europa.eu/eli/reg/2016/679/oj
+[5] E. McCallister, T. Grance, and K. Scarfone, "Guide to protecting the confidentiality of personally identifiable information (PII)," NIST Special Publication 800-122, Apr. 2010, doi: 10.6028/NIST.SP.800-122.
 
-[10] L. Sweeney, "k-anonymity: A model for protecting privacy," *International Journal of Uncertainty, Fuzziness and Knowledge-Based Systems*, vol. 10, no. 5, pp. 557-570, 2002, doi: 10.1142/S0218488502001648.
+[6] PCI Security Standards Council, "Securing the future of payments: PCI SSC publishes PCI Data Security Standard v4.0," press release, Mar. 31, 2022. [Online]. Available: https://www.pcisecuritystandards.org/about_us/press_releases/securing-the-future-of-payments-pci-ssc-publishes-pci-data-security-standard-v4-0/
 
-[15] Tableau, "Save workbooks to Tableau Public," Tableau Desktop Help. [Online]. Available: https://help.tableau.com/current/pro/desktop/en-us/publish_workbooks_tableaupublic.htm (accessed Oct. 8, 2026).
+[7] PCI Security Standards Council, "How can an entity meet PCI DSS requirements for PAN masking and truncation if it has migrated to 8-digit BINs?," FAQ 1492, Apr. 2024. [Online]. Available: https://www.pcisecuritystandards.org/faqs/1492/
 
-[16] K. Shenoy, "Credit Card Transactions Fraud Detection Dataset," Kaggle, 2020. [Online]. Available: https://www.kaggle.com/datasets/kartik2112/fraud-detection
+[8] K. Shenoy, "Credit Card Transactions Fraud Detection Dataset," Kaggle, 2020. [Online]. Available: https://www.kaggle.com/datasets/kartik2112/fraud-detection
+
+[9] Tableau, "Save workbooks to Tableau Public," Tableau Desktop Help. [Online]. Available: https://help.tableau.com/current/pro/desktop/en-us/publish_workbooks_tableaupublic.htm (accessed Oct. 8, 2026).
+
+[10] Y.-A. Le Borgne, W. Siblini, B. Lebichot, and G. Bontempi, *Reproducible Machine Learning for Credit Card Fraud Detection: Practical Handbook*. Brussels, Belgium: Université Libre de Bruxelles, 2022. [Online]. Available: https://fraud-detection-handbook.github.io/fraud-detection-handbook/Chapter_2_Background/FDS.html
+
+[11] S. Garfinkel, J. Near, A. Dajani, P. Singer, and B. Guttman, "De-identifying government datasets: Techniques and governance," NIST Special Publication 800-188, Sep. 2023, doi: 10.6028/NIST.SP.800-188.
+
+[12] L. Sweeney, "k-anonymity: A model for protecting privacy," *International Journal of Uncertainty, Fuzziness and Knowledge-Based Systems*, vol. 10, no. 5, pp. 557-570, 2002, doi: 10.1142/S0218488502001648.
+
+[13] A. Machanavajjhala, D. Kifer, J. Gehrke, and M. Venkitasubramaniam, "l-diversity: Privacy beyond k-anonymity," *ACM Transactions on Knowledge Discovery from Data*, vol. 1, no. 1, Art. 3, Mar. 2007, doi: 10.1145/1217299.1217302.
+
+[14] C. Dwork, "Differential privacy," in *Automata, Languages and Programming (ICALP 2006)*, Lecture Notes in Computer Science, vol. 4052. Berlin, Germany: Springer, 2006, pp. 1-12, doi: 10.1007/11787006_1.
+
+[15] Microsoft, "Download Power BI Desktop," Microsoft Learn. [Online]. Available: https://learn.microsoft.com/en-us/power-bi/fundamentals/desktop-get-the-desktop (accessed Oct. 8, 2026).
+
+[16] B. Staniar, "Local file save with Tableau Desktop Public Edition," Tableau Blog, Apr. 30, 2024. [Online]. Available: https://www.tableau.com/en-gb/blog/local-file-save-tableau-desktop-public-edition
 
 [17] National Institute of Standards and Technology, "Secure Hash Standard (SHS)," FIPS PUB 180-4, Aug. 2015, doi: 10.6028/NIST.FIPS.180-4.
 

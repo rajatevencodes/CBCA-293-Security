@@ -1,3 +1,5 @@
+# CBCA293 Security and Privacy for Big Data Analytics, Bennett University
+# Team: Rajat Sharma (S24BCAU0134), Ishan Chaudary (S24BCAU0002), Piyush Agarwal (S24BCAU0182), Suraj Tiwari (S24BCAU0136)
 """Steps 3 and 4: the fraud rule engine and its evaluation.
 
 Every limit is LEARNED from the train file only. The rules are then judged on

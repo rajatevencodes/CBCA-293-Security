@@ -1,0 +1,1910 @@
+<?xml version='1.0' encoding='utf-8' ?>
+
+<!-- build 20263.26.1022.1645                               -->
+<workbook original-version='18.1' source-build='2026.3.0 (20263.26.1022.1645)' source-platform='mac' version='18.1' xmlns:user='http://www.tableausoftware.com/xml/user'>
+  <document-format-change-manifest>
+    <AnimationOnByDefault />
+    <MarkAnimation />
+    <ObjectModelEncapsulateLegacy />
+    <ObjectModelExtractV2 />
+    <ObjectModelTableType />
+    <SchemaViewerObjectModel />
+    <SetMembershipControl />
+    <SheetIdentifierTracking />
+    <SortTagCleanup />
+    <VConnDownstreamExtractsWithWarnings />
+    <WindowsPersistSimpleIdentifiers />
+  </document-format-change-manifest>
+  <preferences>
+    <preference name='ui.encoding.shelf.height' value='24' />
+    <preference name='ui.shelf.height' value='26' />
+  </preferences>
+  <style>
+    <style-rule element='animation'>
+      <format attr='animation-on' value='ao-off' />
+    </style-rule>
+  </style>
+  <datasources>
+    <datasource caption='transactions_protected' inline='true' name='federated.0cbca293fraud0privacy0dash01' version='18.1'>
+      <connection class='federated'>
+        <named-connections>
+          <named-connection caption='transactions_protected' name='textscan.1cbca293protected0csv0conn01'>
+            <connection class='textscan' directory='/Users/rajatsharma/Desktop/CBCA-293-Security/data/processed' filename='transactions_protected.csv' password='' server='' workgroup-auth-mode='as-is' />
+          </named-connection>
+        </named-connections>
+        <relation connection='textscan.1cbca293protected0csv0conn01' name='transactions_protected.csv' table='[transactions_protected#csv]' type='table'>
+          <columns character-set='UTF-8' header='yes' locale='en_US' separator=','>
+            <column datatype='datetime' name='transaction_time' ordinal='0' />
+            <column datatype='integer' name='hour' ordinal='1' />
+            <column datatype='string' name='dataset_split' ordinal='2' />
+            <column datatype='string' name='customer_id' ordinal='3' />
+            <column datatype='string' name='card_masked' ordinal='4' />
+            <column datatype='string' name='merchant' ordinal='5' />
+            <column datatype='string' name='category' ordinal='6' />
+            <column datatype='real' name='amount' ordinal='7' />
+            <column datatype='string' name='gender' ordinal='8' />
+            <column datatype='string' name='age_band' ordinal='9' />
+            <column datatype='string' name='region' ordinal='10' />
+            <column datatype='integer' name='rule_high_amount' ordinal='11' />
+            <column datatype='integer' name='rule_night' ordinal='12' />
+            <column datatype='integer' name='rule_risky_category' ordinal='13' />
+            <column datatype='integer' name='rule_above_usual' ordinal='14' />
+            <column datatype='integer' name='risk_score' ordinal='15' />
+            <column datatype='integer' name='flagged' ordinal='16' />
+            <column datatype='integer' name='is_fraud' ordinal='17' />
+            <column datatype='string' name='outcome' ordinal='18' />
+          </columns>
+        </relation>
+        <metadata-records>
+          <metadata-record class='capability'>
+            <remote-name />
+            <remote-type>0</remote-type>
+            <parent-name>[transactions_protected.csv]</parent-name>
+            <remote-alias />
+            <aggregation>Count</aggregation>
+            <contains-null>true</contains-null>
+            <attributes>
+              <attribute datatype='string' name='character-set'>&quot;UTF-8&quot;</attribute>
+              <attribute datatype='string' name='collation'>&quot;en_US&quot;</attribute>
+              <attribute datatype='string' name='field-delimiter'>&quot;,&quot;</attribute>
+              <attribute datatype='string' name='header-row'>&quot;true&quot;</attribute>
+              <attribute datatype='string' name='locale'>&quot;en_US&quot;</attribute>
+              <attribute datatype='string' name='single-char'>&quot;&quot;</attribute>
+            </attributes>
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>transaction_time</remote-name>
+            <remote-type>135</remote-type>
+            <local-name>[transaction_time]</local-name>
+            <parent-name>[transactions_protected.csv]</parent-name>
+            <remote-alias>transaction_time</remote-alias>
+            <ordinal>0</ordinal>
+            <local-type>datetime</local-type>
+            <aggregation>Year</aggregation>
+            <contains-null>true</contains-null>
+            <object-id>[transactions_protected.csv_5F1C0A2E9B8D4C3AA6E7B1D2C3F4A5B6]</object-id>
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>hour</remote-name>
+            <remote-type>20</remote-type>
+            <local-name>[hour]</local-name>
+            <parent-name>[transactions_protected.csv]</parent-name>
+            <remote-alias>hour</remote-alias>
+            <ordinal>1</ordinal>
+            <local-type>integer</local-type>
+            <aggregation>Sum</aggregation>
+            <contains-null>true</contains-null>
+            <object-id>[transactions_protected.csv_5F1C0A2E9B8D4C3AA6E7B1D2C3F4A5B6]</object-id>
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>dataset_split</remote-name>
+            <remote-type>129</remote-type>
+            <local-name>[dataset_split]</local-name>
+            <parent-name>[transactions_protected.csv]</parent-name>
+            <remote-alias>dataset_split</remote-alias>
+            <ordinal>2</ordinal>
+            <local-type>string</local-type>
+            <aggregation>Count</aggregation>
+            <scale>1</scale>
+            <width>1073741823</width>
+            <contains-null>true</contains-null>
+            <collation flag='0' name='LEN_RUS' />
+            <object-id>[transactions_protected.csv_5F1C0A2E9B8D4C3AA6E7B1D2C3F4A5B6]</object-id>
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>customer_id</remote-name>
+            <remote-type>129</remote-type>
+            <local-name>[customer_id]</local-name>
+            <parent-name>[transactions_protected.csv]</parent-name>
+            <remote-alias>customer_id</remote-alias>
+            <ordinal>3</ordinal>
+            <local-type>string</local-type>
+            <aggregation>Count</aggregation>
+            <scale>1</scale>
+            <width>1073741823</width>
+            <contains-null>true</contains-null>
+            <collation flag='0' name='LEN_RUS' />
+            <object-id>[transactions_protected.csv_5F1C0A2E9B8D4C3AA6E7B1D2C3F4A5B6]</object-id>
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>card_masked</remote-name>
+            <remote-type>129</remote-type>
+            <local-name>[card_masked]</local-name>
+            <parent-name>[transactions_protected.csv]</parent-name>
+            <remote-alias>card_masked</remote-alias>
+            <ordinal>4</ordinal>
+            <local-type>string</local-type>
+            <aggregation>Count</aggregation>
+            <scale>1</scale>
+            <width>1073741823</width>
+            <contains-null>true</contains-null>
+            <collation flag='0' name='LEN_RUS' />
+            <object-id>[transactions_protected.csv_5F1C0A2E9B8D4C3AA6E7B1D2C3F4A5B6]</object-id>
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>merchant</remote-name>
+            <remote-type>129</remote-type>
+            <local-name>[merchant]</local-name>
+            <parent-name>[transactions_protected.csv]</parent-name>
+            <remote-alias>merchant</remote-alias>
+            <ordinal>5</ordinal>
+            <local-type>string</local-type>
+            <aggregation>Count</aggregation>
+            <scale>1</scale>
+            <width>1073741823</width>
+            <contains-null>true</contains-null>
+            <collation flag='0' name='LEN_RUS' />
+            <object-id>[transactions_protected.csv_5F1C0A2E9B8D4C3AA6E7B1D2C3F4A5B6]</object-id>
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>category</remote-name>
+            <remote-type>129</remote-type>
+            <local-name>[category]</local-name>
+            <parent-name>[transactions_protected.csv]</parent-name>
+            <remote-alias>category</remote-alias>
+            <ordinal>6</ordinal>
+            <local-type>string</local-type>
+            <aggregation>Count</aggregation>
+            <scale>1</scale>
+            <width>1073741823</width>
+            <contains-null>true</contains-null>
+            <collation flag='0' name='LEN_RUS' />
+            <object-id>[transactions_protected.csv_5F1C0A2E9B8D4C3AA6E7B1D2C3F4A5B6]</object-id>
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>amount</remote-name>
+            <remote-type>5</remote-type>
+            <local-name>[amount]</local-name>
+            <parent-name>[transactions_protected.csv]</parent-name>
+            <remote-alias>amount</remote-alias>
+            <ordinal>7</ordinal>
+            <local-type>real</local-type>
+            <aggregation>Sum</aggregation>
+            <contains-null>true</contains-null>
+            <object-id>[transactions_protected.csv_5F1C0A2E9B8D4C3AA6E7B1D2C3F4A5B6]</object-id>
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>gender</remote-name>
+            <remote-type>129</remote-type>
+            <local-name>[gender]</local-name>
+            <parent-name>[transactions_protected.csv]</parent-name>
+            <remote-alias>gender</remote-alias>
+            <ordinal>8</ordinal>
+            <local-type>string</local-type>
+            <aggregation>Count</aggregation>
+            <scale>1</scale>
+            <width>1073741823</width>
+            <contains-null>true</contains-null>
+            <collation flag='0' name='LEN_RUS' />
+            <object-id>[transactions_protected.csv_5F1C0A2E9B8D4C3AA6E7B1D2C3F4A5B6]</object-id>
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>age_band</remote-name>
+            <remote-type>129</remote-type>
+            <local-name>[age_band]</local-name>
+            <parent-name>[transactions_protected.csv]</parent-name>
+            <remote-alias>age_band</remote-alias>
+            <ordinal>9</ordinal>
+            <local-type>string</local-type>
+            <aggregation>Count</aggregation>
+            <scale>1</scale>
+            <width>1073741823</width>
+            <contains-null>true</contains-null>
+            <collation flag='0' name='LEN_RUS' />
+            <object-id>[transactions_protected.csv_5F1C0A2E9B8D4C3AA6E7B1D2C3F4A5B6]</object-id>
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>region</remote-name>
+            <remote-type>129</remote-type>
+            <local-name>[region]</local-name>
+            <parent-name>[transactions_protected.csv]</parent-name>
+            <remote-alias>region</remote-alias>
+            <ordinal>10</ordinal>
+            <local-type>string</local-type>
+            <aggregation>Count</aggregation>
+            <scale>1</scale>
+            <width>1073741823</width>
+            <contains-null>true</contains-null>
+            <collation flag='0' name='LEN_RUS' />
+            <object-id>[transactions_protected.csv_5F1C0A2E9B8D4C3AA6E7B1D2C3F4A5B6]</object-id>
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>rule_high_amount</remote-name>
+            <remote-type>20</remote-type>
+            <local-name>[rule_high_amount]</local-name>
+            <parent-name>[transactions_protected.csv]</parent-name>
+            <remote-alias>rule_high_amount</remote-alias>
+            <ordinal>11</ordinal>
+            <local-type>integer</local-type>
+            <aggregation>Sum</aggregation>
+            <contains-null>true</contains-null>
+            <object-id>[transactions_protected.csv_5F1C0A2E9B8D4C3AA6E7B1D2C3F4A5B6]</object-id>
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>rule_night</remote-name>
+            <remote-type>20</remote-type>
+            <local-name>[rule_night]</local-name>
+            <parent-name>[transactions_protected.csv]</parent-name>
+            <remote-alias>rule_night</remote-alias>
+            <ordinal>12</ordinal>
+            <local-type>integer</local-type>
+            <aggregation>Sum</aggregation>
+            <contains-null>true</contains-null>
+            <object-id>[transactions_protected.csv_5F1C0A2E9B8D4C3AA6E7B1D2C3F4A5B6]</object-id>
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>rule_risky_category</remote-name>
+            <remote-type>20</remote-type>
+            <local-name>[rule_risky_category]</local-name>
+            <parent-name>[transactions_protected.csv]</parent-name>
+            <remote-alias>rule_risky_category</remote-alias>
+            <ordinal>13</ordinal>
+            <local-type>integer</local-type>
+            <aggregation>Sum</aggregation>
+            <contains-null>true</contains-null>
+            <object-id>[transactions_protected.csv_5F1C0A2E9B8D4C3AA6E7B1D2C3F4A5B6]</object-id>
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>rule_above_usual</remote-name>
+            <remote-type>20</remote-type>
+            <local-name>[rule_above_usual]</local-name>
+            <parent-name>[transactions_protected.csv]</parent-name>
+            <remote-alias>rule_above_usual</remote-alias>
+            <ordinal>14</ordinal>
+            <local-type>integer</local-type>
+            <aggregation>Sum</aggregation>
+            <contains-null>true</contains-null>
+            <object-id>[transactions_protected.csv_5F1C0A2E9B8D4C3AA6E7B1D2C3F4A5B6]</object-id>
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>risk_score</remote-name>
+            <remote-type>20</remote-type>
+            <local-name>[risk_score]</local-name>
+            <parent-name>[transactions_protected.csv]</parent-name>
+            <remote-alias>risk_score</remote-alias>
+            <ordinal>15</ordinal>
+            <local-type>integer</local-type>
+            <aggregation>Sum</aggregation>
+            <contains-null>true</contains-null>
+            <object-id>[transactions_protected.csv_5F1C0A2E9B8D4C3AA6E7B1D2C3F4A5B6]</object-id>
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>flagged</remote-name>
+            <remote-type>20</remote-type>
+            <local-name>[flagged]</local-name>
+            <parent-name>[transactions_protected.csv]</parent-name>
+            <remote-alias>flagged</remote-alias>
+            <ordinal>16</ordinal>
+            <local-type>integer</local-type>
+            <aggregation>Sum</aggregation>
+            <contains-null>true</contains-null>
+            <object-id>[transactions_protected.csv_5F1C0A2E9B8D4C3AA6E7B1D2C3F4A5B6]</object-id>
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>is_fraud</remote-name>
+            <remote-type>20</remote-type>
+            <local-name>[is_fraud]</local-name>
+            <parent-name>[transactions_protected.csv]</parent-name>
+            <remote-alias>is_fraud</remote-alias>
+            <ordinal>17</ordinal>
+            <local-type>integer</local-type>
+            <aggregation>Sum</aggregation>
+            <contains-null>true</contains-null>
+            <object-id>[transactions_protected.csv_5F1C0A2E9B8D4C3AA6E7B1D2C3F4A5B6]</object-id>
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>outcome</remote-name>
+            <remote-type>129</remote-type>
+            <local-name>[outcome]</local-name>
+            <parent-name>[transactions_protected.csv]</parent-name>
+            <remote-alias>outcome</remote-alias>
+            <ordinal>18</ordinal>
+            <local-type>string</local-type>
+            <aggregation>Count</aggregation>
+            <scale>1</scale>
+            <width>1073741823</width>
+            <contains-null>true</contains-null>
+            <collation flag='0' name='LEN_RUS' />
+            <object-id>[transactions_protected.csv_5F1C0A2E9B8D4C3AA6E7B1D2C3F4A5B6]</object-id>
+          </metadata-record>
+        </metadata-records>
+      </connection>
+      <aliases enabled='yes' />
+      <column caption='Total Transactions' datatype='integer' default-format='n#,##0;-#,##0' name='[Calculation_7310000000000000001]' role='measure' type='quantitative'>
+        <calculation class='tableau' formula='COUNT([customer_id])' />
+      </column>
+      <column caption='Fraud Transactions' datatype='integer' default-format='n#,##0;-#,##0' name='[Calculation_7310000000000000002]' role='measure' type='quantitative'>
+        <calculation class='tableau' formula='SUM([is_fraud])' />
+      </column>
+      <column caption='Fraud Rate %' datatype='real' default-format='p0.00%' name='[Calculation_7310000000000000003]' role='measure' type='quantitative'>
+        <calculation class='tableau' formula='SUM([is_fraud]) / COUNT([customer_id])' />
+      </column>
+      <column caption='Fraud Amount $' datatype='real' default-format='c&quot;$&quot;#,##0;-&quot;$&quot;#,##0' name='[Calculation_7310000000000000004]' role='measure' type='quantitative'>
+        <calculation class='tableau' formula='SUM(IF [is_fraud] = 1 THEN [amount] ELSE 0 END)' />
+      </column>
+      <column caption='Rule Recall %' datatype='real' default-format='p0.0%' name='[Calculation_7310000000000000005]' role='measure' type='quantitative'>
+        <calculation class='tableau' formula='SUM([flagged] * [is_fraud]) / SUM([is_fraud])' />
+      </column>
+      <column caption='Rule Precision %' datatype='real' default-format='p0.0%' name='[Calculation_7310000000000000006]' role='measure' type='quantitative'>
+        <calculation class='tableau' formula='SUM([flagged] * [is_fraud]) / SUM([flagged])' />
+      </column>
+      <column caption='transactions_protected.csv' datatype='table' name='[__tableau_internal_object_id__].[transactions_protected.csv_5F1C0A2E9B8D4C3AA6E7B1D2C3F4A5B6]' role='measure' type='quantitative' />
+      <column caption='Age Band' datatype='string' name='[age_band]' role='dimension' type='nominal' />
+      <column caption='Amount' datatype='real' default-format='c&quot;$&quot;#,##0.00;-&quot;$&quot;#,##0.00' name='[amount]' role='measure' type='quantitative' />
+      <column caption='Card (masked)' datatype='string' name='[card_masked]' role='dimension' type='nominal' />
+      <column caption='Category' datatype='string' name='[category]' role='dimension' type='nominal' />
+      <column caption='Customer ID' datatype='string' name='[customer_id]' role='dimension' type='nominal' />
+      <column caption='Dataset Split' datatype='string' name='[dataset_split]' role='dimension' type='nominal' />
+      <column caption='Flagged' datatype='integer' name='[flagged]' role='measure' type='quantitative' />
+      <column caption='Gender' datatype='string' name='[gender]' role='dimension' type='nominal' />
+      <column caption='Hour' datatype='integer' name='[hour]' role='dimension' type='ordinal' />
+      <column caption='Is Fraud' datatype='integer' name='[is_fraud]' role='measure' type='quantitative' />
+      <column caption='Merchant' datatype='string' name='[merchant]' role='dimension' type='nominal' />
+      <column caption='Outcome' datatype='string' name='[outcome]' role='dimension' type='nominal' />
+      <column caption='Region' datatype='string' name='[region]' role='dimension' type='nominal' />
+      <column caption='Risk Score' datatype='integer' name='[risk_score]' role='measure' type='quantitative' />
+      <column caption='Rule: Above Usual Spend' datatype='integer' name='[rule_above_usual]' role='measure' type='quantitative' />
+      <column caption='Rule: High Amount' datatype='integer' name='[rule_high_amount]' role='measure' type='quantitative' />
+      <column caption='Rule: Night Time' datatype='integer' name='[rule_night]' role='measure' type='quantitative' />
+      <column caption='Rule: Risky Category' datatype='integer' name='[rule_risky_category]' role='measure' type='quantitative' />
+      <column caption='Transaction Time' datatype='datetime' name='[transaction_time]' role='dimension' type='ordinal' />
+      <extract count='-1' enabled='true' object-id='' units='records' user-specific='false'>
+        <connection access_mode='readonly' authentication='auth-none' author-locale='en_US' class='hyper' dbname='Data/Extracts/transactions_protected.hyper' default-settings='yes' schema='Extract' sslmode='' tablename='Extract' update-time='11/02/2026 12:00:00 PM' username='tableau_internal_user'>
+          <relation name='Extract' table='[Extract].[Extract]' type='table' />
+          <metadata-records>
+            <metadata-record class='column'>
+              <remote-name>transaction_time</remote-name>
+              <remote-type>135</remote-type>
+              <local-name>[transaction_time]</local-name>
+              <parent-name>[Extract]</parent-name>
+              <remote-alias>transaction_time</remote-alias>
+              <ordinal>0</ordinal>
+              <local-type>datetime</local-type>
+              <aggregation>Year</aggregation>
+              <approx-count>1820066</approx-count>
+              <contains-null>true</contains-null>
+              <object-id>[transactions_protected.csv_5F1C0A2E9B8D4C3AA6E7B1D2C3F4A5B6]</object-id>
+            </metadata-record>
+            <metadata-record class='column'>
+              <remote-name>hour</remote-name>
+              <remote-type>20</remote-type>
+              <local-name>[hour]</local-name>
+              <parent-name>[Extract]</parent-name>
+              <remote-alias>hour</remote-alias>
+              <ordinal>1</ordinal>
+              <local-type>integer</local-type>
+              <aggregation>Sum</aggregation>
+              <approx-count>24</approx-count>
+              <contains-null>true</contains-null>
+              <object-id>[transactions_protected.csv_5F1C0A2E9B8D4C3AA6E7B1D2C3F4A5B6]</object-id>
+            </metadata-record>
+            <metadata-record class='column'>
+              <remote-name>dataset_split</remote-name>
+              <remote-type>129</remote-type>
+              <local-name>[dataset_split]</local-name>
+              <parent-name>[Extract]</parent-name>
+              <remote-alias>dataset_split</remote-alias>
+              <ordinal>2</ordinal>
+              <local-type>string</local-type>
+              <aggregation>Count</aggregation>
+              <approx-count>2</approx-count>
+              <contains-null>true</contains-null>
+              <collation flag='0' name='binary' />
+              <object-id>[transactions_protected.csv_5F1C0A2E9B8D4C3AA6E7B1D2C3F4A5B6]</object-id>
+            </metadata-record>
+            <metadata-record class='column'>
+              <remote-name>customer_id</remote-name>
+              <remote-type>129</remote-type>
+              <local-name>[customer_id]</local-name>
+              <parent-name>[Extract]</parent-name>
+              <remote-alias>customer_id</remote-alias>
+              <ordinal>3</ordinal>
+              <local-type>string</local-type>
+              <aggregation>Count</aggregation>
+              <approx-count>1289</approx-count>
+              <contains-null>true</contains-null>
+              <collation flag='0' name='binary' />
+              <object-id>[transactions_protected.csv_5F1C0A2E9B8D4C3AA6E7B1D2C3F4A5B6]</object-id>
+            </metadata-record>
+            <metadata-record class='column'>
+              <remote-name>card_masked</remote-name>
+              <remote-type>129</remote-type>
+              <local-name>[card_masked]</local-name>
+              <parent-name>[Extract]</parent-name>
+              <remote-alias>card_masked</remote-alias>
+              <ordinal>4</ordinal>
+              <local-type>string</local-type>
+              <aggregation>Count</aggregation>
+              <approx-count>1162</approx-count>
+              <contains-null>true</contains-null>
+              <collation flag='0' name='binary' />
+              <object-id>[transactions_protected.csv_5F1C0A2E9B8D4C3AA6E7B1D2C3F4A5B6]</object-id>
+            </metadata-record>
+            <metadata-record class='column'>
+              <remote-name>merchant</remote-name>
+              <remote-type>129</remote-type>
+              <local-name>[merchant]</local-name>
+              <parent-name>[Extract]</parent-name>
+              <remote-alias>merchant</remote-alias>
+              <ordinal>5</ordinal>
+              <local-type>string</local-type>
+              <aggregation>Count</aggregation>
+              <approx-count>718</approx-count>
+              <contains-null>true</contains-null>
+              <collation flag='0' name='binary' />
+              <object-id>[transactions_protected.csv_5F1C0A2E9B8D4C3AA6E7B1D2C3F4A5B6]</object-id>
+            </metadata-record>
+            <metadata-record class='column'>
+              <remote-name>category</remote-name>
+              <remote-type>129</remote-type>
+              <local-name>[category]</local-name>
+              <parent-name>[Extract]</parent-name>
+              <remote-alias>category</remote-alias>
+              <ordinal>6</ordinal>
+              <local-type>string</local-type>
+              <aggregation>Count</aggregation>
+              <approx-count>14</approx-count>
+              <contains-null>true</contains-null>
+              <collation flag='0' name='binary' />
+              <object-id>[transactions_protected.csv_5F1C0A2E9B8D4C3AA6E7B1D2C3F4A5B6]</object-id>
+            </metadata-record>
+            <metadata-record class='column'>
+              <remote-name>amount</remote-name>
+              <remote-type>5</remote-type>
+              <local-name>[amount]</local-name>
+              <parent-name>[Extract]</parent-name>
+              <remote-alias>amount</remote-alias>
+              <ordinal>7</ordinal>
+              <local-type>real</local-type>
+              <aggregation>Sum</aggregation>
+              <approx-count>76209</approx-count>
+              <contains-null>true</contains-null>
+              <object-id>[transactions_protected.csv_5F1C0A2E9B8D4C3AA6E7B1D2C3F4A5B6]</object-id>
+            </metadata-record>
+            <metadata-record class='column'>
+              <remote-name>gender</remote-name>
+              <remote-type>129</remote-type>
+              <local-name>[gender]</local-name>
+              <parent-name>[Extract]</parent-name>
+              <remote-alias>gender</remote-alias>
+              <ordinal>8</ordinal>
+              <local-type>string</local-type>
+              <aggregation>Count</aggregation>
+              <approx-count>2</approx-count>
+              <contains-null>true</contains-null>
+              <collation flag='0' name='binary' />
+              <object-id>[transactions_protected.csv_5F1C0A2E9B8D4C3AA6E7B1D2C3F4A5B6]</object-id>
+            </metadata-record>
+            <metadata-record class='column'>
+              <remote-name>age_band</remote-name>
+              <remote-type>129</remote-type>
+              <local-name>[age_band]</local-name>
+              <parent-name>[Extract]</parent-name>
+              <remote-alias>age_band</remote-alias>
+              <ordinal>9</ordinal>
+              <local-type>string</local-type>
+              <aggregation>Count</aggregation>
+              <approx-count>5</approx-count>
+              <contains-null>true</contains-null>
+              <collation flag='0' name='binary' />
+              <object-id>[transactions_protected.csv_5F1C0A2E9B8D4C3AA6E7B1D2C3F4A5B6]</object-id>
+            </metadata-record>
+            <metadata-record class='column'>
+              <remote-name>region</remote-name>
+              <remote-type>129</remote-type>
+              <local-name>[region]</local-name>
+              <parent-name>[Extract]</parent-name>
+              <remote-alias>region</remote-alias>
+              <ordinal>10</ordinal>
+              <local-type>string</local-type>
+              <aggregation>Count</aggregation>
+              <approx-count>4</approx-count>
+              <contains-null>true</contains-null>
+              <collation flag='0' name='binary' />
+              <object-id>[transactions_protected.csv_5F1C0A2E9B8D4C3AA6E7B1D2C3F4A5B6]</object-id>
+            </metadata-record>
+            <metadata-record class='column'>
+              <remote-name>rule_high_amount</remote-name>
+              <remote-type>20</remote-type>
+              <local-name>[rule_high_amount]</local-name>
+              <parent-name>[Extract]</parent-name>
+              <remote-alias>rule_high_amount</remote-alias>
+              <ordinal>11</ordinal>
+              <local-type>integer</local-type>
+              <aggregation>Sum</aggregation>
+              <approx-count>2</approx-count>
+              <contains-null>true</contains-null>
+              <object-id>[transactions_protected.csv_5F1C0A2E9B8D4C3AA6E7B1D2C3F4A5B6]</object-id>
+            </metadata-record>
+            <metadata-record class='column'>
+              <remote-name>rule_night</remote-name>
+              <remote-type>20</remote-type>
+              <local-name>[rule_night]</local-name>
+              <parent-name>[Extract]</parent-name>
+              <remote-alias>rule_night</remote-alias>
+              <ordinal>12</ordinal>
+              <local-type>integer</local-type>
+              <aggregation>Sum</aggregation>
+              <approx-count>2</approx-count>
+              <contains-null>true</contains-null>
+              <object-id>[transactions_protected.csv_5F1C0A2E9B8D4C3AA6E7B1D2C3F4A5B6]</object-id>
+            </metadata-record>
+            <metadata-record class='column'>
+              <remote-name>rule_risky_category</remote-name>
+              <remote-type>20</remote-type>
+              <local-name>[rule_risky_category]</local-name>
+              <parent-name>[Extract]</parent-name>
+              <remote-alias>rule_risky_category</remote-alias>
+              <ordinal>13</ordinal>
+              <local-type>integer</local-type>
+              <aggregation>Sum</aggregation>
+              <approx-count>2</approx-count>
+              <contains-null>true</contains-null>
+              <object-id>[transactions_protected.csv_5F1C0A2E9B8D4C3AA6E7B1D2C3F4A5B6]</object-id>
+            </metadata-record>
+            <metadata-record class='column'>
+              <remote-name>rule_above_usual</remote-name>
+              <remote-type>20</remote-type>
+              <local-name>[rule_above_usual]</local-name>
+              <parent-name>[Extract]</parent-name>
+              <remote-alias>rule_above_usual</remote-alias>
+              <ordinal>14</ordinal>
+              <local-type>integer</local-type>
+              <aggregation>Sum</aggregation>
+              <approx-count>2</approx-count>
+              <contains-null>true</contains-null>
+              <object-id>[transactions_protected.csv_5F1C0A2E9B8D4C3AA6E7B1D2C3F4A5B6]</object-id>
+            </metadata-record>
+            <metadata-record class='column'>
+              <remote-name>risk_score</remote-name>
+              <remote-type>20</remote-type>
+              <local-name>[risk_score]</local-name>
+              <parent-name>[Extract]</parent-name>
+              <remote-alias>risk_score</remote-alias>
+              <ordinal>15</ordinal>
+              <local-type>integer</local-type>
+              <aggregation>Sum</aggregation>
+              <approx-count>5</approx-count>
+              <contains-null>true</contains-null>
+              <object-id>[transactions_protected.csv_5F1C0A2E9B8D4C3AA6E7B1D2C3F4A5B6]</object-id>
+            </metadata-record>
+            <metadata-record class='column'>
+              <remote-name>flagged</remote-name>
+              <remote-type>20</remote-type>
+              <local-name>[flagged]</local-name>
+              <parent-name>[Extract]</parent-name>
+              <remote-alias>flagged</remote-alias>
+              <ordinal>16</ordinal>
+              <local-type>integer</local-type>
+              <aggregation>Sum</aggregation>
+              <approx-count>2</approx-count>
+              <contains-null>true</contains-null>
+              <object-id>[transactions_protected.csv_5F1C0A2E9B8D4C3AA6E7B1D2C3F4A5B6]</object-id>
+            </metadata-record>
+            <metadata-record class='column'>
+              <remote-name>is_fraud</remote-name>
+              <remote-type>20</remote-type>
+              <local-name>[is_fraud]</local-name>
+              <parent-name>[Extract]</parent-name>
+              <remote-alias>is_fraud</remote-alias>
+              <ordinal>17</ordinal>
+              <local-type>integer</local-type>
+              <aggregation>Sum</aggregation>
+              <approx-count>2</approx-count>
+              <contains-null>true</contains-null>
+              <object-id>[transactions_protected.csv_5F1C0A2E9B8D4C3AA6E7B1D2C3F4A5B6]</object-id>
+            </metadata-record>
+            <metadata-record class='column'>
+              <remote-name>outcome</remote-name>
+              <remote-type>129</remote-type>
+              <local-name>[outcome]</local-name>
+              <parent-name>[Extract]</parent-name>
+              <remote-alias>outcome</remote-alias>
+              <ordinal>18</ordinal>
+              <local-type>string</local-type>
+              <aggregation>Count</aggregation>
+              <approx-count>4</approx-count>
+              <contains-null>true</contains-null>
+              <collation flag='0' name='binary' />
+              <object-id>[transactions_protected.csv_5F1C0A2E9B8D4C3AA6E7B1D2C3F4A5B6]</object-id>
+            </metadata-record>
+          </metadata-records>
+        </connection>
+      </extract>
+      <layout dim-ordering='alphabetic' measure-ordering='alphabetic' show-structure='true' />
+      <semantic-values>
+        <semantic-value key='[Country].[Name]' value='&quot;United States&quot;' />
+      </semantic-values>
+      <object-graph>
+        <objects>
+          <object caption='transactions_protected.csv' id='transactions_protected.csv_5F1C0A2E9B8D4C3AA6E7B1D2C3F4A5B6'>
+            <properties context=''>
+              <relation connection='textscan.1cbca293protected0csv0conn01' name='transactions_protected.csv' table='[transactions_protected#csv]' type='table'>
+                <columns character-set='UTF-8' header='yes' locale='en_US' separator=','>
+                  <column datatype='datetime' name='transaction_time' ordinal='0' />
+                  <column datatype='integer' name='hour' ordinal='1' />
+                  <column datatype='string' name='dataset_split' ordinal='2' />
+                  <column datatype='string' name='customer_id' ordinal='3' />
+                  <column datatype='string' name='card_masked' ordinal='4' />
+                  <column datatype='string' name='merchant' ordinal='5' />
+                  <column datatype='string' name='category' ordinal='6' />
+                  <column datatype='real' name='amount' ordinal='7' />
+                  <column datatype='string' name='gender' ordinal='8' />
+                  <column datatype='string' name='age_band' ordinal='9' />
+                  <column datatype='string' name='region' ordinal='10' />
+                  <column datatype='integer' name='rule_high_amount' ordinal='11' />
+                  <column datatype='integer' name='rule_night' ordinal='12' />
+                  <column datatype='integer' name='rule_risky_category' ordinal='13' />
+                  <column datatype='integer' name='rule_above_usual' ordinal='14' />
+                  <column datatype='integer' name='risk_score' ordinal='15' />
+                  <column datatype='integer' name='flagged' ordinal='16' />
+                  <column datatype='integer' name='is_fraud' ordinal='17' />
+                  <column datatype='string' name='outcome' ordinal='18' />
+                </columns>
+              </relation>
+            </properties>
+            <properties context='extract'>
+              <relation name='Extract' table='[Extract].[Extract]' type='table' />
+            </properties>
+          </object>
+        </objects>
+      </object-graph>
+    </datasource>
+  </datasources>
+  <shared-views>
+    <shared-view name='federated.0cbca293fraud0privacy0dash01'>
+      <datasources>
+        <datasource caption='transactions_protected' name='federated.0cbca293fraud0privacy0dash01' />
+      </datasources>
+      <datasource-dependencies datasource='federated.0cbca293fraud0privacy0dash01'>
+        <column caption='Age Band' datatype='string' name='[age_band]' role='dimension' type='nominal' />
+        <column caption='Category' datatype='string' name='[category]' role='dimension' type='nominal' />
+        <column caption='Dataset Split' datatype='string' name='[dataset_split]' role='dimension' type='nominal' />
+        <column caption='Gender' datatype='string' name='[gender]' role='dimension' type='nominal' />
+        <column-instance column='[age_band]' derivation='None' name='[none:age_band:nk]' pivot='key' type='nominal' />
+        <column-instance column='[category]' derivation='None' name='[none:category:nk]' pivot='key' type='nominal' />
+        <column-instance column='[dataset_split]' derivation='None' name='[none:dataset_split:nk]' pivot='key' type='nominal' />
+        <column-instance column='[gender]' derivation='None' name='[none:gender:nk]' pivot='key' type='nominal' />
+        <column-instance column='[region]' derivation='None' name='[none:region:nk]' pivot='key' type='nominal' />
+        <column-instance column='[transaction_time]' derivation='None' name='[none:transaction_time:qk]' pivot='key' type='quantitative' />
+        <column caption='Region' datatype='string' name='[region]' role='dimension' type='nominal' />
+        <column caption='Transaction Time' datatype='datetime' name='[transaction_time]' role='dimension' type='ordinal' />
+      </datasource-dependencies>
+      <filter class='categorical' column='[federated.0cbca293fraud0privacy0dash01].[none:age_band:nk]'>
+        <groupfilter function='level-members' level='[none:age_band:nk]' user:ui-enumeration='all' user:ui-marker='enumerate' />
+      </filter>
+      <filter class='categorical' column='[federated.0cbca293fraud0privacy0dash01].[none:category:nk]'>
+        <groupfilter function='level-members' level='[none:category:nk]' user:ui-enumeration='all' user:ui-marker='enumerate' />
+      </filter>
+      <filter class='categorical' column='[federated.0cbca293fraud0privacy0dash01].[none:dataset_split:nk]'>
+        <groupfilter function='member' level='[none:dataset_split:nk]' member='&quot;test&quot;' user:ui-domain='database' user:ui-enumeration='inclusive' user:ui-marker='enumerate' />
+      </filter>
+      <filter class='categorical' column='[federated.0cbca293fraud0privacy0dash01].[none:gender:nk]'>
+        <groupfilter function='level-members' level='[none:gender:nk]' user:ui-enumeration='all' user:ui-marker='enumerate' />
+      </filter>
+      <filter class='categorical' column='[federated.0cbca293fraud0privacy0dash01].[none:region:nk]'>
+        <groupfilter function='level-members' level='[none:region:nk]' user:ui-enumeration='all' user:ui-marker='enumerate' />
+      </filter>
+      <filter class='quantitative' column='[federated.0cbca293fraud0privacy0dash01].[none:transaction_time:qk]' included-values='all' />
+    </shared-view>
+  </shared-views>
+  <worksheets>
+    <worksheet name='Fraud Amount $'>
+      <layout-options>
+        <title>
+          <formatted-text>
+            <run fontcolor='#555555' fontsize='11'>Fraud Amount $</run>
+          </formatted-text>
+        </title>
+      </layout-options>
+      <table>
+        <view>
+          <datasources>
+            <datasource caption='transactions_protected' name='federated.0cbca293fraud0privacy0dash01' />
+          </datasources>
+          <datasource-dependencies datasource='federated.0cbca293fraud0privacy0dash01'>
+            <column caption='Fraud Amount $' datatype='real' default-format='c&quot;$&quot;#,##0;-&quot;$&quot;#,##0' name='[Calculation_7310000000000000004]' role='measure' type='quantitative'>
+              <calculation class='tableau' formula='SUM(IF [is_fraud] = 1 THEN [amount] ELSE 0 END)' />
+            </column>
+            <column caption='Age Band' datatype='string' name='[age_band]' role='dimension' type='nominal' />
+            <column caption='Amount' datatype='real' default-format='c&quot;$&quot;#,##0.00;-&quot;$&quot;#,##0.00' name='[amount]' role='measure' type='quantitative' />
+            <column caption='Category' datatype='string' name='[category]' role='dimension' type='nominal' />
+            <column caption='Dataset Split' datatype='string' name='[dataset_split]' role='dimension' type='nominal' />
+            <column caption='Gender' datatype='string' name='[gender]' role='dimension' type='nominal' />
+            <column caption='Is Fraud' datatype='integer' name='[is_fraud]' role='measure' type='quantitative' />
+            <column-instance column='[age_band]' derivation='None' name='[none:age_band:nk]' pivot='key' type='nominal' />
+            <column-instance column='[category]' derivation='None' name='[none:category:nk]' pivot='key' type='nominal' />
+            <column-instance column='[dataset_split]' derivation='None' name='[none:dataset_split:nk]' pivot='key' type='nominal' />
+            <column-instance column='[gender]' derivation='None' name='[none:gender:nk]' pivot='key' type='nominal' />
+            <column-instance column='[region]' derivation='None' name='[none:region:nk]' pivot='key' type='nominal' />
+            <column-instance column='[transaction_time]' derivation='None' name='[none:transaction_time:qk]' pivot='key' type='quantitative' />
+            <column caption='Region' datatype='string' name='[region]' role='dimension' type='nominal' />
+            <column caption='Transaction Time' datatype='datetime' name='[transaction_time]' role='dimension' type='ordinal' />
+            <column-instance column='[Calculation_7310000000000000004]' derivation='User' name='[usr:Calculation_7310000000000000004:qk]' pivot='key' type='quantitative' />
+          </datasource-dependencies>
+          <slices>
+            <column>[federated.0cbca293fraud0privacy0dash01].[none:transaction_time:qk]</column>
+            <column>[federated.0cbca293fraud0privacy0dash01].[none:category:nk]</column>
+            <column>[federated.0cbca293fraud0privacy0dash01].[none:region:nk]</column>
+            <column>[federated.0cbca293fraud0privacy0dash01].[none:age_band:nk]</column>
+            <column>[federated.0cbca293fraud0privacy0dash01].[none:gender:nk]</column>
+            <column>[federated.0cbca293fraud0privacy0dash01].[none:dataset_split:nk]</column>
+          </slices>
+          <aggregation value='true' />
+        </view>
+        <style />
+        <panes>
+          <pane selection-relaxation-option='selection-relaxation-allow'>
+            <view>
+              <breakdown value='auto' />
+            </view>
+            <mark class='Text' />
+            <encodings>
+              <text column='[federated.0cbca293fraud0privacy0dash01].[usr:Calculation_7310000000000000004:qk]' />
+            </encodings>
+            <customized-label>
+              <formatted-text>
+                <run bold='true' fontcolor='#1f4e79' fontsize='22'><![CDATA[<[federated.0cbca293fraud0privacy0dash01].[usr:Calculation_7310000000000000004:qk]>]]></run>
+              </formatted-text>
+            </customized-label>
+            <style>
+              <style-rule element='mark'>
+                <format attr='mark-labels-show' value='true' />
+                <format attr='mark-labels-cull' value='true' />
+              </style-rule>
+            </style>
+          </pane>
+        </panes>
+        <rows />
+        <cols />
+      </table>
+      <simple-id uuid='{EC65D4BC-6456-43D4-A762-1263D85D2B9E}' />
+    </worksheet>
+    <worksheet name='Fraud Count by Category'>
+      <table>
+        <view>
+          <datasources>
+            <datasource caption='transactions_protected' name='federated.0cbca293fraud0privacy0dash01' />
+          </datasources>
+          <datasource-dependencies datasource='federated.0cbca293fraud0privacy0dash01'>
+            <column caption='Age Band' datatype='string' name='[age_band]' role='dimension' type='nominal' />
+            <column caption='Category' datatype='string' name='[category]' role='dimension' type='nominal' />
+            <column caption='Dataset Split' datatype='string' name='[dataset_split]' role='dimension' type='nominal' />
+            <column caption='Gender' datatype='string' name='[gender]' role='dimension' type='nominal' />
+            <column caption='Is Fraud' datatype='integer' name='[is_fraud]' role='measure' type='quantitative' />
+            <column-instance column='[age_band]' derivation='None' name='[none:age_band:nk]' pivot='key' type='nominal' />
+            <column-instance column='[category]' derivation='None' name='[none:category:nk]' pivot='key' type='nominal' />
+            <column-instance column='[dataset_split]' derivation='None' name='[none:dataset_split:nk]' pivot='key' type='nominal' />
+            <column-instance column='[gender]' derivation='None' name='[none:gender:nk]' pivot='key' type='nominal' />
+            <column-instance column='[region]' derivation='None' name='[none:region:nk]' pivot='key' type='nominal' />
+            <column-instance column='[transaction_time]' derivation='None' name='[none:transaction_time:qk]' pivot='key' type='quantitative' />
+            <column caption='Region' datatype='string' name='[region]' role='dimension' type='nominal' />
+            <column-instance column='[is_fraud]' derivation='Sum' name='[sum:is_fraud:qk]' pivot='key' type='quantitative' />
+            <column caption='Transaction Time' datatype='datetime' name='[transaction_time]' role='dimension' type='ordinal' />
+          </datasource-dependencies>
+          <computed-sort column='[federated.0cbca293fraud0privacy0dash01].[none:category:nk]' direction='DESC' using='[federated.0cbca293fraud0privacy0dash01].[sum:is_fraud:qk]' />
+          <slices>
+            <column>[federated.0cbca293fraud0privacy0dash01].[none:transaction_time:qk]</column>
+            <column>[federated.0cbca293fraud0privacy0dash01].[none:category:nk]</column>
+            <column>[federated.0cbca293fraud0privacy0dash01].[none:region:nk]</column>
+            <column>[federated.0cbca293fraud0privacy0dash01].[none:age_band:nk]</column>
+            <column>[federated.0cbca293fraud0privacy0dash01].[none:gender:nk]</column>
+            <column>[federated.0cbca293fraud0privacy0dash01].[none:dataset_split:nk]</column>
+          </slices>
+          <aggregation value='true' />
+        </view>
+        <style />
+        <panes>
+          <pane selection-relaxation-option='selection-relaxation-allow'>
+            <view>
+              <breakdown value='auto' />
+            </view>
+            <mark class='Bar' />
+            <style>
+              <style-rule element='mark'>
+                <format attr='mark-labels-show' value='true' />
+                <format attr='mark-labels-cull' value='true' />
+              </style-rule>
+            </style>
+          </pane>
+        </panes>
+        <rows>[federated.0cbca293fraud0privacy0dash01].[none:category:nk]</rows>
+        <cols>[federated.0cbca293fraud0privacy0dash01].[sum:is_fraud:qk]</cols>
+      </table>
+      <simple-id uuid='{720253AE-DCEF-493F-BB55-6646FEA15F58}' />
+    </worksheet>
+    <worksheet name='Fraud Rate %'>
+      <layout-options>
+        <title>
+          <formatted-text>
+            <run fontcolor='#555555' fontsize='11'>Fraud Rate %</run>
+          </formatted-text>
+        </title>
+      </layout-options>
+      <table>
+        <view>
+          <datasources>
+            <datasource caption='transactions_protected' name='federated.0cbca293fraud0privacy0dash01' />
+          </datasources>
+          <datasource-dependencies datasource='federated.0cbca293fraud0privacy0dash01'>
+            <column caption='Fraud Rate %' datatype='real' default-format='p0.00%' name='[Calculation_7310000000000000003]' role='measure' type='quantitative'>
+              <calculation class='tableau' formula='SUM([is_fraud]) / COUNT([customer_id])' />
+            </column>
+            <column caption='Age Band' datatype='string' name='[age_band]' role='dimension' type='nominal' />
+            <column caption='Category' datatype='string' name='[category]' role='dimension' type='nominal' />
+            <column caption='Customer ID' datatype='string' name='[customer_id]' role='dimension' type='nominal' />
+            <column caption='Dataset Split' datatype='string' name='[dataset_split]' role='dimension' type='nominal' />
+            <column caption='Gender' datatype='string' name='[gender]' role='dimension' type='nominal' />
+            <column caption='Is Fraud' datatype='integer' name='[is_fraud]' role='measure' type='quantitative' />
+            <column-instance column='[age_band]' derivation='None' name='[none:age_band:nk]' pivot='key' type='nominal' />
+            <column-instance column='[category]' derivation='None' name='[none:category:nk]' pivot='key' type='nominal' />
+            <column-instance column='[dataset_split]' derivation='None' name='[none:dataset_split:nk]' pivot='key' type='nominal' />
+            <column-instance column='[gender]' derivation='None' name='[none:gender:nk]' pivot='key' type='nominal' />
+            <column-instance column='[region]' derivation='None' name='[none:region:nk]' pivot='key' type='nominal' />
+            <column-instance column='[transaction_time]' derivation='None' name='[none:transaction_time:qk]' pivot='key' type='quantitative' />
+            <column caption='Region' datatype='string' name='[region]' role='dimension' type='nominal' />
+            <column caption='Transaction Time' datatype='datetime' name='[transaction_time]' role='dimension' type='ordinal' />
+            <column-instance column='[Calculation_7310000000000000003]' derivation='User' name='[usr:Calculation_7310000000000000003:qk]' pivot='key' type='quantitative' />
+          </datasource-dependencies>
+          <slices>
+            <column>[federated.0cbca293fraud0privacy0dash01].[none:transaction_time:qk]</column>
+            <column>[federated.0cbca293fraud0privacy0dash01].[none:category:nk]</column>
+            <column>[federated.0cbca293fraud0privacy0dash01].[none:region:nk]</column>
+            <column>[federated.0cbca293fraud0privacy0dash01].[none:age_band:nk]</column>
+            <column>[federated.0cbca293fraud0privacy0dash01].[none:gender:nk]</column>
+            <column>[federated.0cbca293fraud0privacy0dash01].[none:dataset_split:nk]</column>
+          </slices>
+          <aggregation value='true' />
+        </view>
+        <style />
+        <panes>
+          <pane selection-relaxation-option='selection-relaxation-allow'>
+            <view>
+              <breakdown value='auto' />
+            </view>
+            <mark class='Text' />
+            <encodings>
+              <text column='[federated.0cbca293fraud0privacy0dash01].[usr:Calculation_7310000000000000003:qk]' />
+            </encodings>
+            <customized-label>
+              <formatted-text>
+                <run bold='true' fontcolor='#1f4e79' fontsize='22'><![CDATA[<[federated.0cbca293fraud0privacy0dash01].[usr:Calculation_7310000000000000003:qk]>]]></run>
+              </formatted-text>
+            </customized-label>
+            <style>
+              <style-rule element='mark'>
+                <format attr='mark-labels-show' value='true' />
+                <format attr='mark-labels-cull' value='true' />
+              </style-rule>
+            </style>
+          </pane>
+        </panes>
+        <rows />
+        <cols />
+      </table>
+      <simple-id uuid='{2345DE3C-C702-4DE3-AAD8-E185E369C9F9}' />
+    </worksheet>
+    <worksheet name='Fraud Rate by Hour'>
+      <table>
+        <view>
+          <datasources>
+            <datasource caption='transactions_protected' name='federated.0cbca293fraud0privacy0dash01' />
+          </datasources>
+          <datasource-dependencies datasource='federated.0cbca293fraud0privacy0dash01'>
+            <column caption='Fraud Rate %' datatype='real' default-format='p0.00%' name='[Calculation_7310000000000000003]' role='measure' type='quantitative'>
+              <calculation class='tableau' formula='SUM([is_fraud]) / COUNT([customer_id])' />
+            </column>
+            <column caption='Age Band' datatype='string' name='[age_band]' role='dimension' type='nominal' />
+            <column caption='Category' datatype='string' name='[category]' role='dimension' type='nominal' />
+            <column caption='Customer ID' datatype='string' name='[customer_id]' role='dimension' type='nominal' />
+            <column caption='Dataset Split' datatype='string' name='[dataset_split]' role='dimension' type='nominal' />
+            <column caption='Gender' datatype='string' name='[gender]' role='dimension' type='nominal' />
+            <column caption='Hour' datatype='integer' name='[hour]' role='dimension' type='ordinal' />
+            <column caption='Is Fraud' datatype='integer' name='[is_fraud]' role='measure' type='quantitative' />
+            <column-instance column='[age_band]' derivation='None' name='[none:age_band:nk]' pivot='key' type='nominal' />
+            <column-instance column='[category]' derivation='None' name='[none:category:nk]' pivot='key' type='nominal' />
+            <column-instance column='[dataset_split]' derivation='None' name='[none:dataset_split:nk]' pivot='key' type='nominal' />
+            <column-instance column='[gender]' derivation='None' name='[none:gender:nk]' pivot='key' type='nominal' />
+            <column-instance column='[hour]' derivation='None' name='[none:hour:ok]' pivot='key' type='ordinal' />
+            <column-instance column='[region]' derivation='None' name='[none:region:nk]' pivot='key' type='nominal' />
+            <column-instance column='[transaction_time]' derivation='None' name='[none:transaction_time:qk]' pivot='key' type='quantitative' />
+            <column caption='Region' datatype='string' name='[region]' role='dimension' type='nominal' />
+            <column caption='Transaction Time' datatype='datetime' name='[transaction_time]' role='dimension' type='ordinal' />
+            <column-instance column='[Calculation_7310000000000000003]' derivation='User' name='[usr:Calculation_7310000000000000003:qk]' pivot='key' type='quantitative' />
+          </datasource-dependencies>
+          <slices>
+            <column>[federated.0cbca293fraud0privacy0dash01].[none:transaction_time:qk]</column>
+            <column>[federated.0cbca293fraud0privacy0dash01].[none:category:nk]</column>
+            <column>[federated.0cbca293fraud0privacy0dash01].[none:region:nk]</column>
+            <column>[federated.0cbca293fraud0privacy0dash01].[none:age_band:nk]</column>
+            <column>[federated.0cbca293fraud0privacy0dash01].[none:gender:nk]</column>
+            <column>[federated.0cbca293fraud0privacy0dash01].[none:dataset_split:nk]</column>
+          </slices>
+          <aggregation value='true' />
+        </view>
+        <style />
+        <panes>
+          <pane selection-relaxation-option='selection-relaxation-allow'>
+            <view>
+              <breakdown value='auto' />
+            </view>
+            <mark class='Bar' />
+          </pane>
+        </panes>
+        <rows>[federated.0cbca293fraud0privacy0dash01].[usr:Calculation_7310000000000000003:qk]</rows>
+        <cols>[federated.0cbca293fraud0privacy0dash01].[none:hour:ok]</cols>
+      </table>
+      <simple-id uuid='{177E6C4A-30DA-4558-A84A-55F7B17BECFB}' />
+    </worksheet>
+    <worksheet name='Fraud Transactions'>
+      <layout-options>
+        <title>
+          <formatted-text>
+            <run fontcolor='#555555' fontsize='11'>Fraud Transactions</run>
+          </formatted-text>
+        </title>
+      </layout-options>
+      <table>
+        <view>
+          <datasources>
+            <datasource caption='transactions_protected' name='federated.0cbca293fraud0privacy0dash01' />
+          </datasources>
+          <datasource-dependencies datasource='federated.0cbca293fraud0privacy0dash01'>
+            <column caption='Fraud Transactions' datatype='integer' default-format='n#,##0;-#,##0' name='[Calculation_7310000000000000002]' role='measure' type='quantitative'>
+              <calculation class='tableau' formula='SUM([is_fraud])' />
+            </column>
+            <column caption='Age Band' datatype='string' name='[age_band]' role='dimension' type='nominal' />
+            <column caption='Category' datatype='string' name='[category]' role='dimension' type='nominal' />
+            <column caption='Dataset Split' datatype='string' name='[dataset_split]' role='dimension' type='nominal' />
+            <column caption='Gender' datatype='string' name='[gender]' role='dimension' type='nominal' />
+            <column caption='Is Fraud' datatype='integer' name='[is_fraud]' role='measure' type='quantitative' />
+            <column-instance column='[age_band]' derivation='None' name='[none:age_band:nk]' pivot='key' type='nominal' />
+            <column-instance column='[category]' derivation='None' name='[none:category:nk]' pivot='key' type='nominal' />
+            <column-instance column='[dataset_split]' derivation='None' name='[none:dataset_split:nk]' pivot='key' type='nominal' />
+            <column-instance column='[gender]' derivation='None' name='[none:gender:nk]' pivot='key' type='nominal' />
+            <column-instance column='[region]' derivation='None' name='[none:region:nk]' pivot='key' type='nominal' />
+            <column-instance column='[transaction_time]' derivation='None' name='[none:transaction_time:qk]' pivot='key' type='quantitative' />
+            <column caption='Region' datatype='string' name='[region]' role='dimension' type='nominal' />
+            <column caption='Transaction Time' datatype='datetime' name='[transaction_time]' role='dimension' type='ordinal' />
+            <column-instance column='[Calculation_7310000000000000002]' derivation='User' name='[usr:Calculation_7310000000000000002:qk]' pivot='key' type='quantitative' />
+          </datasource-dependencies>
+          <slices>
+            <column>[federated.0cbca293fraud0privacy0dash01].[none:transaction_time:qk]</column>
+            <column>[federated.0cbca293fraud0privacy0dash01].[none:category:nk]</column>
+            <column>[federated.0cbca293fraud0privacy0dash01].[none:region:nk]</column>
+            <column>[federated.0cbca293fraud0privacy0dash01].[none:age_band:nk]</column>
+            <column>[federated.0cbca293fraud0privacy0dash01].[none:gender:nk]</column>
+            <column>[federated.0cbca293fraud0privacy0dash01].[none:dataset_split:nk]</column>
+          </slices>
+          <aggregation value='true' />
+        </view>
+        <style />
+        <panes>
+          <pane selection-relaxation-option='selection-relaxation-allow'>
+            <view>
+              <breakdown value='auto' />
+            </view>
+            <mark class='Text' />
+            <encodings>
+              <text column='[federated.0cbca293fraud0privacy0dash01].[usr:Calculation_7310000000000000002:qk]' />
+            </encodings>
+            <customized-label>
+              <formatted-text>
+                <run bold='true' fontcolor='#1f4e79' fontsize='22'><![CDATA[<[federated.0cbca293fraud0privacy0dash01].[usr:Calculation_7310000000000000002:qk]>]]></run>
+              </formatted-text>
+            </customized-label>
+            <style>
+              <style-rule element='mark'>
+                <format attr='mark-labels-show' value='true' />
+                <format attr='mark-labels-cull' value='true' />
+              </style-rule>
+            </style>
+          </pane>
+        </panes>
+        <rows />
+        <cols />
+      </table>
+      <simple-id uuid='{1101B247-48A1-450C-9880-2A78113FD385}' />
+    </worksheet>
+    <worksheet name='Fraud by Age Band'>
+      <table>
+        <view>
+          <datasources>
+            <datasource caption='transactions_protected' name='federated.0cbca293fraud0privacy0dash01' />
+          </datasources>
+          <datasource-dependencies datasource='federated.0cbca293fraud0privacy0dash01'>
+            <column caption='Age Band' datatype='string' name='[age_band]' role='dimension' type='nominal' />
+            <column caption='Category' datatype='string' name='[category]' role='dimension' type='nominal' />
+            <column caption='Dataset Split' datatype='string' name='[dataset_split]' role='dimension' type='nominal' />
+            <column caption='Gender' datatype='string' name='[gender]' role='dimension' type='nominal' />
+            <column caption='Is Fraud' datatype='integer' name='[is_fraud]' role='measure' type='quantitative' />
+            <column-instance column='[age_band]' derivation='None' name='[none:age_band:nk]' pivot='key' type='nominal' />
+            <column-instance column='[category]' derivation='None' name='[none:category:nk]' pivot='key' type='nominal' />
+            <column-instance column='[dataset_split]' derivation='None' name='[none:dataset_split:nk]' pivot='key' type='nominal' />
+            <column-instance column='[gender]' derivation='None' name='[none:gender:nk]' pivot='key' type='nominal' />
+            <column-instance column='[region]' derivation='None' name='[none:region:nk]' pivot='key' type='nominal' />
+            <column-instance column='[transaction_time]' derivation='None' name='[none:transaction_time:qk]' pivot='key' type='quantitative' />
+            <column caption='Region' datatype='string' name='[region]' role='dimension' type='nominal' />
+            <column-instance column='[is_fraud]' derivation='Sum' name='[sum:is_fraud:qk]' pivot='key' type='quantitative' />
+            <column caption='Transaction Time' datatype='datetime' name='[transaction_time]' role='dimension' type='ordinal' />
+          </datasource-dependencies>
+          <manual-sort column='[federated.0cbca293fraud0privacy0dash01].[none:age_band:nk]' direction='ASC'>
+            <dictionary>
+              <bucket>&quot;&lt;25&quot;</bucket>
+              <bucket>&quot;25-39&quot;</bucket>
+              <bucket>&quot;40-54&quot;</bucket>
+              <bucket>&quot;55-69&quot;</bucket>
+              <bucket>&quot;70+&quot;</bucket>
+            </dictionary>
+          </manual-sort>
+          <slices>
+            <column>[federated.0cbca293fraud0privacy0dash01].[none:transaction_time:qk]</column>
+            <column>[federated.0cbca293fraud0privacy0dash01].[none:category:nk]</column>
+            <column>[federated.0cbca293fraud0privacy0dash01].[none:region:nk]</column>
+            <column>[federated.0cbca293fraud0privacy0dash01].[none:age_band:nk]</column>
+            <column>[federated.0cbca293fraud0privacy0dash01].[none:gender:nk]</column>
+            <column>[federated.0cbca293fraud0privacy0dash01].[none:dataset_split:nk]</column>
+          </slices>
+          <aggregation value='true' />
+        </view>
+        <style />
+        <panes>
+          <pane selection-relaxation-option='selection-relaxation-allow'>
+            <view>
+              <breakdown value='auto' />
+            </view>
+            <mark class='Bar' />
+            <style>
+              <style-rule element='mark'>
+                <format attr='mark-labels-show' value='true' />
+                <format attr='mark-labels-cull' value='true' />
+              </style-rule>
+            </style>
+          </pane>
+        </panes>
+        <rows>[federated.0cbca293fraud0privacy0dash01].[sum:is_fraud:qk]</rows>
+        <cols>[federated.0cbca293fraud0privacy0dash01].[none:age_band:nk]</cols>
+      </table>
+      <simple-id uuid='{9A4CF090-155A-476A-96C6-62ED142FAA82}' />
+    </worksheet>
+    <worksheet name='Fraud by Region'>
+      <table>
+        <view>
+          <datasources>
+            <datasource caption='transactions_protected' name='federated.0cbca293fraud0privacy0dash01' />
+          </datasources>
+          <datasource-dependencies datasource='federated.0cbca293fraud0privacy0dash01'>
+            <column caption='Age Band' datatype='string' name='[age_band]' role='dimension' type='nominal' />
+            <column caption='Category' datatype='string' name='[category]' role='dimension' type='nominal' />
+            <column caption='Dataset Split' datatype='string' name='[dataset_split]' role='dimension' type='nominal' />
+            <column caption='Gender' datatype='string' name='[gender]' role='dimension' type='nominal' />
+            <column caption='Is Fraud' datatype='integer' name='[is_fraud]' role='measure' type='quantitative' />
+            <column-instance column='[age_band]' derivation='None' name='[none:age_band:nk]' pivot='key' type='nominal' />
+            <column-instance column='[category]' derivation='None' name='[none:category:nk]' pivot='key' type='nominal' />
+            <column-instance column='[dataset_split]' derivation='None' name='[none:dataset_split:nk]' pivot='key' type='nominal' />
+            <column-instance column='[gender]' derivation='None' name='[none:gender:nk]' pivot='key' type='nominal' />
+            <column-instance column='[region]' derivation='None' name='[none:region:nk]' pivot='key' type='nominal' />
+            <column-instance column='[transaction_time]' derivation='None' name='[none:transaction_time:qk]' pivot='key' type='quantitative' />
+            <column caption='Region' datatype='string' name='[region]' role='dimension' type='nominal' />
+            <column-instance column='[is_fraud]' derivation='Sum' name='[sum:is_fraud:qk]' pivot='key' type='quantitative' />
+            <column caption='Transaction Time' datatype='datetime' name='[transaction_time]' role='dimension' type='ordinal' />
+          </datasource-dependencies>
+          <slices>
+            <column>[federated.0cbca293fraud0privacy0dash01].[none:transaction_time:qk]</column>
+            <column>[federated.0cbca293fraud0privacy0dash01].[none:category:nk]</column>
+            <column>[federated.0cbca293fraud0privacy0dash01].[none:region:nk]</column>
+            <column>[federated.0cbca293fraud0privacy0dash01].[none:age_band:nk]</column>
+            <column>[federated.0cbca293fraud0privacy0dash01].[none:gender:nk]</column>
+            <column>[federated.0cbca293fraud0privacy0dash01].[none:dataset_split:nk]</column>
+          </slices>
+          <aggregation value='true' />
+        </view>
+        <style />
+        <panes>
+          <pane selection-relaxation-option='selection-relaxation-allow'>
+            <view>
+              <breakdown value='auto' />
+            </view>
+            <mark class='Bar' />
+            <style>
+              <style-rule element='mark'>
+                <format attr='mark-labels-show' value='true' />
+                <format attr='mark-labels-cull' value='true' />
+              </style-rule>
+            </style>
+          </pane>
+        </panes>
+        <rows>[federated.0cbca293fraud0privacy0dash01].[sum:is_fraud:qk]</rows>
+        <cols>[federated.0cbca293fraud0privacy0dash01].[none:region:nk]</cols>
+      </table>
+      <simple-id uuid='{16705E93-F618-40C4-9826-094A5959E6ED}' />
+    </worksheet>
+    <worksheet name='Monthly Fraud Trend'>
+      <table>
+        <view>
+          <datasources>
+            <datasource caption='transactions_protected' name='federated.0cbca293fraud0privacy0dash01' />
+          </datasources>
+          <datasource-dependencies datasource='federated.0cbca293fraud0privacy0dash01'>
+            <column caption='Age Band' datatype='string' name='[age_band]' role='dimension' type='nominal' />
+            <column caption='Category' datatype='string' name='[category]' role='dimension' type='nominal' />
+            <column caption='Dataset Split' datatype='string' name='[dataset_split]' role='dimension' type='nominal' />
+            <column caption='Gender' datatype='string' name='[gender]' role='dimension' type='nominal' />
+            <column caption='Is Fraud' datatype='integer' name='[is_fraud]' role='measure' type='quantitative' />
+            <column-instance column='[age_band]' derivation='None' name='[none:age_band:nk]' pivot='key' type='nominal' />
+            <column-instance column='[category]' derivation='None' name='[none:category:nk]' pivot='key' type='nominal' />
+            <column-instance column='[dataset_split]' derivation='None' name='[none:dataset_split:nk]' pivot='key' type='nominal' />
+            <column-instance column='[gender]' derivation='None' name='[none:gender:nk]' pivot='key' type='nominal' />
+            <column-instance column='[region]' derivation='None' name='[none:region:nk]' pivot='key' type='nominal' />
+            <column-instance column='[transaction_time]' derivation='None' name='[none:transaction_time:qk]' pivot='key' type='quantitative' />
+            <column caption='Region' datatype='string' name='[region]' role='dimension' type='nominal' />
+            <column-instance column='[is_fraud]' derivation='Sum' name='[sum:is_fraud:qk]' pivot='key' type='quantitative' />
+            <column-instance column='[transaction_time]' derivation='Month-Trunc' name='[tmn:transaction_time:qk]' pivot='key' type='quantitative' />
+            <column caption='Transaction Time' datatype='datetime' name='[transaction_time]' role='dimension' type='ordinal' />
+          </datasource-dependencies>
+          <slices>
+            <column>[federated.0cbca293fraud0privacy0dash01].[none:transaction_time:qk]</column>
+            <column>[federated.0cbca293fraud0privacy0dash01].[none:category:nk]</column>
+            <column>[federated.0cbca293fraud0privacy0dash01].[none:region:nk]</column>
+            <column>[federated.0cbca293fraud0privacy0dash01].[none:age_band:nk]</column>
+            <column>[federated.0cbca293fraud0privacy0dash01].[none:gender:nk]</column>
+            <column>[federated.0cbca293fraud0privacy0dash01].[none:dataset_split:nk]</column>
+          </slices>
+          <aggregation value='true' />
+        </view>
+        <style />
+        <panes>
+          <pane selection-relaxation-option='selection-relaxation-allow'>
+            <view>
+              <breakdown value='auto' />
+            </view>
+            <mark class='Line' />
+          </pane>
+        </panes>
+        <rows>[federated.0cbca293fraud0privacy0dash01].[sum:is_fraud:qk]</rows>
+        <cols>[federated.0cbca293fraud0privacy0dash01].[tmn:transaction_time:qk]</cols>
+      </table>
+      <simple-id uuid='{A25BDADD-E716-4637-A3C7-DE5DA215C524}' />
+    </worksheet>
+    <worksheet name='Rule Outcomes'>
+      <table>
+        <view>
+          <datasources>
+            <datasource caption='transactions_protected' name='federated.0cbca293fraud0privacy0dash01' />
+          </datasources>
+          <datasource-dependencies datasource='federated.0cbca293fraud0privacy0dash01'>
+            <column caption='Total Transactions' datatype='integer' default-format='n#,##0;-#,##0' name='[Calculation_7310000000000000001]' role='measure' type='quantitative'>
+              <calculation class='tableau' formula='COUNT([customer_id])' />
+            </column>
+            <column caption='Age Band' datatype='string' name='[age_band]' role='dimension' type='nominal' />
+            <column caption='Category' datatype='string' name='[category]' role='dimension' type='nominal' />
+            <column caption='Customer ID' datatype='string' name='[customer_id]' role='dimension' type='nominal' />
+            <column caption='Dataset Split' datatype='string' name='[dataset_split]' role='dimension' type='nominal' />
+            <column caption='Gender' datatype='string' name='[gender]' role='dimension' type='nominal' />
+            <column-instance column='[age_band]' derivation='None' name='[none:age_band:nk]' pivot='key' type='nominal' />
+            <column-instance column='[category]' derivation='None' name='[none:category:nk]' pivot='key' type='nominal' />
+            <column-instance column='[dataset_split]' derivation='None' name='[none:dataset_split:nk]' pivot='key' type='nominal' />
+            <column-instance column='[gender]' derivation='None' name='[none:gender:nk]' pivot='key' type='nominal' />
+            <column-instance column='[outcome]' derivation='None' name='[none:outcome:nk]' pivot='key' type='nominal' />
+            <column-instance column='[region]' derivation='None' name='[none:region:nk]' pivot='key' type='nominal' />
+            <column-instance column='[transaction_time]' derivation='None' name='[none:transaction_time:qk]' pivot='key' type='quantitative' />
+            <column caption='Outcome' datatype='string' name='[outcome]' role='dimension' type='nominal' />
+            <column caption='Region' datatype='string' name='[region]' role='dimension' type='nominal' />
+            <column caption='Transaction Time' datatype='datetime' name='[transaction_time]' role='dimension' type='ordinal' />
+            <column-instance column='[Calculation_7310000000000000001]' derivation='User' name='[usr:Calculation_7310000000000000001:qk]' pivot='key' type='quantitative' />
+          </datasource-dependencies>
+          <filter class='categorical' column='[federated.0cbca293fraud0privacy0dash01].[none:outcome:nk]'>
+            <groupfilter function='except' user:ui-domain='database' user:ui-enumeration='exclusive' user:ui-marker='enumerate'>
+              <groupfilter function='level-members' level='[none:outcome:nk]' />
+              <groupfilter function='member' level='[none:outcome:nk]' member='&quot;Correctly passed&quot;' />
+            </groupfilter>
+          </filter>
+          <slices>
+            <column>[federated.0cbca293fraud0privacy0dash01].[none:outcome:nk]</column>
+            <column>[federated.0cbca293fraud0privacy0dash01].[none:transaction_time:qk]</column>
+            <column>[federated.0cbca293fraud0privacy0dash01].[none:category:nk]</column>
+            <column>[federated.0cbca293fraud0privacy0dash01].[none:region:nk]</column>
+            <column>[federated.0cbca293fraud0privacy0dash01].[none:age_band:nk]</column>
+            <column>[federated.0cbca293fraud0privacy0dash01].[none:gender:nk]</column>
+            <column>[federated.0cbca293fraud0privacy0dash01].[none:dataset_split:nk]</column>
+          </slices>
+          <aggregation value='true' />
+        </view>
+        <style />
+        <panes>
+          <pane selection-relaxation-option='selection-relaxation-allow'>
+            <view>
+              <breakdown value='auto' />
+            </view>
+            <mark class='Bar' />
+            <encodings>
+              <color column='[federated.0cbca293fraud0privacy0dash01].[none:outcome:nk]' />
+            </encodings>
+            <style>
+              <style-rule element='mark'>
+                <format attr='mark-labels-show' value='true' />
+                <format attr='mark-labels-cull' value='true' />
+              </style-rule>
+            </style>
+          </pane>
+        </panes>
+        <rows>[federated.0cbca293fraud0privacy0dash01].[usr:Calculation_7310000000000000001:qk]</rows>
+        <cols>[federated.0cbca293fraud0privacy0dash01].[none:outcome:nk]</cols>
+      </table>
+      <simple-id uuid='{07DD2C5D-F59F-44CC-8BD5-F5D3FFF20A56}' />
+    </worksheet>
+    <worksheet name='Rule Precision %'>
+      <layout-options>
+        <title>
+          <formatted-text>
+            <run fontcolor='#555555' fontsize='11'>Rule Precision %</run>
+          </formatted-text>
+        </title>
+      </layout-options>
+      <table>
+        <view>
+          <datasources>
+            <datasource caption='transactions_protected' name='federated.0cbca293fraud0privacy0dash01' />
+          </datasources>
+          <datasource-dependencies datasource='federated.0cbca293fraud0privacy0dash01'>
+            <column caption='Rule Precision %' datatype='real' default-format='p0.0%' name='[Calculation_7310000000000000006]' role='measure' type='quantitative'>
+              <calculation class='tableau' formula='SUM([flagged] * [is_fraud]) / SUM([flagged])' />
+            </column>
+            <column caption='Age Band' datatype='string' name='[age_band]' role='dimension' type='nominal' />
+            <column caption='Category' datatype='string' name='[category]' role='dimension' type='nominal' />
+            <column caption='Dataset Split' datatype='string' name='[dataset_split]' role='dimension' type='nominal' />
+            <column caption='Flagged' datatype='integer' name='[flagged]' role='measure' type='quantitative' />
+            <column caption='Gender' datatype='string' name='[gender]' role='dimension' type='nominal' />
+            <column caption='Is Fraud' datatype='integer' name='[is_fraud]' role='measure' type='quantitative' />
+            <column-instance column='[age_band]' derivation='None' name='[none:age_band:nk]' pivot='key' type='nominal' />
+            <column-instance column='[category]' derivation='None' name='[none:category:nk]' pivot='key' type='nominal' />
+            <column-instance column='[dataset_split]' derivation='None' name='[none:dataset_split:nk]' pivot='key' type='nominal' />
+            <column-instance column='[gender]' derivation='None' name='[none:gender:nk]' pivot='key' type='nominal' />
+            <column-instance column='[region]' derivation='None' name='[none:region:nk]' pivot='key' type='nominal' />
+            <column-instance column='[transaction_time]' derivation='None' name='[none:transaction_time:qk]' pivot='key' type='quantitative' />
+            <column caption='Region' datatype='string' name='[region]' role='dimension' type='nominal' />
+            <column caption='Transaction Time' datatype='datetime' name='[transaction_time]' role='dimension' type='ordinal' />
+            <column-instance column='[Calculation_7310000000000000006]' derivation='User' name='[usr:Calculation_7310000000000000006:qk]' pivot='key' type='quantitative' />
+          </datasource-dependencies>
+          <slices>
+            <column>[federated.0cbca293fraud0privacy0dash01].[none:transaction_time:qk]</column>
+            <column>[federated.0cbca293fraud0privacy0dash01].[none:category:nk]</column>
+            <column>[federated.0cbca293fraud0privacy0dash01].[none:region:nk]</column>
+            <column>[federated.0cbca293fraud0privacy0dash01].[none:age_band:nk]</column>
+            <column>[federated.0cbca293fraud0privacy0dash01].[none:gender:nk]</column>
+            <column>[federated.0cbca293fraud0privacy0dash01].[none:dataset_split:nk]</column>
+          </slices>
+          <aggregation value='true' />
+        </view>
+        <style />
+        <panes>
+          <pane selection-relaxation-option='selection-relaxation-allow'>
+            <view>
+              <breakdown value='auto' />
+            </view>
+            <mark class='Text' />
+            <encodings>
+              <text column='[federated.0cbca293fraud0privacy0dash01].[usr:Calculation_7310000000000000006:qk]' />
+            </encodings>
+            <customized-label>
+              <formatted-text>
+                <run bold='true' fontcolor='#1f4e79' fontsize='22'><![CDATA[<[federated.0cbca293fraud0privacy0dash01].[usr:Calculation_7310000000000000006:qk]>]]></run>
+              </formatted-text>
+            </customized-label>
+            <style>
+              <style-rule element='mark'>
+                <format attr='mark-labels-show' value='true' />
+                <format attr='mark-labels-cull' value='true' />
+              </style-rule>
+            </style>
+          </pane>
+        </panes>
+        <rows />
+        <cols />
+      </table>
+      <simple-id uuid='{EDAB54E4-F7C2-437C-944E-700CFDCD4D39}' />
+    </worksheet>
+    <worksheet name='Rule Recall %'>
+      <layout-options>
+        <title>
+          <formatted-text>
+            <run fontcolor='#555555' fontsize='11'>Rule Recall %</run>
+          </formatted-text>
+        </title>
+      </layout-options>
+      <table>
+        <view>
+          <datasources>
+            <datasource caption='transactions_protected' name='federated.0cbca293fraud0privacy0dash01' />
+          </datasources>
+          <datasource-dependencies datasource='federated.0cbca293fraud0privacy0dash01'>
+            <column caption='Rule Recall %' datatype='real' default-format='p0.0%' name='[Calculation_7310000000000000005]' role='measure' type='quantitative'>
+              <calculation class='tableau' formula='SUM([flagged] * [is_fraud]) / SUM([is_fraud])' />
+            </column>
+            <column caption='Age Band' datatype='string' name='[age_band]' role='dimension' type='nominal' />
+            <column caption='Category' datatype='string' name='[category]' role='dimension' type='nominal' />
+            <column caption='Dataset Split' datatype='string' name='[dataset_split]' role='dimension' type='nominal' />
+            <column caption='Flagged' datatype='integer' name='[flagged]' role='measure' type='quantitative' />
+            <column caption='Gender' datatype='string' name='[gender]' role='dimension' type='nominal' />
+            <column caption='Is Fraud' datatype='integer' name='[is_fraud]' role='measure' type='quantitative' />
+            <column-instance column='[age_band]' derivation='None' name='[none:age_band:nk]' pivot='key' type='nominal' />
+            <column-instance column='[category]' derivation='None' name='[none:category:nk]' pivot='key' type='nominal' />
+            <column-instance column='[dataset_split]' derivation='None' name='[none:dataset_split:nk]' pivot='key' type='nominal' />
+            <column-instance column='[gender]' derivation='None' name='[none:gender:nk]' pivot='key' type='nominal' />
+            <column-instance column='[region]' derivation='None' name='[none:region:nk]' pivot='key' type='nominal' />
+            <column-instance column='[transaction_time]' derivation='None' name='[none:transaction_time:qk]' pivot='key' type='quantitative' />
+            <column caption='Region' datatype='string' name='[region]' role='dimension' type='nominal' />
+            <column caption='Transaction Time' datatype='datetime' name='[transaction_time]' role='dimension' type='ordinal' />
+            <column-instance column='[Calculation_7310000000000000005]' derivation='User' name='[usr:Calculation_7310000000000000005:qk]' pivot='key' type='quantitative' />
+          </datasource-dependencies>
+          <slices>
+            <column>[federated.0cbca293fraud0privacy0dash01].[none:transaction_time:qk]</column>
+            <column>[federated.0cbca293fraud0privacy0dash01].[none:category:nk]</column>
+            <column>[federated.0cbca293fraud0privacy0dash01].[none:region:nk]</column>
+            <column>[federated.0cbca293fraud0privacy0dash01].[none:age_band:nk]</column>
+            <column>[federated.0cbca293fraud0privacy0dash01].[none:gender:nk]</column>
+            <column>[federated.0cbca293fraud0privacy0dash01].[none:dataset_split:nk]</column>
+          </slices>
+          <aggregation value='true' />
+        </view>
+        <style />
+        <panes>
+          <pane selection-relaxation-option='selection-relaxation-allow'>
+            <view>
+              <breakdown value='auto' />
+            </view>
+            <mark class='Text' />
+            <encodings>
+              <text column='[federated.0cbca293fraud0privacy0dash01].[usr:Calculation_7310000000000000005:qk]' />
+            </encodings>
+            <customized-label>
+              <formatted-text>
+                <run bold='true' fontcolor='#1f4e79' fontsize='22'><![CDATA[<[federated.0cbca293fraud0privacy0dash01].[usr:Calculation_7310000000000000005:qk]>]]></run>
+              </formatted-text>
+            </customized-label>
+            <style>
+              <style-rule element='mark'>
+                <format attr='mark-labels-show' value='true' />
+                <format attr='mark-labels-cull' value='true' />
+              </style-rule>
+            </style>
+          </pane>
+        </panes>
+        <rows />
+        <cols />
+      </table>
+      <simple-id uuid='{EC855D76-109C-475A-A283-FFEB759B960B}' />
+    </worksheet>
+    <worksheet name='Total Transactions'>
+      <layout-options>
+        <title>
+          <formatted-text>
+            <run fontcolor='#555555' fontsize='11'>Total Transactions</run>
+          </formatted-text>
+        </title>
+      </layout-options>
+      <table>
+        <view>
+          <datasources>
+            <datasource caption='transactions_protected' name='federated.0cbca293fraud0privacy0dash01' />
+          </datasources>
+          <datasource-dependencies datasource='federated.0cbca293fraud0privacy0dash01'>
+            <column caption='Total Transactions' datatype='integer' default-format='n#,##0;-#,##0' name='[Calculation_7310000000000000001]' role='measure' type='quantitative'>
+              <calculation class='tableau' formula='COUNT([customer_id])' />
+            </column>
+            <column caption='Age Band' datatype='string' name='[age_band]' role='dimension' type='nominal' />
+            <column caption='Category' datatype='string' name='[category]' role='dimension' type='nominal' />
+            <column caption='Customer ID' datatype='string' name='[customer_id]' role='dimension' type='nominal' />
+            <column caption='Dataset Split' datatype='string' name='[dataset_split]' role='dimension' type='nominal' />
+            <column caption='Gender' datatype='string' name='[gender]' role='dimension' type='nominal' />
+            <column-instance column='[age_band]' derivation='None' name='[none:age_band:nk]' pivot='key' type='nominal' />
+            <column-instance column='[category]' derivation='None' name='[none:category:nk]' pivot='key' type='nominal' />
+            <column-instance column='[dataset_split]' derivation='None' name='[none:dataset_split:nk]' pivot='key' type='nominal' />
+            <column-instance column='[gender]' derivation='None' name='[none:gender:nk]' pivot='key' type='nominal' />
+            <column-instance column='[region]' derivation='None' name='[none:region:nk]' pivot='key' type='nominal' />
+            <column-instance column='[transaction_time]' derivation='None' name='[none:transaction_time:qk]' pivot='key' type='quantitative' />
+            <column caption='Region' datatype='string' name='[region]' role='dimension' type='nominal' />
+            <column caption='Transaction Time' datatype='datetime' name='[transaction_time]' role='dimension' type='ordinal' />
+            <column-instance column='[Calculation_7310000000000000001]' derivation='User' name='[usr:Calculation_7310000000000000001:qk]' pivot='key' type='quantitative' />
+          </datasource-dependencies>
+          <slices>
+            <column>[federated.0cbca293fraud0privacy0dash01].[none:transaction_time:qk]</column>
+            <column>[federated.0cbca293fraud0privacy0dash01].[none:category:nk]</column>
+            <column>[federated.0cbca293fraud0privacy0dash01].[none:region:nk]</column>
+            <column>[federated.0cbca293fraud0privacy0dash01].[none:age_band:nk]</column>
+            <column>[federated.0cbca293fraud0privacy0dash01].[none:gender:nk]</column>
+            <column>[federated.0cbca293fraud0privacy0dash01].[none:dataset_split:nk]</column>
+          </slices>
+          <aggregation value='true' />
+        </view>
+        <style />
+        <panes>
+          <pane selection-relaxation-option='selection-relaxation-allow'>
+            <view>
+              <breakdown value='auto' />
+            </view>
+            <mark class='Text' />
+            <encodings>
+              <text column='[federated.0cbca293fraud0privacy0dash01].[usr:Calculation_7310000000000000001:qk]' />
+            </encodings>
+            <customized-label>
+              <formatted-text>
+                <run bold='true' fontcolor='#1f4e79' fontsize='22'><![CDATA[<[federated.0cbca293fraud0privacy0dash01].[usr:Calculation_7310000000000000001:qk]>]]></run>
+              </formatted-text>
+            </customized-label>
+            <style>
+              <style-rule element='mark'>
+                <format attr='mark-labels-show' value='true' />
+                <format attr='mark-labels-cull' value='true' />
+              </style-rule>
+            </style>
+          </pane>
+        </panes>
+        <rows />
+        <cols />
+      </table>
+      <simple-id uuid='{21A013C3-5552-416F-9C17-DC3BEA2C750E}' />
+    </worksheet>
+  </worksheets>
+  <dashboards>
+    <dashboard name='Fraud &amp; Privacy Dashboard'>
+      <style />
+      <size maxheight='760' maxwidth='1265' minheight='760' minwidth='1265' sizing-mode='fixed' />
+      <datasources>
+        <datasource caption='transactions_protected' name='federated.0cbca293fraud0privacy0dash01' />
+      </datasources>
+      <datasource-dependencies datasource='federated.0cbca293fraud0privacy0dash01'>
+        <column caption='Age Band' datatype='string' name='[age_band]' role='dimension' type='nominal' />
+        <column caption='Category' datatype='string' name='[category]' role='dimension' type='nominal' />
+        <column caption='Dataset Split' datatype='string' name='[dataset_split]' role='dimension' type='nominal' />
+        <column caption='Gender' datatype='string' name='[gender]' role='dimension' type='nominal' />
+        <column-instance column='[age_band]' derivation='None' name='[none:age_band:nk]' pivot='key' type='nominal' />
+        <column-instance column='[category]' derivation='None' name='[none:category:nk]' pivot='key' type='nominal' />
+        <column-instance column='[dataset_split]' derivation='None' name='[none:dataset_split:nk]' pivot='key' type='nominal' />
+        <column-instance column='[gender]' derivation='None' name='[none:gender:nk]' pivot='key' type='nominal' />
+        <column-instance column='[region]' derivation='None' name='[none:region:nk]' pivot='key' type='nominal' />
+        <column-instance column='[transaction_time]' derivation='None' name='[none:transaction_time:qk]' pivot='key' type='quantitative' />
+        <column caption='Region' datatype='string' name='[region]' role='dimension' type='nominal' />
+        <column caption='Transaction Time' datatype='datetime' name='[transaction_time]' role='dimension' type='ordinal' />
+      </datasource-dependencies>
+      <zones>
+        <zone h='100000' id='1' type-v2='layout-basic' w='100000' x='0' y='0'>
+          <zone h='100000' id='2' param='vert' type-v2='layout-flow' w='100000' x='0' y='0'>
+            <zone fixed-size='50' forceUpdate='true' h='6579' id='3' is-fixed='true' type-v2='text' w='100000' x='0' y='0'>
+              <formatted-text>
+                <run bold='true' fontsize='20'>Fraud &amp; Privacy Dashboard</run>
+                <run fontcolor='#6b6b6b' fontsize='10'>   Rajat Sharma (S24BCAU0134) · Ishan Chaudary (S24BCAU0002) · Piyush Agarwal (S24BCAU0182) · Suraj Tiwari (S24BCAU0136)</run>
+              </formatted-text>
+            </zone>
+            <zone h='93421' id='4' param='horz' type-v2='layout-flow' w='100000' x='0' y='6579'>
+              <zone h='93421' id='5' param='vert' type-v2='layout-flow' w='81818' x='0' y='6579'>
+                <zone fixed-size='110' h='14474' id='6' is-fixed='true' param='horz' type-v2='layout-flow' w='81818' x='0' y='6579'>
+                  <zone fixed-size='172' h='14474' id='7' is-fixed='true' name='Total Transactions' w='13597' x='0' y='6579' />
+                  <zone fixed-size='172' h='14474' id='8' is-fixed='true' name='Fraud Transactions' w='13597' x='13597' y='6579' />
+                  <zone fixed-size='172' h='14474' id='9' is-fixed='true' name='Fraud Rate %' w='13597' x='27194' y='6579' />
+                  <zone fixed-size='172' h='14474' id='10' is-fixed='true' name='Fraud Amount $' w='13597' x='40791' y='6579' />
+                  <zone fixed-size='172' h='14474' id='11' is-fixed='true' name='Rule Recall %' w='13597' x='54388' y='6579' />
+                  <zone fixed-size='172' h='14474' id='12' is-fixed='true' name='Rule Precision %' w='13597' x='67985' y='6579' />
+                </zone>
+                <zone h='52892' id='13' param='horz' type-v2='layout-flow' w='81818' x='0' y='21053'>
+                  <zone fixed-size='345' h='52892' id='14' is-fixed='true' name='Fraud Rate by Hour' w='27272' x='0' y='21053'>
+                    <layout-cache minheight='184' type-h='scalable' type-w='fixed' />
+                  </zone>
+                  <zone fixed-size='345' h='52892' id='15' is-fixed='true' name='Fraud Count by Category' w='27272' x='27272' y='21053'>
+                    <layout-cache type-h='cell' type-w='fixed' />
+                  </zone>
+                  <zone fixed-size='345' h='52892' id='16' is-fixed='true' name='Fraud by Age Band' w='27274' x='54544' y='21053'>
+                    <layout-cache minheight='203' type-h='scalable' type-w='fixed' />
+                  </zone>
+                </zone>
+                <zone h='26055' id='17' param='horz' type-v2='layout-flow' w='81818' x='0' y='73945'>
+                  <zone fixed-size='345' h='26055' id='18' is-fixed='true' name='Fraud by Region' w='27272' x='0' y='73945'>
+                    <layout-cache minheight='184' type-h='scalable' type-w='fixed' />
+                  </zone>
+                  <zone fixed-size='345' h='26055' id='19' is-fixed='true' name='Monthly Fraud Trend' w='27272' x='27272' y='73945'>
+                    <layout-cache minheight='198' type-h='scalable' type-w='fixed' />
+                  </zone>
+                  <zone fixed-size='345' h='26055' id='20' is-fixed='true' name='Rule Outcomes' w='27274' x='54544' y='73945'>
+                    <layout-cache minheight='184' type-h='scalable' type-w='fixed' />
+                  </zone>
+                </zone>
+              </zone>
+              <zone fixed-size='230' h='93421' id='21' is-fixed='true' param='vert' type-v2='layout-flow' w='18182' x='81818' y='6579'>
+                <zone h='8026' id='22' name='Monthly Fraud Trend' param='[federated.0cbca293fraud0privacy0dash01].[none:transaction_time:qk]' type-v2='filter' w='18182' x='81818' y='6579'>
+                  <zone-style>
+                    <format attr='border-color' value='#444444' />
+                    <format attr='border-style' value='none' />
+                    <format attr='border-width' value='0' />
+                    <format attr='background-color' value='#ffffff' />
+                  </zone-style>
+                </zone>
+                <zone h='5789' id='23' mode='checkdropdown' name='Monthly Fraud Trend' param='[federated.0cbca293fraud0privacy0dash01].[none:category:nk]' type-v2='filter' values='database' w='18182' x='81818' y='14605'>
+                  <zone-style>
+                    <format attr='border-color' value='#444444' />
+                    <format attr='border-style' value='none' />
+                    <format attr='border-width' value='0' />
+                    <format attr='background-color' value='#ffffff' />
+                  </zone-style>
+                </zone>
+                <zone h='5789' id='24' mode='checkdropdown' name='Monthly Fraud Trend' param='[federated.0cbca293fraud0privacy0dash01].[none:region:nk]' type-v2='filter' values='database' w='18182' x='81818' y='20394'>
+                  <zone-style>
+                    <format attr='border-color' value='#444444' />
+                    <format attr='border-style' value='none' />
+                    <format attr='border-width' value='0' />
+                    <format attr='background-color' value='#ffffff' />
+                  </zone-style>
+                </zone>
+                <zone h='5789' id='25' mode='checkdropdown' name='Monthly Fraud Trend' param='[federated.0cbca293fraud0privacy0dash01].[none:age_band:nk]' type-v2='filter' values='database' w='18182' x='81818' y='26183'>
+                  <zone-style>
+                    <format attr='border-color' value='#444444' />
+                    <format attr='border-style' value='none' />
+                    <format attr='border-width' value='0' />
+                    <format attr='background-color' value='#ffffff' />
+                  </zone-style>
+                </zone>
+                <zone h='5789' id='26' mode='checkdropdown' name='Monthly Fraud Trend' param='[federated.0cbca293fraud0privacy0dash01].[none:gender:nk]' type-v2='filter' values='database' w='18182' x='81818' y='31972'>
+                  <zone-style>
+                    <format attr='border-color' value='#444444' />
+                    <format attr='border-style' value='none' />
+                    <format attr='border-width' value='0' />
+                    <format attr='background-color' value='#ffffff' />
+                  </zone-style>
+                </zone>
+                <zone h='5789' id='27' mode='checkdropdown' name='Monthly Fraud Trend' param='[federated.0cbca293fraud0privacy0dash01].[none:dataset_split:nk]' type-v2='filter' values='database' w='18182' x='81818' y='37761'>
+                  <zone-style>
+                    <format attr='border-color' value='#444444' />
+                    <format attr='border-style' value='none' />
+                    <format attr='border-width' value='0' />
+                    <format attr='background-color' value='#ffffff' />
+                  </zone-style>
+                </zone>
+                <zone h='56450' id='28' type-v2='empty' w='18182' x='81818' y='43550' />
+              </zone>
+            </zone>
+          </zone>
+        </zone>
+      </zones>
+      <simple-id uuid='{E9577847-B390-49BD-9BB5-FB382C590855}' />
+    </dashboard>
+  </dashboards>
+  <windows pres-mode='true' source-height='30'>
+    <window class='worksheet' name='Total Transactions'>
+      <cards>
+        <edge name='left'>
+          <strip size='160'>
+            <card type='pages' />
+            <card type='filters' />
+            <card type='marks' />
+          </strip>
+        </edge>
+        <edge name='top'>
+          <strip size='2147483647'>
+            <card type='columns' />
+          </strip>
+          <strip size='2147483647'>
+            <card type='rows' />
+          </strip>
+          <strip size='31'>
+            <card type='title' />
+          </strip>
+        </edge>
+      </cards>
+      <simple-id uuid='{893A1374-CD91-47DC-B5AD-E2C469BC7EA6}' />
+    </window>
+    <window class='worksheet' name='Fraud Transactions'>
+      <cards>
+        <edge name='left'>
+          <strip size='160'>
+            <card type='pages' />
+            <card type='filters' />
+            <card type='marks' />
+          </strip>
+        </edge>
+        <edge name='top'>
+          <strip size='2147483647'>
+            <card type='columns' />
+          </strip>
+          <strip size='2147483647'>
+            <card type='rows' />
+          </strip>
+          <strip size='31'>
+            <card type='title' />
+          </strip>
+        </edge>
+      </cards>
+      <simple-id uuid='{E09B1366-DB94-4817-BC7F-FF173A595EFC}' />
+    </window>
+    <window class='worksheet' name='Fraud Rate %'>
+      <cards>
+        <edge name='left'>
+          <strip size='160'>
+            <card type='pages' />
+            <card type='filters' />
+            <card type='marks' />
+          </strip>
+        </edge>
+        <edge name='top'>
+          <strip size='2147483647'>
+            <card type='columns' />
+          </strip>
+          <strip size='2147483647'>
+            <card type='rows' />
+          </strip>
+          <strip size='31'>
+            <card type='title' />
+          </strip>
+        </edge>
+      </cards>
+      <simple-id uuid='{F8AE6F9F-59B6-4AD2-8E1F-59DF8C98EE50}' />
+    </window>
+    <window class='worksheet' name='Fraud Amount $'>
+      <cards>
+        <edge name='left'>
+          <strip size='160'>
+            <card type='pages' />
+            <card type='filters' />
+            <card type='marks' />
+          </strip>
+        </edge>
+        <edge name='top'>
+          <strip size='2147483647'>
+            <card type='columns' />
+          </strip>
+          <strip size='2147483647'>
+            <card type='rows' />
+          </strip>
+          <strip size='31'>
+            <card type='title' />
+          </strip>
+        </edge>
+      </cards>
+      <simple-id uuid='{11B09B71-9E98-4870-9DD4-A3EB4EC7C0BA}' />
+    </window>
+    <window class='worksheet' name='Rule Recall %'>
+      <cards>
+        <edge name='left'>
+          <strip size='160'>
+            <card type='pages' />
+            <card type='filters' />
+            <card type='marks' />
+          </strip>
+        </edge>
+        <edge name='top'>
+          <strip size='2147483647'>
+            <card type='columns' />
+          </strip>
+          <strip size='2147483647'>
+            <card type='rows' />
+          </strip>
+          <strip size='31'>
+            <card type='title' />
+          </strip>
+        </edge>
+      </cards>
+      <simple-id uuid='{5EDF48FF-51BC-4688-BC82-C0B37F8A9B39}' />
+    </window>
+    <window class='worksheet' name='Rule Precision %'>
+      <cards>
+        <edge name='left'>
+          <strip size='160'>
+            <card type='pages' />
+            <card type='filters' />
+            <card type='marks' />
+          </strip>
+        </edge>
+        <edge name='top'>
+          <strip size='2147483647'>
+            <card type='columns' />
+          </strip>
+          <strip size='2147483647'>
+            <card type='rows' />
+          </strip>
+          <strip size='31'>
+            <card type='title' />
+          </strip>
+        </edge>
+      </cards>
+      <simple-id uuid='{E4D4B2BB-11B7-4371-B4B6-6AE2C3A82547}' />
+    </window>
+    <window class='worksheet' name='Fraud Rate by Hour'>
+      <cards>
+        <edge name='left'>
+          <strip size='160'>
+            <card type='pages' />
+            <card type='filters' />
+            <card type='marks' />
+          </strip>
+        </edge>
+        <edge name='top'>
+          <strip size='2147483647'>
+            <card type='columns' />
+          </strip>
+          <strip size='2147483647'>
+            <card type='rows' />
+          </strip>
+          <strip size='31'>
+            <card type='title' />
+          </strip>
+        </edge>
+      </cards>
+      <simple-id uuid='{F1685BF5-3BB8-401B-94A2-6702BCD889D5}' />
+    </window>
+    <window class='worksheet' name='Fraud Count by Category'>
+      <cards>
+        <edge name='left'>
+          <strip size='160'>
+            <card type='pages' />
+            <card type='filters' />
+            <card type='marks' />
+          </strip>
+        </edge>
+        <edge name='top'>
+          <strip size='2147483647'>
+            <card type='columns' />
+          </strip>
+          <strip size='2147483647'>
+            <card type='rows' />
+          </strip>
+          <strip size='31'>
+            <card type='title' />
+          </strip>
+        </edge>
+      </cards>
+      <simple-id uuid='{D5C2DD98-3E8F-4C98-9940-7701B500C5CE}' />
+    </window>
+    <window class='worksheet' name='Fraud by Age Band'>
+      <cards>
+        <edge name='left'>
+          <strip size='160'>
+            <card type='pages' />
+            <card type='filters' />
+            <card type='marks' />
+          </strip>
+        </edge>
+        <edge name='top'>
+          <strip size='2147483647'>
+            <card type='columns' />
+          </strip>
+          <strip size='2147483647'>
+            <card type='rows' />
+          </strip>
+          <strip size='31'>
+            <card type='title' />
+          </strip>
+        </edge>
+      </cards>
+      <simple-id uuid='{CD1189E7-06AC-4DE3-984D-5C05B43F1648}' />
+    </window>
+    <window class='worksheet' name='Fraud by Region'>
+      <cards>
+        <edge name='left'>
+          <strip size='160'>
+            <card type='pages' />
+            <card type='filters' />
+            <card type='marks' />
+          </strip>
+        </edge>
+        <edge name='top'>
+          <strip size='2147483647'>
+            <card type='columns' />
+          </strip>
+          <strip size='2147483647'>
+            <card type='rows' />
+          </strip>
+          <strip size='31'>
+            <card type='title' />
+          </strip>
+        </edge>
+      </cards>
+      <simple-id uuid='{04AE2332-4B08-428D-82C4-ECB9B80D69A9}' />
+    </window>
+    <window class='worksheet' name='Monthly Fraud Trend'>
+      <cards>
+        <edge name='left'>
+          <strip size='160'>
+            <card type='pages' />
+            <card type='filters' />
+            <card type='marks' />
+          </strip>
+        </edge>
+        <edge name='top'>
+          <strip size='2147483647'>
+            <card type='columns' />
+          </strip>
+          <strip size='2147483647'>
+            <card type='rows' />
+          </strip>
+          <strip size='31'>
+            <card type='title' />
+          </strip>
+        </edge>
+      </cards>
+      <simple-id uuid='{6C740A15-11BB-48C3-A1D3-B3ED7AD0B1FF}' />
+    </window>
+    <window class='worksheet' name='Rule Outcomes'>
+      <cards>
+        <edge name='left'>
+          <strip size='160'>
+            <card type='pages' />
+            <card type='filters' />
+            <card type='marks' />
+          </strip>
+        </edge>
+        <edge name='top'>
+          <strip size='2147483647'>
+            <card type='columns' />
+          </strip>
+          <strip size='2147483647'>
+            <card type='rows' />
+          </strip>
+          <strip size='31'>
+            <card type='title' />
+          </strip>
+        </edge>
+      </cards>
+      <simple-id uuid='{19A0B9AE-1562-4AC3-97CF-7BDCBE2D4D3F}' />
+    </window>
+    <window class='dashboard' maximized='true' name='Fraud &amp; Privacy Dashboard'>
+      <viewpoints>
+        <viewpoint name='Fraud Amount $'>
+          <zoom type='entire-view' />
+        </viewpoint>
+        <viewpoint name='Fraud Count by Category'>
+          <zoom type='entire-view' />
+        </viewpoint>
+        <viewpoint name='Fraud Rate %'>
+          <zoom type='entire-view' />
+        </viewpoint>
+        <viewpoint name='Fraud Rate by Hour'>
+          <zoom type='entire-view' />
+        </viewpoint>
+        <viewpoint name='Fraud Transactions'>
+          <zoom type='entire-view' />
+        </viewpoint>
+        <viewpoint name='Fraud by Age Band'>
+          <zoom type='entire-view' />
+        </viewpoint>
+        <viewpoint name='Fraud by Region'>
+          <zoom type='entire-view' />
+        </viewpoint>
+        <viewpoint name='Monthly Fraud Trend'>
+          <zoom type='entire-view' />
+        </viewpoint>
+        <viewpoint name='Rule Outcomes'>
+          <zoom type='entire-view' />
+        </viewpoint>
+        <viewpoint name='Rule Precision %'>
+          <zoom type='entire-view' />
+        </viewpoint>
+        <viewpoint name='Rule Recall %'>
+          <zoom type='entire-view' />
+        </viewpoint>
+        <viewpoint name='Total Transactions'>
+          <zoom type='entire-view' />
+        </viewpoint>
+      </viewpoints>
+      <active id='27' />
+      <simple-id uuid='{09345ED6-D469-4D05-8BD9-C924B325E864}' />
+    </window>
+  </windows>
+</workbook>

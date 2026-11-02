@@ -1,3 +1,5 @@
+# CBCA293 Security and Privacy for Big Data Analytics, Bennett University
+# Team: Rajat Sharma (S24BCAU0134), Ishan Chaudary (S24BCAU0002), Piyush Agarwal (S24BCAU0182), Suraj Tiwari (S24BCAU0136)
 """Step 5: draw the report charts (PNG files in outputs/charts/)."""
 
 import matplotlib

@@ -1,3 +1,5 @@
+# CBCA293 Security and Privacy for Big Data Analytics, Bennett University
+# Team: Rajat Sharma (S24BCAU0134), Ishan Chaudary (S24BCAU0002), Piyush Agarwal (S24BCAU0182), Suraj Tiwari (S24BCAU0136)
 """All settings in one place.
 
 If you want to change a path, the salt or a rule setting, change it HERE.

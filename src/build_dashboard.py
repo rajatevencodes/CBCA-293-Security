@@ -1,4 +1,6 @@
-"""Step 6: write the Tableau workbook ``dashboard/fraud_dashboard.twb`` as code.
+# CBCA293 Security and Privacy for Big Data Analytics, Bennett University
+# Team: Rajat Sharma (S24BCAU0134), Ishan Chaudary (S24BCAU0002), Piyush Agarwal (S24BCAU0182), Suraj Tiwari (S24BCAU0136)
+"""Step 6: write the Tableau workbook (``.twb`` and packaged ``.twbx``) as code.
 
 What this script does
 ---------------------
@@ -10,7 +12,11 @@ XML with Python's standard library (``xml.etree.ElementTree``) so the whole
     uv run python src/build_dashboard.py
 
 The workbook connects to ``data/processed/transactions_protected.csv`` (the
-privacy-protected file written by the pipeline). Tableau never sees the raw data.
+privacy-protected file written by the pipeline) through its Tableau extract
+``transactions_protected.hyper`` (written by ``make_extract.py``), because
+Tableau Public only opens workbooks that use an extract. It also writes
+``dashboard/fraud_dashboard.twbx``: one packaged file with the dashboard and the
+extract inside. Tableau never sees the raw data.
 
 How a .twb is organised (top to bottom)
 ---------------------------------------
@@ -35,10 +41,14 @@ The XML structure mirrors real workbooks saved by Tableau 2023 to 2025
 from __future__ import annotations
 
 import argparse
+import contextlib
 import csv
+import io
 import re
 import sys
+import tempfile
 import xml.etree.ElementTree as ET
+import zipfile
 from dataclasses import dataclass, field
 from pathlib import Path
 
@@ -51,8 +61,8 @@ DEFAULT_CSV = PROJECT_ROOT / "data" / "processed" / "transactions_protected.csv"
 DEFAULT_TWB = PROJECT_ROOT / "dashboard" / "fraud_dashboard.twb"
 
 DASHBOARD_NAME = "Fraud & Privacy Dashboard"
-DASHBOARD_WIDTH = 1400   # pixels (fixed size)
-DASHBOARD_HEIGHT = 900
+DASHBOARD_WIDTH = 1265   # pixels (fixed size): fits a 13-inch MacBook screen in
+DASHBOARD_HEIGHT = 760   # Tableau's Presentation Mode without scrolling
 
 # Namespace Tableau uses for "user interface" attributes such as user:ui-marker.
 USER_NS = "http://www.tableausoftware.com/xml/user"
@@ -348,10 +358,13 @@ def csv_relation(parent: ET.Element, csv_name: str) -> ET.Element:
     return rel
 
 
-def build_datasource(parent: ET.Element, csv_path: Path, connection_dir: Path) -> ET.Element:
+def build_datasource(parent: ET.Element, csv_path: Path, connection_dir: Path,
+                     extract_dbname: str | None = None) -> ET.Element:
     """Write the <datasource>: where the CSV is, its columns and our calculations.
 
     ``connection_dir`` is the folder Tableau will look in for the CSV.
+    ``extract_dbname`` is the path of the .hyper extract Tableau should read
+    (Tableau Public refuses workbooks without an extract).
     """
     csv_name = csv_path.name                      # e.g. transactions_protected.csv
     object_id = f"{csv_name}_{OBJECT_ID_SUFFIX}"
@@ -416,6 +429,8 @@ def build_datasource(parent: ET.Element, csv_path: Path, connection_dir: Path) -
     sub(ds, "column", {"caption": csv_name, "datatype": "table",
                        "name": f"[__tableau_internal_object_id__].[{object_id}]",
                        "role": "measure", "type": "quantitative"})
+    if extract_dbname:
+        build_extract(ds, csv_name, extract_dbname)
     sub(ds, "layout", {"dim-ordering": "alphabetic", "measure-ordering": "alphabetic",
                        "show-structure": "true"})
     sem = sub(ds, "semantic-values")
@@ -425,7 +440,40 @@ def build_datasource(parent: ET.Element, csv_path: Path, connection_dir: Path) -
     objects = sub(sub(ds, "object-graph"), "objects")
     obj = sub(objects, "object", {"caption": csv_name, "id": object_id})
     csv_relation(sub(obj, "properties", {"context": ""}), csv_name)
+    if extract_dbname:
+        sub(sub(obj, "properties", {"context": "extract"}), "relation",
+            {"name": "Extract", "table": "[Extract].[Extract]", "type": "table"})
     return ds
+
+
+def build_extract(ds: ET.Element, csv_name: str, dbname: str) -> ET.Element:
+    """Write <extract>: the .hyper copy of the CSV that Tableau reads instead.
+
+    The .hyper file itself is made by src/make_extract.py (schema "Extract",
+    table "Extract", the layout Tableau uses for its own extracts).
+    """
+    ext = sub(ds, "extract", {"count": "-1", "enabled": "true", "object-id": "", "units": "records"})
+    conn = sub(ext, "connection", {
+        "access_mode": "readonly", "authentication": "auth-none", "author-locale": "en_US",
+        "class": "hyper", "dbname": dbname, "default-settings": "yes", "schema": "Extract",
+        "sslmode": "", "tablename": "Extract", "update-time": "11/02/2026 12:00:00 PM",
+        "username": "tableau_internal_user",
+    })
+    sub(conn, "relation", {"name": "Extract", "table": "[Extract].[Extract]", "type": "table"})
+    records = sub(conn, "metadata-records")
+    for i, (name, datatype, *_rest) in enumerate(CSV_COLUMNS):
+        rec = sub(records, "metadata-record", {"class": "column"})
+        sub(rec, "remote-name", text=name)
+        sub(rec, "remote-type", text=str(REMOTE_TYPE[datatype]))
+        sub(rec, "local-name", text=f"[{name}]")
+        sub(rec, "parent-name", text="[Extract]")
+        sub(rec, "remote-alias", text=name)
+        sub(rec, "ordinal", text=str(i))
+        sub(rec, "family", text=csv_name)
+        sub(rec, "local-type", text=datatype)
+        sub(rec, "aggregation", text=DEFAULT_AGGREGATION[datatype])
+        sub(rec, "contains-null", text="true")
+    return ext
 
 
 # ---------------------------------------------------------------------------
@@ -487,6 +535,10 @@ def shelf_text(pills: list[Pill]) -> str | None:
 def build_worksheet(parent: ET.Element, sheet: Sheet) -> ET.Element:
     """Write one <worksheet>: data used, filters, sorts, marks and shelves."""
     ws = sub(parent, "worksheet", {"name": sheet.name})
+    if sheet.text:
+        # KPI tile: a small one-line title so the big number fits in the tile.
+        title = sub(sub(sub(ws, "layout-options"), "title"), "formatted-text")
+        sub(title, "run", {"fontcolor": "#555555", "fontsize": "11"}, sheet.name)
     table = sub(ws, "table")
 
     # <view>: which data source and fields the sheet uses, plus filters/sorts.
@@ -538,7 +590,7 @@ def build_worksheet(parent: ET.Element, sheet: Sheet) -> ET.Element:
     if sheet.text:
         # KPI tile: show the number in a big bold font.
         label = sub(sub(pane, "customized-label"), "formatted-text")
-        sub(label, "run", {"bold": "true", "fontcolor": "#1f4e79", "fontsize": "26"},
+        sub(label, "run", {"bold": "true", "fontcolor": "#1f4e79", "fontsize": "22"},
             f"<{sheet.text.ref}>")
     if sheet.text or sheet.label_bars:
         rule = sub(sub(pane, "style"), "style-rule", {"element": "mark"})
@@ -593,7 +645,7 @@ def zone(parent: ET.Element, zid: int, x: int, y: int, w: int, h: int, **attrs) 
 def build_dashboard(parent: ET.Element) -> ET.Element:
     """Write the <dashboard>: title, KPI row, 2x3 chart grid and a filter panel.
 
-    Layout (pixels, fixed 1400 x 900):
+    Layout (pixels, fixed 1265 x 760):
         +------------------------------------------------------+---------+
         | Title (50 px)                                                  |
         +------------------------------------------------------+---------+
@@ -627,8 +679,10 @@ def build_dashboard(parent: ET.Element) -> ET.Element:
                  is_fixed="true", type_v2="text")
     text = sub(title, "formatted-text")
     sub(text, "run", {"bold": "true", "fontsize": "20"}, DASHBOARD_NAME)
-    sub(text, "run", {"fontcolor": "#6b6b6b", "fontsize": "11"},
-        "   Privacy-protected card transactions (masked, pseudonymized, generalized) and 4-rule fraud detection")
+    # Team names shown next to the title (one line, fits the dashboard width).
+    sub(text, "run", {"fontcolor": "#6b6b6b", "fontsize": "10"},
+        "   Rajat Sharma (S24BCAU0134) · Ishan Chaudary (S24BCAU0002) · "
+        "Piyush Agarwal (S24BCAU0182) · Suraj Tiwari (S24BCAU0136)")
 
     # Body: main area (left) + filter panel (right).
     body = zone(page, new_id(), 0, by, FULL, bh, param="horz", type_v2="layout-flow")
@@ -642,14 +696,18 @@ def build_dashboard(parent: ET.Element) -> ET.Element:
     # KPI row: six tiles side by side.
     kpi_row = zone(main, new_id(), mx, ky, mw, kh, fixed_size=KPI_PX, is_fixed="true",
                    param="horz", type_v2="layout-flow")
+    main_px = W - FILTER_PX            # width of the area left of the filter panel
     for sheet, (x, w) in zip(KPI_SHEETS, split(mx, mw, [1] * 6, 6)):
-        zone(kpi_row, new_id(), x, ky, w, kh, name=sheet.name)
+        # fixed-size keeps all six tiles the same width
+        zone(kpi_row, new_id(), x, ky, w, kh, fixed_size=main_px // 6, is_fixed="true",
+             name=sheet.name)
 
     # Two rows of three charts.
     for (y, h), sheets in [((r1y, r1h), CHART_SHEETS[:3]), ((r2y, r2h), CHART_SHEETS[3:])]:
         row = zone(main, new_id(), mx, y, mw, h, param="horz", type_v2="layout-flow")
         for sheet, (x, w) in zip(sheets, split(mx, mw, [1] * 3, 3)):
-            zone(row, new_id(), x, y, w, h, name=sheet.name)
+            zone(row, new_id(), x, y, w, h, fixed_size=main_px // 3, is_fixed="true",
+                 name=sheet.name)
 
     # Filter panel: one control per shared filter, stacked vertically.
     panel = zone(body, new_id(), fx, by, fw, bh, fixed_size=FILTER_PX, is_fixed="true",
@@ -688,7 +746,11 @@ def build_windows(parent: ET.Element) -> ET.Element:
     win = sub(windows, "window", {"class": "dashboard", "maximized": "true", "name": DASHBOARD_NAME})
     viewpoints = sub(win, "viewpoints")
     for sheet in ALL_SHEETS:
-        sub(viewpoints, "viewpoint", {"name": sheet.name})
+        # Fit each chart to its box ("Entire View"), so no chart needs scrollbars.
+        sub(sub(viewpoints, "viewpoint", {"name": sheet.name}), "zoom", {"type": "entire-view"})
+    # Tableau requires these two after <viewpoints> in a dashboard window.
+    sub(win, "active", {"id": "-1"})
+    sub(win, "device-preview", {"visible": "true"})
     return windows
 
 
@@ -697,7 +759,7 @@ def build_windows(parent: ET.Element) -> ET.Element:
 # ---------------------------------------------------------------------------
 
 
-def build_workbook(csv_path: Path, connection_dir: Path) -> ET.Element:
+def build_workbook(csv_path: Path, connection_dir: Path, extract_dbname: str | None = None) -> ET.Element:
     """Assemble the complete <workbook> element."""
     wb = ET.Element("workbook", {
         "original-version": XML_VERSION, "source-build": SOURCE_BUILD,
@@ -706,14 +768,19 @@ def build_workbook(csv_path: Path, connection_dir: Path) -> ET.Element:
     # Feature flags: tell Tableau which newer XML forms this file uses
     # (object-graph data model, 'type-v2' on dashboard zones, ...).
     manifest = sub(wb, "document-format-change-manifest")
-    for flag in ("ObjectModelEncapsulateLegacy", "ObjectModelTableType",
-                 "SchemaViewerObjectModel", "SetMembershipControl"):
+    # SortTagCleanup enables the <computed-sort> / <manual-sort> tags used in
+    # the worksheets; without it newer Tableau versions refuse to open the file.
+    flags = ["ObjectModelEncapsulateLegacy", "ObjectModelTableType",
+             "SchemaViewerObjectModel", "SetMembershipControl", "SortTagCleanup"]
+    if extract_dbname:
+        flags.insert(1, "ObjectModelExtractV2")   # extract inside the object-graph model
+    for flag in flags:
         sub(manifest, flag)
     prefs = sub(wb, "preferences")
     sub(prefs, "preference", {"name": "ui.encoding.shelf.height", "value": "24"})
     sub(prefs, "preference", {"name": "ui.shelf.height", "value": "26"})
 
-    build_datasource(sub(wb, "datasources"), csv_path, connection_dir)
+    build_datasource(sub(wb, "datasources"), csv_path, connection_dir, extract_dbname)
     build_shared_views(wb)
     worksheets = sub(wb, "worksheets")
     for sheet in ALL_SHEETS:
@@ -748,15 +815,37 @@ def build(csv_path: Path, out_path: Path, connection_dir: Path | None = None) ->
     connection_dir = Path(connection_dir).expanduser() if connection_dir else csv_path.parent
     check_csv_header(csv_path)
 
-    workbook = build_workbook(csv_path, connection_dir)
-    ET.indent(workbook, space="  ")
-    xml_text = ET.tostring(workbook, encoding="unicode")
-    out_path.parent.mkdir(parents=True, exist_ok=True)
-    out_path.write_text(
-        "<?xml version='1.0' encoding='utf-8' ?>\n\n" + BUILD_COMMENT + "\n" + xml_text + "\n",
-        encoding="utf-8",
-    )
-    validate(out_path)
+    # Tableau Public only accepts workbooks that read an extract (.hyper).
+    # src/make_extract.py writes it next to the CSV.
+    hyper = csv_path.with_suffix(".hyper")
+    has_extract = hyper.exists()
+    if not has_extract:
+        print(f"Note: {hyper.name} not found; run src/make_extract.py, "
+              "otherwise Tableau Public will refuse the workbook.")
+
+    def write(path: Path, dbname: str | None) -> str:
+        workbook = build_workbook(csv_path, connection_dir, dbname)
+        ET.indent(workbook, space="  ")
+        text = ("<?xml version='1.0' encoding='utf-8' ?>\n\n" + BUILD_COMMENT + "\n"
+                + ET.tostring(workbook, encoding="unicode") + "\n")
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text(text, encoding="utf-8")
+        validate(path)
+        return text
+
+    # 1) .twb: reads the extract from data/processed on this computer.
+    write(out_path, (connection_dir / hyper.name).as_posix() if has_extract else None)
+    # 2) .twbx: one packaged file (workbook + extract inside), the easiest to open.
+    if has_extract:
+        inner = f"Data/Extracts/{hyper.name}"
+        with tempfile.TemporaryDirectory() as tmp_dir:      # checked copy, kept out of the project
+            with contextlib.redirect_stdout(io.StringIO()):  # same checks, printed once above
+                text = write(Path(tmp_dir) / out_path.name, inner)
+        twbx = out_path.with_suffix(".twbx")
+        with zipfile.ZipFile(twbx, "w", zipfile.ZIP_DEFLATED) as z:
+            z.writestr(out_path.name, text)
+            z.write(hyper, inner)
+        print(f"Wrote {twbx.name} (workbook + extract in one file)")
     return out_path
 
 

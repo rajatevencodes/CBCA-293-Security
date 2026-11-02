@@ -7,10 +7,10 @@ This is the **single source of truth** for the project. The code, the dashboard 
 **One line:** A Python pipeline takes 1.85 million credit card transactions, hides the private customer details, flags suspicious transactions with 4 simple rules, and sends the safe result to a Tableau dashboard.
 
 ```text
-Raw CSVs → [1] Load → [2] Privacy layer → [3] Fraud rules → [4] Evaluate → [5] Charts → [6] Tableau workbook
+Raw CSVs → [1] Load → [2] Privacy layer → [3] Fraud rules → [4] Evaluate → [5] Charts → [6] Tableau extract + workbook
 ```
 
-Tableau only ever sees the protected file. It never sees the raw data.
+Tableau only ever sees the protected file (as a Tableau extract, `transactions_protected.hyper`). It never sees the raw data.
 
 ## 1. Dataset (facts measured by `src/load_data.py`)
 
@@ -90,7 +90,10 @@ All limits are learned from `fraudTrain.csv` **only**. Results are reported on `
 | `is_fraud` | 0/1 | the true answer |
 | `outcome` | text | `Caught`, `Missed`, `False alarm`, `Correctly passed` |
 
-## 5. Tableau dashboard (`dashboard/fraud_dashboard.twb`, written by `src/build_dashboard.py`)
+## 5. Tableau dashboard (`dashboard/fraud_dashboard.twbx`, written by `src/build_dashboard.py`)
+
+* Size 1265 x 760 px (fits a 13-inch MacBook in Presentation Mode); team names next to the title.
+* Data: the extract `data/processed/transactions_protected.hyper` (made by `src/make_extract.py`), because Tableau Public only opens extract-based workbooks. The `.twbx` packs dashboard + extract in one file.
 
 * **KPIs:** Total Transactions · Fraud Transactions · Fraud Rate % · Fraud Amount $ · Rule Recall % · Rule Precision %
 * **Charts:** Fraud Rate by Hour · Fraud Count by Category · Fraud by Age Band · Fraud by Region · Monthly Fraud Trend · Rule Outcomes (Caught / Missed / False alarm)
@@ -103,3 +106,4 @@ All limits are learned from `fraudTrain.csv` **only**. Results are reported on `
 * `rule_tuning.csv`: train F1 for each score threshold.
 * `metrics.json`: test metrics for each rule and for the combined score.
 * `charts/*.png`: report figures (fraud by hour, fraud by category, rule comparison, confusion matrix, k-anonymity group sizes).
+* `../dashboard/screenshots/*.png`: the 4 Tableau screenshots used in the report (overview, test filter, filter panel, tooltip).

@@ -112,7 +112,8 @@ Exact states and narrow age bands split the data into 461 groups. Of these, 395 
 | `outputs/rule_tuning.csv` | Table 4.2 |
 | `outputs/metrics.json` | Learned rule settings and all test metrics (Section 4.3) |
 | `outputs/charts/*.png` | Figures 3.2 to 3.6 |
-| `dashboard/fraud_dashboard.twb` | Tableau workbook: 12 worksheets, 6 calculated fields, 6 shared filters, validated |
+| `data/processed/transactions_protected.hyper` | Tableau extract of the protected CSV (Tableau Public needs an extract) |
+| `dashboard/fraud_dashboard.twbx` | Packaged Tableau workbook (dashboard + extract): 12 worksheets, 6 calculated fields, 6 shared filters, validated |
 
 The protected CSV has the 19 columns listed in `docs/01_project_understanding.md`, Section 4: `transaction_time`, `hour`, `dataset_split`, `customer_id`, `card_masked`, `merchant`, `category`, `amount`, `gender`, `age_band`, `region`, the four rule columns, `risk_score`, `flagged`, `is_fraud` and `outcome`.
 
@@ -150,7 +151,7 @@ The combined rules flag 3,592 transactions, or 0.65% of the test file. They catc
 
 ### 4.3.3 Why accuracy is misleading
 
-The flag-nothing baseline has **99.61% accuracy**, above the combined rules at 99.41%, but its recall is **0%**. It catches no fraud. Since 99.6% of rows are normal, accuracy mainly measures how often normal rows are left alone [20]. R2 and R3 show the opposite failure. Their recall is 84.2% and 58.7%, but they flag about 23% and 22% of all test transactions, leaving precision close to the base rate. Precision, recall and F1 give the useful comparison.
+The flag-nothing baseline has **99.61% accuracy**, above the combined rules at 99.41%, but its recall is **0%**. It catches no fraud. Since 99.6% of rows are normal, accuracy mainly measures how often normal rows are left alone [13]. R2 and R3 show the opposite failure. Their recall is 84.2% and 58.7%, but they flag about 23% and 22% of all test transactions, leaving precision close to the base rate. Precision, recall and F1 give the useful comparison.
 
 ### 4.3.4 Why combining the rules raises precision
 
@@ -171,7 +172,7 @@ Test F1 falls from 0.4666 to 0.4267, while recall rises from 52.41% to 57.06%. T
 
 The 114-second run removed every direct identifier and measured k-anonymity at k = 5. Four one-line rules reached an F1 of 0.427 on later test data. An alert can be traced to its conditions, such as a large amount at night in an online shopping category. The generated Tableau workbook passed its structural checks and can be rebuilt from the protected CSV.
 
-The threshold controls the balance between missed fraud and investigator workload. At 3, the test run produces 2,368 false alarms and misses 921 frauds, about 2 false alarms per fraud caught. On training data, threshold 2 reaches 72% recall but creates more than 10 times as many alerts. Threshold 4 reaches 83% precision and misses most fraud. F1 selects threshold 3 here. A bank would instead compare the cost of missed fraud with the cost of checking an alert [3], [4].
+The threshold controls the balance between missed fraud and investigator workload. At 3, the test run produces 2,368 false alarms and misses 921 frauds, about 2 false alarms per fraud caught. On training data, threshold 2 reaches 72% recall but creates more than 10 times as many alerts. Threshold 4 reaches 83% precision and misses most fraud. F1 selects threshold 3 here. A bank would instead compare the cost of missed fraud with the cost of checking an alert [14], [15].
 
 Generalization removes state-level and exact-age analysis from the dashboard. It keeps only 4 regions and 5 age bands. The detailed version left 659 customers in groups below 5, so that loss of detail was needed to meet the chosen k. The fraud rules use amount, hour, category and customer pseudonym, none of which the generalization removes. Their inputs are unchanged by this privacy step.
 
@@ -179,4 +180,4 @@ A tested distance rule did not separate the classes. The average is 76.1 km for 
 
 By default, the dashboard combines training and test rows. The Rule Recall % tile then shows 53.4%, or 5,158 of 9,651 frauds caught. Rule Precision % shows 39.8%, or 5,158 of 12,949 alerts. Tables 4.2 and 4.5 provide those counts. They are not test results because the rules learned from the training rows. Setting **Dataset Split** to `test` changes the tiles to 57.1% recall and 34.1% precision, matching Table 4.5 and Figure 3.8.
 
-These numbers describe simulated data, not expected performance at a bank. Real fraud is more varied and changes over time [3]. Section 5.2 covers the remaining limits.
+These numbers describe simulated data, not expected performance at a bank. Real fraud is more varied and changes over time [14]. Section 5.2 covers the remaining limits.

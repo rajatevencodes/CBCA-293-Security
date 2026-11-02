@@ -1,3 +1,5 @@
+# CBCA293 Security and Privacy for Big Data Analytics, Bennett University
+# Team: Rajat Sharma (S24BCAU0134), Ishan Chaudary (S24BCAU0002), Piyush Agarwal (S24BCAU0182), Suraj Tiwari (S24BCAU0136)
 """Step 2: the privacy layer.
 
 Turns raw rows into protected rows. After this step there is no card number,
